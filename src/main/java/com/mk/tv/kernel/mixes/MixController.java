@@ -94,7 +94,6 @@ public class MixController implements ICommandController {
     @Override
     public void menuResponse(APIWrapper api, String[] args) {
         final String sep = sep();
-
         final String prefix = sep + "MIX PRESETS" + sep;
 
         final String format = " %c%d  " + config.border + "        %s --  %s        ";
@@ -103,7 +102,6 @@ public class MixController implements ICommandController {
             final String item = menu.get(i);
             menuFormatted[i] = String.format(format, indicator(), i, item, repo.map.get(item));
         }
-
         final String body = ConsoleUtils.encaseInBanner(menuFormatted, config.border);
 
         final String suffix = sep + config.displayLiteralCommand("mix scriptName+w(1000)+hotkeyName") + "will run script, wait 1s and press hotkey!"; //+

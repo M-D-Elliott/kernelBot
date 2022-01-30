@@ -27,8 +27,6 @@ public class BotUserController implements ICommandController {
 
     //***************************************************************//
 
-    //***************************************************************//
-
     @Override
     public void readCommands(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
         commandFuncMap.put("user", this::processCommand);
