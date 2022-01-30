@@ -20,7 +20,7 @@ import static jPlus.util.io.ConsoleIOUtils.validateString;
 import static jPlus.util.io.ConsoleUtils.sep;
 
 public class HotkeyController implements IRepoCommandController {
-    private final JacksonRepo<Hotkey> repo = new JacksonRepo<>("repos/hotkeys.txt", new TypeReference<>() {
+    private final JacksonRepo<String> repo = new JacksonRepo<>("repos/hotkeys.txt", new TypeReference<>() {
     }, HotkeyController::newHotkeyMap);
 
     private final Config config;
@@ -34,9 +34,9 @@ public class HotkeyController implements IRepoCommandController {
 
     //***************************************************************//
 
-    private static LinkedHashMap<String, Hotkey> newHotkeyMap() {
-        final LinkedHashMap<String, Hotkey> ret = new LinkedHashMap<>();
-        final Hotkey hotkey = new Hotkey("a+b");
+    private static LinkedHashMap<String, String> newHotkeyMap() {
+        final LinkedHashMap<String, String> ret = new LinkedHashMap<>();
+        final String hotkey = "a+b";
         ret.put("ab", hotkey);
         return ret;
     }
@@ -90,7 +90,7 @@ public class HotkeyController implements IRepoCommandController {
         final String[] menuFormatted = new String[menu.size()];
         for (int i = 0; i < menuFormatted.length; i++) {
             final String item = menu.get(i);
-            menuFormatted[i] = String.format(format, indicator, i, item, repo.map.get(item).code);
+            menuFormatted[i] = String.format(format, indicator, i, item, repo.map.get(item));
         }
         final String body = ConsoleUtils.encaseInBanner(menuFormatted, config.border);
 
@@ -106,8 +106,8 @@ public class HotkeyController implements IRepoCommandController {
 
     @Override
     public void processRepoCommand(APIWrapper api, String[] args) {
-        final Hotkey hotkey = repo.get(args[0]);
-        processCommand(hotkey.code);
+        final String hotkey = repo.get(args[0]);
+        processCommand(hotkey);
     }
 
     @Override

@@ -60,7 +60,7 @@ public class InstallWizard extends Install {
     private void task(String title, Runnable body, Runnable afterBody) {
         System.out.println();
         System.out.println();
-        System.out.println(encase("Task " + (completeTasks.size() + 1), '-') + " " + title);
+        System.out.println(encase("Task " + (completeTasks.size() + 1), "-") + " " + title);
         System.out.println();
         body.run();
         afterBody.run();
@@ -70,7 +70,7 @@ public class InstallWizard extends Install {
         System.out.println(header);
 
         int index = 1;
-        for (String task : completeTasks) System.out.println(encase("Task " + index++, '+') + " " + task);
+        for (String task : completeTasks) System.out.println(encase("Task " + index++, "+") + " " + task);
     }
 
     private void task1() {

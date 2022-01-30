@@ -5,7 +5,6 @@ import jPlus.lang.callback.Retrievable2;
 import jPlus.util.lang.StringUtils;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collection;
 
 public class ConsoleUtils {
@@ -19,64 +18,6 @@ public class ConsoleUtils {
         final StringBuilder ret = new StringBuilder();
         while (repeat-- > 0) ret.append(sep);
         return ret.toString();
-    }
-
-    public static String encase(String s, char edge) {
-        return edge + s + edge;
-    }
-
-    //***************************************************************//
-
-    public static final char STANDARD_BANNER_COMP = '*';
-    private static final String BANNER = "%1$s" + sep() + "%2$s" + "%1$s";
-
-    public static String encaseInBanner(String s) {
-        return encaseInBanner(s, STANDARD_BANNER_COMP);
-    }
-
-    public static String encaseInBanner(String str, char bannerComp) {
-        return encaseInBanner(str.split(sep()), bannerComp, (s, i) -> s);
-    }
-
-    public static String encaseInBanner(String[] arr, char bannerComp) {
-        return encaseInBanner(arr, bannerComp, (s, i) -> s);
-    }
-
-
-    public static String encaseInBanner(Collection<String> lines, char bannerComp, Retrievable2<String, String, Integer> itemFormatter) {
-        return encaseInBanner(lines.toArray(new String[0]), bannerComp, itemFormatter);
-    }
-
-    public static String encaseInBanner(String[] lines, char bannerComp, Retrievable2<String, String, Integer> itemFormatter) {
-        final String lineFormat = encase("%1$s", bannerComp) + sep();
-        final StringBuilder formattedLines = new StringBuilder();
-
-        final int maxLength = StringUtils.maxLength(lines);
-        int maxLengthF = maxLength;
-        for (int i = 0; i < lines.length; i++) {
-            final String line = lines[i];
-            final int length = line.length();
-
-            final String formattedLine = String.format(lineFormat,
-                    StringUtils.addWhiteSpaceR(itemFormatter.retrieve(line, i),
-                            maxLength - length));
-            maxLengthF = Math.max(maxLengthF, formattedLine.length());
-
-            formattedLines.append(formattedLine);
-        }
-        final String border = StringUtils.repeat(bannerComp, maxLengthF - 2);
-
-        return String.format(BANNER, border, formattedLines.toString());
-    }
-
-    public static String banner(int bannerCount) {
-        return banner(STANDARD_BANNER_COMP, bannerCount);
-    }
-
-    public static String banner(char bannerComp, int bannerCount) {
-        final char[] bannerC = new char[bannerCount];
-        Arrays.fill(bannerC, bannerComp);
-        return new String(bannerC);
     }
 
     public static void clsBliss() {
@@ -110,4 +51,63 @@ public class ConsoleUtils {
         RuntimeUtils.waitForProcess("clear");
     }
 
+    //***************************************************************//
+
+    public static final String STANDARD_BANNER_COMP = "*";
+    private static final String BANNER_FORMAT = "%1$s" + sep() + "%2$s" + "%1$s";
+
+    public static String encase(String s, String edge) {
+        return edge + s + edge;
+    }
+
+    private static String encaseMirror(String s, String edge) {
+        return edge + s + StringUtils.reverse(edge);
+    }
+
+    public static String encaseInBanner(String s) {
+        return encaseInBanner(s, STANDARD_BANNER_COMP);
+    }
+
+    public static String encaseInBanner(String str, String bannerComp) {
+        return encaseInBanner(str.split(sep()), bannerComp, bannerComp, (s, i) -> s);
+    }
+
+    public static String encaseInBanner(String[] arr, String bannerComp) {
+        return encaseInBanner(arr, bannerComp, bannerComp, (s, i) -> s);
+    }
+
+    public static String encaseInBanner(Collection<String> lines, String bannerComp, Retrievable2<String, String, Integer> itemFormatter) {
+        return encaseInBanner(lines, bannerComp, bannerComp, itemFormatter);
+    }
+
+    public static String encaseInBanner(Collection<String> lines, String ver, String hor, Retrievable2<String, String, Integer> itemFormatter) {
+        return encaseInBanner(lines.toArray(new String[0]), ver, hor, itemFormatter);
+    }
+
+    public static String encaseInBanner(String[] lines, String ver, String hor, Retrievable2<String, String, Integer> itemFormatter) {
+        final String sep = sep();
+        final String lineFormat = encaseMirror("%1$s", ver) + sep;
+        final StringBuilder formattedLines = new StringBuilder();
+
+        final int maxLength = StringUtils.maxLength(lines);
+        int maxLengthF = maxLength;
+        for (int i = 0; i < lines.length; i++) {
+            final String line = lines[i];
+            final int length = line.length();
+
+            final String formattedLine = String.format(lineFormat,
+                    StringUtils.addWhiteSpaceR(itemFormatter.retrieve(line, i),
+                            maxLength - length));
+            maxLengthF = Math.max(maxLengthF, formattedLine.length());
+
+            formattedLines.append(formattedLine);
+        }
+
+        final int hL = hor.length();
+        final int maxBorderLength = maxLengthF - sep.length();
+        final int borderCount = (maxBorderLength + 1) / hL;
+        final String border = StringUtils.repeat(hor, borderCount).substring(0, maxBorderLength);
+
+        return String.format(BANNER_FORMAT, border, formattedLines.toString());
+    }
 }

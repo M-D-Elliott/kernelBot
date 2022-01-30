@@ -165,7 +165,7 @@ public class BotUserController implements ICommandController {
 
     private void warnPublicChannel(APIWrapper api) {
         if (api.access().value() < 3)
-            api.print(ConsoleUtils.encaseInBanner(Globals.WARN_PUBLIC_CHANNEL, '#'));
+            api.print(ConsoleUtils.encaseInBanner(Globals.WARN_PUBLIC_CHANNEL, "#"));
     }
 
     public BotUser getBotUser(String username) {

@@ -101,4 +101,16 @@ public final class IntUtils {
     public static int random(int min, int max) {
         return (int) ((max + 1 - min) * Math.random()) + min;
     }
+
+    public static boolean isEven(int i) {
+        return i % 2 == 0;
+    }
+
+    public static boolean isOdd(int i) {
+        return i % 2 != 0;
+    }
+
+    public static boolean isSameParity(int i1, int i2) {
+        return i1 % 2 == i2 % 2;
+    }
 }

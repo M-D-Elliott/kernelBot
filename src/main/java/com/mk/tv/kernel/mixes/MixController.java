@@ -27,7 +27,8 @@ public class MixController implements ICommandController {
     private final Config config;
 
     private final List<String> menu = new ArrayList<>();
-    public final char indicator = 'm';
+
+    private static String COMMAND_NOT_FOUND = "%$1s not found";
 
     public MixController(Config config) {
         this.config = config;
@@ -50,7 +51,7 @@ public class MixController implements ICommandController {
 
     @Override
     public char indicator() {
-        return indicator;
+        return 'm';
     }
 
     @Override
@@ -78,6 +79,8 @@ public class MixController implements ICommandController {
                             final int waitValue = Integer.parseInt(wvs);
                             Thread.sleep(waitValue);
                         }
+                    } else {
+                        api.print(String.format(COMMAND_NOT_FOUND, commandName));
                     }
                 }
             } catch (InterruptedException e) {
@@ -98,7 +101,7 @@ public class MixController implements ICommandController {
         final String[] menuFormatted = new String[menu.size()];
         for (int i = 0; i < menuFormatted.length; i++) {
             final String item = menu.get(i);
-            menuFormatted[i] = String.format(format, indicator, i, item, repo.map.get(item));
+            menuFormatted[i] = String.format(format, indicator(), i, item, repo.map.get(item));
         }
 
         final String body = ConsoleUtils.encaseInBanner(menuFormatted, config.border);

@@ -90,9 +90,10 @@ public class Kernel {
     }
 
     protected void menuResponse(APIWrapper api, String[] args) {
-        final String format = "  %d  " + config.border + "        %s        ";
+        final String border = "?-";
+        final String format = "  %d  " + border + "        %s        ";
 
         api.print(sep() + ConsoleUtils.encaseInBanner(
-                menu, config.border, (item, i) -> String.format(format, i, item)));
+                menu, border, (item, i) -> String.format(format, i, item)));
     }
 }
