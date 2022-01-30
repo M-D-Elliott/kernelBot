@@ -21,7 +21,7 @@ public class ScriptController implements IRepoCommandController {
 
     public final Map<String, String> pathMap = new HashMap<>();
 
-    public final List<String> menu = new ArrayList<>();
+    private final List<String> menu = new ArrayList<>();
     public final char indicator = 's';
 
     private final Config config;
@@ -53,18 +53,21 @@ public class ScriptController implements IRepoCommandController {
     }
 
     @Override
+    public char indicator() {
+        return indicator;
+    }
+
+    @Override
     public String getMenuItem(int i) {
         return menu.get(i);
 
     }
 
-    @Override
     public void processCommand(APIWrapper api, String[] args) {
         if (validateString(args, 1) && processCommand(args[1])) return;
         menuResponse(api, args);
     }
 
-    @Override
     public boolean processCommand(String commandBody) {
         return RuntimeUtils.batch(commandBody);
     }
@@ -79,6 +82,11 @@ public class ScriptController implements IRepoCommandController {
         final String format = " %c%d  " + config.border + "        %s        ";
         api.print(prefix + ConsoleUtils.encaseInBanner(
                 menu, config.border, (item, i) -> String.format(format, indicator, i, item)) + suffix);
+    }
+
+    @Override
+    public List<String> menu() {
+        return menu;
     }
 
     @Override

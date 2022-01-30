@@ -18,8 +18,8 @@ public class BotUserController implements ICommandController {
 
     private final AuthConfig config;
 
-    public final List<String> menu = new ArrayList<>();
-    public final char indicator = 'u';
+    private final List<String> menu = new ArrayList<>();
+    private final char indicator = 'u';
 
     public BotUserController(AuthConfig config) {
         this.config = config;
@@ -42,16 +42,20 @@ public class BotUserController implements ICommandController {
     }
 
     @Override
+    public char indicator() {
+        return indicator;
+    }
+
+    @Override
     public String getMenuItem(int i) {
         return menu.get(i);
     }
 
-    @Override
+
     public void processCommand(APIWrapper api, String[] args) {
         menuResponse(api, args);
     }
 
-    @Override
     public boolean processCommand(String commandBody) {
         return false;
     }
@@ -62,6 +66,11 @@ public class BotUserController implements ICommandController {
 
         api.print(sep() + ConsoleUtils.encaseInBanner(
                 menu, config.border, (item, i) -> String.format(format, this.indicator, i, item)));
+    }
+
+    @Override
+    public List<String> menu() {
+        return menu;
     }
 
     //***************************************************************//

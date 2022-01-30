@@ -20,8 +20,8 @@ public class SystemController implements ICommandController {
     public static final String CHANGE_INDICATOR_HELP = "to change indicator to ! type: '%sindicator !'";
     private final Config config;
 
-    public final List<String> menu = new ArrayList<>();
-    public final char indicator = 'y';
+    private final List<String> menu = new ArrayList<>();
+    private final char indicator = 'y';
 
     public SystemController(Config config) {
         this.config = config;
@@ -39,16 +39,19 @@ public class SystemController implements ICommandController {
     }
 
     @Override
+    public char indicator() {
+        return indicator;
+    }
+
+    @Override
     public String getMenuItem(int i) {
         return menu.get(i);
     }
 
-    @Override
     public void processCommand(APIWrapper api, String[] args) {
         menuResponse(api, args);
     }
 
-    @Override
     public boolean processCommand(String commandBody) {
         return false;
     }
@@ -59,6 +62,11 @@ public class SystemController implements ICommandController {
         final String format = " %c%d  " + config.border + "        %s        ";
         api.print(prefix + ConsoleUtils.encaseInBanner(
                 menu, config.border, (item, i) -> String.format(format, indicator, i, item)));
+    }
+
+    @Override
+    public List<String> menu() {
+        return menu;
     }
 
     //***************************************************************//

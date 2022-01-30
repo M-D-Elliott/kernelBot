@@ -1,5 +1,6 @@
 package com.mk.tv.kernel.hotkeys;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.mk.tv.kernel.generic.IRepoCommandController;
 import com.mk.tv.kernel.generic.JacksonRepo;
 import com.mk.tv.kernel.system.Config;
@@ -19,12 +20,12 @@ import static jPlus.util.io.ConsoleIOUtils.validateString;
 import static jPlus.util.io.ConsoleUtils.sep;
 
 public class HotkeyController implements IRepoCommandController {
-    private final JacksonRepo<Hotkey> repo = new JacksonRepo<>("repos/hotkeys.txt",
-            Hotkey.typeRef(), HotkeyController::newHotkeyMap);
+    private final JacksonRepo<Hotkey> repo = new JacksonRepo<>("repos/hotkeys.txt", new TypeReference<>() {
+    }, HotkeyController::newHotkeyMap);
 
     private final Config config;
 
-    public final List<String> menu = new ArrayList<>();
+    private final List<String> menu = new ArrayList<>();
     public final char indicator = 'p';
 
     public HotkeyController(Config config) {
@@ -48,12 +49,13 @@ public class HotkeyController implements IRepoCommandController {
         commandFuncMap.put("press", this::processCommand);
 
         final Receivable2<APIWrapper, String[]> hotkeyCommand = this::processRepoCommand;
-
-        for (String hotkeyName : repo.map.keySet()) {
-            commandFuncMap.put(hotkeyName, hotkeyCommand);
-        }
-
+        for (String hotkeyName : repo.map.keySet()) commandFuncMap.put(hotkeyName, hotkeyCommand);
         menu.addAll(repo.map.keySet());
+    }
+
+    @Override
+    public char indicator() {
+        return indicator;
     }
 
     @Override
@@ -61,13 +63,11 @@ public class HotkeyController implements IRepoCommandController {
         return menu.get(i);
     }
 
-    @Override
     public void processCommand(APIWrapper api, String[] args) {
         if (validateString(args, 1) && processCommand(args[1])) return;
         menuResponse(api, args);
     }
 
-    @Override
     public boolean processCommand(String commandBody) {
         try {
             final int[] keyEvents = KeyEvents.parseGroup(commandBody);
@@ -92,13 +92,16 @@ public class HotkeyController implements IRepoCommandController {
             final String item = menu.get(i);
             menuFormatted[i] = String.format(format, indicator, i, item, repo.map.get(item).code);
         }
-
         final String body = ConsoleUtils.encaseInBanner(menuFormatted, config.border);
 
         final String suffix = sep + config.displayLiteralCommand("press ctrl+f1") + "will press ctrl and f1 on the host comp!"; //+
-        //sep + config.displayLiteralCommand("addpress hotkeyName hotkeyCode") + " -- adds a new hotkey preset!";
 
         api.print(prefix + body + suffix);
+    }
+
+    @Override
+    public List<String> menu() {
+        return menu;
     }
 
     @Override

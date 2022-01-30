@@ -1,6 +1,8 @@
 package com.mk.tv.kernel;
 
+import com.mk.tv.kernel.generic.ICommandController;
 import com.mk.tv.kernel.hotkeys.HotkeyController;
+import com.mk.tv.kernel.mixes.MixController;
 import com.mk.tv.kernel.scripts.ScriptController;
 import com.mk.tv.kernel.system.Config;
 import com.mk.tv.kernel.system.SystemController;
@@ -18,9 +20,7 @@ import static jPlus.util.lang.IntUtils.boundsMin;
 public class Kernel {
 
     public final Config config;
-    private final HotkeyController hotkeyController;
-    private final ScriptController scriptController;
-    private final SystemController systemController;
+    protected final List<ICommandController> controllers = new ArrayList<>();
 
     //***************************************************************//
 
@@ -30,9 +30,10 @@ public class Kernel {
 
     public Kernel(Config config) {
         this.config = config;
-        hotkeyController = new HotkeyController(config);
-        scriptController = new ScriptController(config);
-        systemController = new SystemController(config);
+        controllers.add(new HotkeyController(config));
+        controllers.add(new ScriptController(config));
+        controllers.add(new MixController(config));
+        controllers.add(new SystemController(config));
     }
 
     public void init() {
@@ -42,17 +43,13 @@ public class Kernel {
 
     protected void prepareCommandMap() {
         commandFunctionMap.put("help", this::menuResponse);
-
-        hotkeyController.readCommands(this.commandFunctionMap);
-        scriptController.readCommands(this.commandFunctionMap);
-        systemController.readCommands(this.commandFunctionMap);
+        for (ICommandController controller : controllers) controller.readCommands(this.commandFunctionMap);
     }
 
     protected void prepareMenu() {
-        Collections.addAll(menu, "help", "press", "script", "system");
-        indicatorMenuMap.put(hotkeyController.indicator, hotkeyController.menu);
-        indicatorMenuMap.put(scriptController.indicator, scriptController.menu);
-        indicatorMenuMap.put(systemController.indicator, systemController.menu);
+        Collections.addAll(menu, "help", "press", "script", "mix", "system");
+        for (ICommandController controller : controllers)
+            indicatorMenuMap.put(controller.indicator(), controller.menu());
     }
 
     //***************************************************************//
@@ -71,7 +68,7 @@ public class Kernel {
         final List<String> menuList = indicatorMenuMap.get(parsedM[0].charAt(0));
         if (menuList != null) {
             intIndicator = IntUtils.parseInteger(parsedM[0].substring(1));
-            if (intIndicator != null && --intIndicator < menuList.size())
+            if (intIndicator != null && intIndicator < menuList.size())
                 parsedM[0] = menuList.get(intIndicator);
         }
 
@@ -83,7 +80,6 @@ public class Kernel {
         } else {
             System.out.println(api.username() + " -- " + parsedM[0]);
             command.receive(api, parsedM);
-            
         }
     }
 

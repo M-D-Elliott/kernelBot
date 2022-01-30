@@ -14,9 +14,4 @@ public class Hotkey {
     public Hotkey(String code) {
         this.code = code;
     }
-
-    public static TypeReference<LinkedHashMap<String, Hotkey>> typeRef() {
-        return new TypeReference<>() {
-        };
-    }
 }
