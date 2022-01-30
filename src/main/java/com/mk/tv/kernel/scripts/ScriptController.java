@@ -6,6 +6,7 @@ import com.mk.tv.utils.ApacheFileUtils;
 import jPlus.io.APIWrapper;
 import jPlus.io.file.FileUtils;
 import jPlus.lang.callback.Receivable2;
+import jPlus.util.io.ConsoleUtils;
 import jPlus.util.io.RuntimeUtils;
 
 import java.io.File;
@@ -70,12 +71,14 @@ public class ScriptController implements IRepoCommandController {
 
     @Override
     public void menuResponse(APIWrapper api, String[] args) {
-        final String prefix = sep() + "SCRIPT PRESETS" + sep() +
-                config.displayLiteralCommand("addscript scriptName scriptCode") + " -- adds a new script preset!"
-                + sep() + sep();
-        final String format = "%c%d. %s" + sep();
-        api.printMenu(menu, (item, i) -> String.format(format, indicator, i, item),
-                new StringBuilder(prefix));
+        final String sep = sep();
+
+        final String prefix = sep + "SCRIPT PRESETS" + sep;
+        final String suffix = sep + config.displayLiteralCommand("addscript scriptName scriptCode") + " -- adds a new script preset!";
+
+        final String format = " %c%d  " + config.border + "        %s        ";
+        api.print(prefix + ConsoleUtils.encaseInBanner(
+                menu, config.border, (item, i) -> String.format(format, indicator, i, item)) + suffix);
     }
 
     @Override

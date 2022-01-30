@@ -38,6 +38,11 @@ public class ConsoleUtils {
         return encaseInBanner(str.split(sep()), bannerComp, (s, i) -> s);
     }
 
+    public static String encaseInBanner(String[] arr, char bannerComp) {
+        return encaseInBanner(arr, bannerComp, (s, i) -> s);
+    }
+
+
     public static String encaseInBanner(Collection<String> lines, char bannerComp, Retrievable2<String, String, Integer> itemFormatter) {
         return encaseInBanner(lines.toArray(new String[0]), bannerComp, itemFormatter);
     }
@@ -46,15 +51,20 @@ public class ConsoleUtils {
         final String lineFormat = encase("%1$s", bannerComp) + sep();
         final StringBuilder formattedLines = new StringBuilder();
 
-        final int longest = StringUtils.maxLength(lines);
+        final int maxLength = StringUtils.maxLength(lines);
+        int maxLengthF = maxLength;
         for (int i = 0; i < lines.length; i++) {
             final String line = lines[i];
             final int length = line.length();
-            formattedLines.append(String.format(lineFormat,
+
+            final String formattedLine = String.format(lineFormat,
                     StringUtils.addWhiteSpaceR(itemFormatter.retrieve(line, i),
-                            longest - length)));
+                            maxLength - length));
+            maxLengthF = Math.max(maxLengthF, formattedLine.length());
+
+            formattedLines.append(formattedLine);
         }
-        final String border = StringUtils.repeat(bannerComp, longest + 2);
+        final String border = StringUtils.repeat(bannerComp, maxLengthF - 2);
 
         return String.format(BANNER, border, formattedLines.toString());
     }

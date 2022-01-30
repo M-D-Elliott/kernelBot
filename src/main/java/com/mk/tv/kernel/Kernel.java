@@ -12,6 +12,7 @@ import jPlus.util.lang.IntUtils;
 
 import java.util.*;
 
+import static jPlus.util.io.ConsoleUtils.sep;
 import static jPlus.util.lang.IntUtils.boundsMin;
 
 public class Kernel {
@@ -92,11 +93,9 @@ public class Kernel {
     }
 
     protected void menuResponse(APIWrapper api, String[] args) {
-        final char border = '+';
-        final String sep = ConsoleUtils.sep();
-        final String format = "  %d  " + border + "        %s        " + sep;
+        final String format = "  %d  " + config.border + "        %s        ";
 
-        api.printMenu(menu, (item, i) -> String.format(format, i, item),
-                new StringBuilder(), border);
+        api.print(sep() + ConsoleUtils.encaseInBanner(
+                menu, config.border, (item, i) -> String.format(format, i, item)));
     }
 }

@@ -1,6 +1,8 @@
 package jPlus.util.lang;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 
 public final class StringUtils {
@@ -35,6 +37,13 @@ public final class StringUtils {
         return max;
     }
 
+    public static int maxLength(Collection<String> strings) {
+        final Iterator<String> iter = strings.iterator();
+        int max = 0;
+        while (iter.hasNext()) max = Math.max(max, iter.next().length());
+        return max;
+    }
+
     public static String repeat(String s, int count) {
         return new String(new char[count]).replace("\0", s);
     }
@@ -51,7 +60,7 @@ public final class StringUtils {
         return String.format(FORMAT_ARG_1 + '+' + (count + str.length()) + "s", str);
     }
 
-    public static Object addWhiteSpaceR(String str, int count) {
+    public static String addWhiteSpaceR(String str, int count) {
         return String.format(FORMAT_ARG_1 + '-' + (count + str.length()) + "s", str);
     }
 }

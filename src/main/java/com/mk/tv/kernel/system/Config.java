@@ -8,6 +8,7 @@ public class Config {
     public String token = "paste token here...";
     public char commandIndicator = '?';
     public String[] formats = new String[]{"bat"};
+    public char border = '+';
 
     public Config() {
     }

@@ -35,18 +35,6 @@ public class ChannelOutWrapper implements APIWrapper {
     }
 
     @Override
-    public void printMenu(Collection<String> items,
-                          Retrievable2<String, String, Integer> itemFormatter,
-                          StringBuilder builder) {
-        DiscordConsoleUtils.printMenu(e, items, itemFormatter, builder);
-    }
-
-    @Override
-    public void printMenu(Collection<String> items, Retrievable2<String, String, Integer> itemFormatter, StringBuilder builder, char border) {
-        DiscordConsoleUtils.printMenu(e, items, itemFormatter, builder, border);
-    }
-
-    @Override
     public void setStatus(String status) {
         final Activity listeningOnIndicator = Activity.listening(status);
         e.getJDA().getPresence().setActivity(listeningOnIndicator);

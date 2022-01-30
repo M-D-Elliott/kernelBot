@@ -11,6 +11,8 @@ import jPlus.util.io.ConsoleUtils;
 
 import java.util.*;
 
+import static jPlus.util.io.ConsoleUtils.sep;
+
 public class BotUserController implements ICommandController {
     private final JacksonRepo<BotUser> repo = new BotUserRepo();
 
@@ -56,15 +58,10 @@ public class BotUserController implements ICommandController {
 
     @Override
     public void menuResponse(APIWrapper api, String[] args) {
-        final StringBuilder building = new StringBuilder();
-        final String format = "%c%d. %s" + ConsoleUtils.sep();
+        final String format = " %c%d  " + config.border + "        %s        ";
 
-        int index = 1;
-        for (String item : menu) {
-            final String row = String.format(format, indicator, index++, item);
-            building.append(row);
-        }
-        api.print(building.toString());
+        api.print(sep() + ConsoleUtils.encaseInBanner(
+                menu, config.border, (item, i) -> String.format(format, this.indicator, i, item)));
     }
 
     //***************************************************************//
@@ -121,7 +118,7 @@ public class BotUserController implements ICommandController {
         if (api.access().value() == 3) {
             if (checkPassword(api, args)) {
                 final StringBuilder building = new StringBuilder();
-                final String sep = ConsoleUtils.sep();
+                final String sep = sep();
                 FileUtils.read("repos/secrets.txt").forEach(item -> building.append(item).append(sep));
                 api.print(building.toString());
             }

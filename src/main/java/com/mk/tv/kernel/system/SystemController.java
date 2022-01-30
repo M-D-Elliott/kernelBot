@@ -3,6 +3,7 @@ package com.mk.tv.kernel.system;
 import com.mk.tv.kernel.generic.ICommandController;
 import jPlus.io.APIWrapper;
 import jPlus.lang.callback.Receivable2;
+import jPlus.util.io.ConsoleUtils;
 import jPlus.util.io.JarUtils;
 
 import java.util.ArrayList;
@@ -54,9 +55,10 @@ public class SystemController implements ICommandController {
 
     @Override
     public void menuResponse(APIWrapper api, String[] args) {
-        final String format = "%c%d. %s" + sep() + " ";
-        api.printMenu(menu, (item, i) -> String.format(format, indicator, i, item),
-                new StringBuilder(sep() + "SYSTEM" + sep()));
+        final String prefix = sep() + "System" + sep();
+        final String format = " %c%d  " + config.border + "        %s        ";
+        api.print(prefix + ConsoleUtils.encaseInBanner(
+                menu, config.border, (item, i) -> String.format(format, indicator, i, item)));
     }
 
     //***************************************************************//

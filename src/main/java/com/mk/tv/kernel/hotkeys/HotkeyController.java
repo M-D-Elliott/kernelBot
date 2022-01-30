@@ -7,6 +7,7 @@ import jPlus.io.APIWrapper;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.awt.KeyEvents;
 import jPlus.util.awt.RobotUtils;
+import jPlus.util.io.ConsoleUtils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -81,15 +82,23 @@ public class HotkeyController implements IRepoCommandController {
 
     @Override
     public void menuResponse(APIWrapper api, String[] args) {
-        final String prefix = sep() + "PRESS PRESETS" + sep() +
-                config.displayLiteralCommand("press ctrl+f1") + "will press ctrl and f1 on the host comp!" + sep() +
-                config.displayLiteralCommand("addpress hotkeyName hotkeyCode") + " -- adds a new hotkey preset!"
-                + sep() + sep();
-        final String format = "%c%d. %s %s" + sep();
-        api.printMenu(menu,
-                (item, i) -> String.format(format, indicator, i, item, repo.map.get(item).code),
-                new StringBuilder(prefix)
-        );
+        final String sep = sep();
+
+        final String prefix = sep + "PRESS PRESETS" + sep;
+
+        final String format = " %c%d  " + config.border + "        %s --  %s        ";
+        final String[] menuFormatted = new String[menu.size()];
+        for (int i = 0; i < menuFormatted.length; i++) {
+            final String item = menu.get(i);
+            menuFormatted[i] = String.format(format, indicator, i, item, repo.map.get(item).code);
+        }
+
+        final String body = ConsoleUtils.encaseInBanner(menuFormatted, config.border);
+
+        final String suffix = sep + config.displayLiteralCommand("press ctrl+f1") + "will press ctrl and f1 on the host comp!"; //+
+        //sep + config.displayLiteralCommand("addpress hotkeyName hotkeyCode") + " -- adds a new hotkey preset!";
+
+        api.print(prefix + body + suffix);
     }
 
     @Override
