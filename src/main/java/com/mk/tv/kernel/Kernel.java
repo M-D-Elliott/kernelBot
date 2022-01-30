@@ -83,6 +83,7 @@ public class Kernel {
         } else {
             System.out.println(api.username() + " -- " + parsedM[0]);
             command.receive(api, parsedM);
+            
         }
     }
 
