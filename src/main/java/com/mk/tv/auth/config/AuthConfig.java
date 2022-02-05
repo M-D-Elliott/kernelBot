@@ -2,9 +2,17 @@ package com.mk.tv.auth.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mk.tv.kernel.system.Config;
+import jPlus.io.security.Access;
+import jPlus.util.io.TimeUtils;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AuthConfig extends Config {
+
+    public String userSessionDuration = "00:06:00:00";
+
+    public String rejectUserMessage = "You aren't Chris...";
+
+    public Access securityLevel = Access.PRIVATE;
 
     public AuthConfig() {
     }
@@ -15,5 +23,9 @@ public class AuthConfig extends Config {
 
     public static AuthConfig newInstance() {
         return new AuthConfig();
+    }
+
+    public long sessionDurationS() {
+        return TimeUtils.parseSecondsFrom(userSessionDuration);
     }
 }

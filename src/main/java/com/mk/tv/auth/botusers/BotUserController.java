@@ -6,6 +6,7 @@ import com.mk.tv.kernel.generic.ICommandController;
 import com.mk.tv.kernel.generic.JacksonRepo;
 import jPlus.io.APIWrapper;
 import jPlus.io.file.FileUtils;
+import jPlus.io.security.Access;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.ConsoleUtils;
 
@@ -122,18 +123,43 @@ public class BotUserController implements ICommandController {
     }
 
     private void spill(APIWrapper api, String[] args) {
-        if (api.access().value() == 3) {
-            if (checkPassword(api, args)) {
-                final StringBuilder building = new StringBuilder();
-                final String sep = sep();
-                FileUtils.read("repos/secrets.txt").forEach(item -> building.append(item).append(sep));
-                api.print(building.toString());
-            }
-        } else
-            api.print(Globals.ONLY_PRIVATE);
+        if (api.access() != Access.PRIVATE ||
+               config.securityLevel == Access.PROTECTED && !checkPassword(api, args)) {
+            api.print(Globals.ONLY_SECURE);
+            return;
+        }
+        final StringBuilder building = new StringBuilder();
+        final String sep = sep();
+        FileUtils.read("repos/secrets.txt").forEach(item -> building.append(item).append(sep));
+        api.print(building.toString());
+
     }
 
     //***************************************************************//
+
+    public boolean authenticateUser(APIWrapper api) {
+        return getBotUser(api.username()) != null;
+    }
+
+
+    public boolean authenticateUser(APIWrapper api, boolean requirePW) {
+        final BotUser user = getBotUser(api.username());
+        final boolean userExists = user != null;
+        if (userExists) {
+            if (requirePW) return user.getSession().active();
+        } else {
+            api.print("User must be registered first.");
+        }
+        return userExists;
+    }
+
+    public boolean initiateSession(APIWrapper api, String pass) {
+        final BotUser user = getBotUser(api.username());
+        if (user == null || !user.password.equals(pass)) return false;
+        user.session = new Session(config.sessionDurationS());
+        repo.save();
+        return true;
+    }
 
     public boolean checkPassword(APIWrapper api, String[] args) {
         if (args.length > 1 && args[1].length() >= 1)
@@ -148,7 +174,7 @@ public class BotUserController implements ICommandController {
     }
 
     private void wrongPass(APIWrapper api) {
-        api.print(Globals.NOT_USER);
+        api.print(config.rejectUserMessage);
     }
 
     private boolean checkPassword(BotUser botUser, String[] args) {

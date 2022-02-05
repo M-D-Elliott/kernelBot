@@ -8,6 +8,7 @@ public class BotUser {
     public String username;
     public String password = "";
     public String welcome = "Hey friend!";
+    public Session session = Session.DEFAULT;
 
     public BotUser() {
     }
@@ -26,5 +27,9 @@ public class BotUser {
     public static TypeReference<LinkedHashMap<String, BotUser>> typeRef() {
         return new TypeReference<>() {
         };
+    }
+
+    public Session getSession() {
+        return session;
     }
 }
