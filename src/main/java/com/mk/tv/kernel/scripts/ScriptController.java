@@ -12,7 +12,7 @@ import jPlus.util.io.RuntimeUtils;
 import java.io.File;
 import java.util.*;
 
-import static com.mk.tv.auth.config.Globals.NOT_YET_IMPLEMENTED;
+import static jPlus.util.io.ConsoleIOUtils.NOT_YET_IMPLEMENTED;
 import static jPlus.util.io.ConsoleIOUtils.validateString;
 import static jPlus.util.io.ConsoleUtils.sep;
 

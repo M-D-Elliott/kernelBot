@@ -96,6 +96,7 @@ public class BotUserController implements ICommandController {
 
     public boolean changePassword(APIWrapper api, String[] args) {
         if (args.length >= 4) return changePassword(api, args[1], args[2], args[3]);
+        api.print(String.format(Globals.PASSWORD_RESET_HELP, config.commandIndicator));
         return false;
     }
 
@@ -125,7 +126,7 @@ public class BotUserController implements ICommandController {
     private void spill(APIWrapper api, String[] args) {
         if (api.access() != Access.PRIVATE ||
                config.securityLevel == Access.PROTECTED && !checkPassword(api, args)) {
-            api.print(Globals.ONLY_SECURE);
+            api.print(config.onlySecureChannelWarning);
             return;
         }
         final StringBuilder building = new StringBuilder();
@@ -189,7 +190,7 @@ public class BotUserController implements ICommandController {
 
     private void warnPublicChannel(APIWrapper api) {
         if (api.access().value() < 3)
-            api.print(ConsoleUtils.encaseInBanner(Globals.WARN_PUBLIC_CHANNEL, "#"));
+            api.print(ConsoleUtils.encaseInBanner(config.publicChannelWarning, "#"));
     }
 
     public BotUser getBotUser(String username) {

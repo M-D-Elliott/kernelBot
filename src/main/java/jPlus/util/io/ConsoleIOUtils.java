@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public class ConsoleIOUtils {
 
-    public static char INDICATOR = '>';
-
+    public static final String NOT_YET_IMPLEMENTED = "Not yet implemented!";
+    public static final char INDICATOR = '>';
     private static final Scanner inScanner = new Scanner(System.in);
 
     public static boolean validateString(String[] args, int index) {
@@ -30,4 +30,6 @@ public class ConsoleIOUtils {
     public static void confirm(String s, Runnable run) {
         if (confirm(s)) run.run();
     }
+
+    //***************************************************************//
 }

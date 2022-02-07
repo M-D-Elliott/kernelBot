@@ -22,7 +22,7 @@ public class Run implements Runnable {
     private final AuthKernel kernel = new AuthKernel(config);
 
     private final DiscordOutListener out = new DiscordOutListener(
-            Collections.singletonList(kernel::interpret));
+            Collections.singletonList(kernel::parse));
 
     public void run() {
         try {

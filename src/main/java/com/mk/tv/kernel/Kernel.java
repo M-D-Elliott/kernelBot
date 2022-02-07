@@ -54,12 +54,16 @@ public class Kernel {
 
     //***************************************************************//
 
-    public void interpret(APIWrapper api) {
+    public void parse(APIWrapper api) {
         String message = api.in();
         if (message.charAt(0) == config.commandIndicator) {
             message = message.substring(1);
         } else if (api.access().value() <= Access.PRIVATE.value()) return;
 
+        interpret(api, message);
+    }
+
+    protected void interpret(APIWrapper api, String message) {
         final String[] parsedM = message.split(" ");
         final Receivable2<APIWrapper, String[]> command =
                 findCommand(parsedM);

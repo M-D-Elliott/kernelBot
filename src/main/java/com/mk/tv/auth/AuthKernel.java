@@ -19,6 +19,12 @@ public class AuthKernel extends Kernel {
         controllers.add(userController);
     }
 
+    @Override
+    public void init(){
+        super.init();
+        menu.add(4, "user");
+    }
+
     //***************************************************************//
 
     @Override
@@ -27,7 +33,7 @@ public class AuthKernel extends Kernel {
     }
 
     @Override
-    public void interpret(APIWrapper api) {
+    public void parse(APIWrapper api) {
         switch (authConfig.securityLevel) {
             case PUBLIC:
                 break;
@@ -57,6 +63,6 @@ public class AuthKernel extends Kernel {
                 return;
         }
 
-        super.interpret(api);
+        super.parse(api);
     }
 }
