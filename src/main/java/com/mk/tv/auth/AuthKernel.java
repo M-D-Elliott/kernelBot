@@ -4,7 +4,6 @@ import com.mk.tv.auth.botusers.BotUserController;
 import com.mk.tv.auth.config.AuthConfig;
 import com.mk.tv.kernel.Kernel;
 import jPlus.io.APIWrapper;
-import jPlus.io.security.Access;
 import jPlus.util.io.ConsoleIOUtils;
 
 public class AuthKernel extends Kernel {
@@ -33,7 +32,7 @@ public class AuthKernel extends Kernel {
     }
 
     @Override
-    public void parse(APIWrapper api) {
+    protected void interpret(APIWrapper api, String[] parsedM) {
         switch (authConfig.securityLevel) {
             case PUBLIC:
                 break;
@@ -44,13 +43,7 @@ public class AuthKernel extends Kernel {
                 }
                 break;
             case PRIVATE:
-                if (userController.authenticateUser(api, true)) break;
-                String message = api.in();
-                if (message.charAt(0) == config.commandIndicator) {
-                    message = message.substring(1);
-                } else if (api.access().value() <= Access.PRIVATE.value()) return;
-
-                final String[] parsedM = message.split(" ");
+                if (userController.authenticateUserAndPass(api)) break;
                 if (ConsoleIOUtils.validateString(parsedM, 0)
                         && parsedM[0].equals("signin")
                         && ConsoleIOUtils.validateString(parsedM, 1)) {
@@ -58,11 +51,11 @@ public class AuthKernel extends Kernel {
                         api.print("Sign in successful!");
                         break;
                     } else api.print("Wrong password!");
-                } else api.print("You are not signed in. " + config.commandIndicator + "signin mypass");
+                }
             default:
                 return;
         }
 
-        super.parse(api);
+        super.interpret(api, parsedM);
     }
 }

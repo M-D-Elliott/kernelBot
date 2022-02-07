@@ -143,15 +143,17 @@ public class BotUserController implements ICommandController {
     }
 
 
-    public boolean authenticateUser(APIWrapper api, boolean requirePW) {
+    public boolean authenticateUserAndPass(APIWrapper api) {
         final BotUser user = getBotUser(api.username());
         final boolean userExists = user != null;
         if (userExists) {
-            if (requirePW) return user.getSession().active();
+            final boolean ret = user.getSession().active();
+            if(!ret) api.print("You are not signed in. " + config.commandIndicator + "signin mypass");
+            return ret;
         } else {
             api.print("User must be registered first.");
+            return false;
         }
-        return userExists;
     }
 
     public boolean initiateSession(APIWrapper api, String pass) {

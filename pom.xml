@@ -6,7 +6,7 @@
 
     <groupId>com.mk.tv</groupId>
     <artifactId>MeekerTVBot</artifactId>
-    <version>0.9.8 PRE RELEASE</version>
+    <version>0.9.9 PRE RELEASE</version>
     <packaging>jar</packaging>
     <build>
         <plugins>
