@@ -125,7 +125,7 @@ public class BotUserController implements ICommandController {
 
     private void spill(APIWrapper api, String[] args) {
         if (api.access() != Access.PRIVATE ||
-               config.securityLevel == Access.PROTECTED && !checkPassword(api, args)) {
+                config.securityLevel == Access.PROTECTED && !checkPassword(api, args)) {
             api.print(config.onlySecureChannelWarning);
             return;
         }
@@ -146,14 +146,12 @@ public class BotUserController implements ICommandController {
     public boolean authenticateWPass(APIWrapper api) {
         final BotUser user = getBotUser(api.username());
         final boolean userExists = user != null;
-        if (userExists) {
-            final boolean ret = user.getSession().active();
-            if(!ret) api.print("You are not signed in. " + config.commandIndicator + "signin mypass");
-            return ret;
-        } else {
-            api.print("User must be registered first.");
-            return false;
-        }
+
+        if (userExists) return user.getSession().active();
+        else api.print("User must be registered first.");
+
+        return false;
+
     }
 
     public boolean initiateSession(APIWrapper api, String pass) {

@@ -58,7 +58,7 @@ public class Kernel {
         String message = api.in();
         if (message.charAt(0) == config.commandIndicator) {
             message = message.substring(1);
-        } else if (api.access().value() <= Access.PRIVATE.value()) return;
+        } else if (api.access().value() < Access.PRIVATE.value()) return;
 
         final String[] parsedM = message.split(" ");
         interpret(api, parsedM);

@@ -51,7 +51,7 @@ public class AuthKernel extends Kernel {
                         api.print("Sign in successful!");
                         break;
                     } else api.print("Wrong password!");
-                }
+                } else api.print("You are not signed in. " + config.commandIndicator + "signin mypass");
             default:
                 return;
         }
