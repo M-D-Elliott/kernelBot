@@ -60,6 +60,10 @@ public class ConsoleUtils {
         return edge + s + edge;
     }
 
+    public static String encase(String s, char edge) {
+        return edge + s + edge;
+    }
+
     private static String encaseMirror(String s, String edge) {
         return edge + s + StringUtils.reverse(edge);
     }

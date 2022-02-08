@@ -3,6 +3,7 @@ package com.mk.tv.utils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import jPlus.io.file.DirUtils;
 import jPlus.lang.callback.Retrievable;
 
 import java.io.File;
@@ -51,7 +52,8 @@ public class JacksonUtils {
         final File file = new File(path);
         try {
             return file.exists()
-                    ? mapper.readValue(file, new TypeReference<TYPE>(){})
+                    ? mapper.readValue(file, new TypeReference<TYPE>() {
+            })
                     : newInstance.retrieve();
         } catch (IOException e) {
             e.printStackTrace();
@@ -64,8 +66,8 @@ public class JacksonUtils {
         final File file = new File(path);
         try {
             return file.exists()
-                    ? mapper.readValue(file, new TypeReference<TYPE[]>(){})
-                    : newInstance.retrieve();
+                    ? mapper.readValue(file, new TypeReference<TYPE[]>() {
+            }) : newInstance.retrieve();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -76,10 +78,17 @@ public class JacksonUtils {
     public static <TYPE> TYPE readAndUpdateBliss(String path, TypeReference<TYPE> typeRef, Retrievable<TYPE> newInstance) {
         final File file = new File(path);
         try {
-            TYPE ret = file.exists()
-                    ? mapper.readValue(file, typeRef)
-                    : newInstance.retrieve();
-            JacksonUtils.pretty.writeValue(file, ret);
+            TYPE ret;
+            if (file.exists()) {
+                ret = mapper.readValue(file, typeRef);
+                JacksonUtils.pretty.writeValue(file, ret);
+            } else {
+                ret = newInstance.retrieve();
+                final File dir = file.getParentFile();
+                if (dir == null || DirUtils.make(dir, false))
+                    if (file.createNewFile()) JacksonUtils.pretty.writeValue(file, ret);
+            }
+
             return ret;
         } catch (IOException e) {
             e.printStackTrace();
@@ -91,10 +100,16 @@ public class JacksonUtils {
     public static <TYPE> TYPE readAndUpdateBliss(String path, Class<TYPE> clazz, Retrievable<TYPE> newInstance) {
         final File file = new File(path);
         try {
-            TYPE ret = file.exists()
-                    ? mapper.readValue(file, clazz)
-                    : newInstance.retrieve();
-            JacksonUtils.pretty.writeValue(file, ret);
+            TYPE ret;
+            if (file.exists()) {
+                ret = mapper.readValue(file, clazz);
+                JacksonUtils.pretty.writeValue(file, ret);
+            } else {
+                ret = newInstance.retrieve();
+                final File dir = file.getParentFile();
+                if (dir == null || DirUtils.make(dir, false))
+                    if (file.createNewFile()) JacksonUtils.pretty.writeValue(file, ret);
+            }
             return ret;
         } catch (IOException e) {
             e.printStackTrace();

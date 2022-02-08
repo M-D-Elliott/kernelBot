@@ -31,6 +31,18 @@ public class DirUtils {
         return directory;
     }
 
+    public static boolean make(File dir, boolean emptyDir) {
+        if (!dir.exists()) {
+            if (!dir.mkdirs())
+            {
+                System.err.println("FileOut failed to construct directory at " + dir.getAbsolutePath());
+                return false;
+            }
+        } else if (emptyDir) empty(dir);
+
+        return true;
+    }
+
     public static void empty(File directory) {
         final File[] files = directory.listFiles();
         if (files != null && files.length > 0) FileUtils.delete(files);

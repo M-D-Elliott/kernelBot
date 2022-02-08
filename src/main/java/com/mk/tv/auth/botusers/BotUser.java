@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 
 public class BotUser {
     public String username;
-    public String password = "";
+    public String password = "password";
     public String welcome = "Hey friend!";
     public Session session = Session.DEFAULT;
 

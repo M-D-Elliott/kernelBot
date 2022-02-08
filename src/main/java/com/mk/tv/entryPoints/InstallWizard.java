@@ -132,7 +132,6 @@ public class InstallWizard extends Install {
             final BotUser firstUser = new BotUser(username);
             final BotUserRepo repo = new BotUserRepo(MapUtils::newLinkedInstance);
             repo.add(firstUser);
-            repo.save();
         });
 
         System.out.println();
