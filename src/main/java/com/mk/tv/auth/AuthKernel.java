@@ -37,13 +37,13 @@ public class AuthKernel extends Kernel {
             case PUBLIC:
                 break;
             case PROTECTED:
-                if (!userController.authenticateUser(api)) {
+                if (!userController.authenticate(api)) {
                     api.print(authConfig.rejectUserMessage);
                     return;
                 }
                 break;
             case PRIVATE:
-                if (userController.authenticateUserAndPass(api)) break;
+                if (userController.authenticateWPass(api)) break;
                 if (ConsoleIOUtils.validateString(parsedM, 0)
                         && parsedM[0].equals("signin")
                         && ConsoleIOUtils.validateString(parsedM, 1)) {

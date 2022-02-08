@@ -21,9 +21,6 @@ public class Run implements Runnable {
 
     private final AuthKernel kernel = new AuthKernel(config);
 
-    private final DiscordOutListener out = new DiscordOutListener(
-            Collections.singletonList(kernel::parse));
-
     public void run() {
         try {
             start();
@@ -34,6 +31,9 @@ public class Run implements Runnable {
 
     private void start() throws LoginException {
         kernel.init();
+
+        final DiscordOutListener out = new DiscordOutListener(
+                Collections.singletonList(kernel::parse));
 
         JDABuilder.createDefault(config.token)
                 .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)

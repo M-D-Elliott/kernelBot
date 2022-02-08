@@ -138,12 +138,12 @@ public class BotUserController implements ICommandController {
 
     //***************************************************************//
 
-    public boolean authenticateUser(APIWrapper api) {
+    public boolean authenticate(APIWrapper api) {
         return getBotUser(api.username()) != null;
     }
 
 
-    public boolean authenticateUserAndPass(APIWrapper api) {
+    public boolean authenticateWPass(APIWrapper api) {
         final BotUser user = getBotUser(api.username());
         final boolean userExists = user != null;
         if (userExists) {

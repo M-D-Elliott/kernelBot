@@ -19,7 +19,7 @@ import static jPlus.util.lang.IntUtils.boundsMin;
 
 public class Kernel {
 
-    public final Config config;
+    protected final Config config;
     protected final List<ICommandController> controllers = new ArrayList<>();
 
     //***************************************************************//
@@ -72,7 +72,7 @@ public class Kernel {
         processCommand(api, command, parsedM);
     }
 
-    private Receivable2<APIWrapper, String[]> findCommand(String[] parsedM) {
+    protected Receivable2<APIWrapper, String[]> findCommand(String[] parsedM) {
         Integer intIndicator = IntUtils.parseInteger(parsedM[0]);
         if (intIndicator != null) parsedM[0] = menu.get(boundsMin(intIndicator, 0));
 
@@ -86,7 +86,7 @@ public class Kernel {
         return commandFunctionMap.get(parsedM[0]);
     }
 
-    private void processCommand(APIWrapper api, Receivable2<APIWrapper, String[]> command, String[] parsedM) {
+    protected void processCommand(APIWrapper api, Receivable2<APIWrapper, String[]> command, String[] parsedM) {
         if (command == null) {
             System.out.println(api.username() + " -- unknown");
             noCommandFoundResponse(api);
