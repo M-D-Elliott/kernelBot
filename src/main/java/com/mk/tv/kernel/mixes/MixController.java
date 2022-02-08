@@ -54,11 +54,6 @@ public class MixController implements ICommandController {
         return 'm';
     }
 
-    @Override
-    public String getMenuItem(int i) {
-        return null;
-    }
-
     public void processCommand(APIWrapper api, String[] args) {
         if (validateString(args, 1) && processCommand(api, args[1])) return;
         menuResponse(api, args);

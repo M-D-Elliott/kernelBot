@@ -43,11 +43,6 @@ public class SystemController implements ICommandController {
         return indicator;
     }
 
-    @Override
-    public String getMenuItem(int i) {
-        return menu.get(i);
-    }
-
     public void processCommand(APIWrapper api, String[] args) {
         menuResponse(api, args);
     }

@@ -58,11 +58,6 @@ public class HotkeyController implements IRepoCommandController {
         return indicator;
     }
 
-    @Override
-    public String getMenuItem(int i) {
-        return menu.get(i);
-    }
-
     public void processCommand(APIWrapper api, String[] args) {
         if (validateString(args, 1) && processCommand(args[1])) return;
         menuResponse(api, args);

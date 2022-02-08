@@ -50,7 +50,7 @@ public class AuthKernel extends Kernel {
                     if (userController.initiateSession(api, parsedM[1])) {
                         api.print("Sign in successful!");
                         break;
-                    } else api.print("Wrong password!");
+                    } else userController.wrongPass(api);
                 } else api.print("You are not signed in. " + config.commandIndicator + "signin mypass");
             default:
                 return;

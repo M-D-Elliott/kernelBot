@@ -12,6 +12,7 @@ import jPlus.util.io.ConsoleUtils;
 
 import java.util.*;
 
+import static jPlus.util.io.ConsoleIOUtils.validateString;
 import static jPlus.util.io.ConsoleUtils.sep;
 
 public class BotUserController implements ICommandController {
@@ -45,18 +46,8 @@ public class BotUserController implements ICommandController {
         return indicator;
     }
 
-    @Override
-    public String getMenuItem(int i) {
-        return menu.get(i);
-    }
-
-
     public void processCommand(APIWrapper api, String[] args) {
         menuResponse(api, args);
-    }
-
-    public boolean processCommand(String commandBody) {
-        return false;
     }
 
     @Override
@@ -75,9 +66,10 @@ public class BotUserController implements ICommandController {
     //***************************************************************//
 
     public void register(APIWrapper api, String[] args) {
-        if (checkPassword(api, args))
+        if (checkPassword(api, args)) {
             if (args.length >= 5 && register(api, args[2], args[3], args[4]))
                 return;
+        } else wrongPass(api);
         api.print(String.format(Globals.REGISTER_HELP, config.commandIndicator));
     }
 
@@ -94,14 +86,13 @@ public class BotUserController implements ICommandController {
         return false;
     }
 
-    public boolean changePassword(APIWrapper api, String[] args) {
-        if (args.length >= 4) return changePassword(api, args[1], args[2], args[3]);
-        api.print(String.format(Globals.PASSWORD_RESET_HELP, config.commandIndicator));
-        return false;
+    public void changePassword(APIWrapper api, String[] args) {
+        if (args.length >= 4) changePassword(api, args[1], args[2], args[3]);
+        else api.print(String.format(Globals.PASSWORD_RESET_HELP, config.commandIndicator));
     }
 
-    private boolean changePassword(APIWrapper api, String oldPass, String newPass, String newPass2) {
-        return changePassword(api, getBotUser(api.username()), oldPass, newPass, newPass2);
+    private void changePassword(APIWrapper api, String oldPass, String newPass, String newPass2) {
+        changePassword(api, getBotUser(api.username()), oldPass, newPass, newPass2);
     }
 
     private boolean changePassword(APIWrapper api, BotUser botUser, String oldPass, String newPass, String newPass2) {
@@ -124,11 +115,16 @@ public class BotUserController implements ICommandController {
     }
 
     private void spill(APIWrapper api, String[] args) {
-        if (api.access() != Access.PRIVATE ||
-                config.securityLevel == Access.PROTECTED && !checkPassword(api, args)) {
+        if (api.access() == Access.PRIVATE) {
+            if (config.securityLevel == Access.PROTECTED && !checkPassword(api, args)) {
+                wrongPass(api);
+                return;
+            }
+        } else {
             api.print(config.onlySecureChannelWarning);
             return;
         }
+
         final StringBuilder building = new StringBuilder();
         final String sep = sep();
         FileUtils.read("repos/secrets.txt").forEach(item -> building.append(item).append(sep));
@@ -151,37 +147,29 @@ public class BotUserController implements ICommandController {
         else api.print("User must be registered first.");
 
         return false;
-
     }
 
     public boolean initiateSession(APIWrapper api, String pass) {
         final BotUser user = getBotUser(api.username());
         if (user == null || !user.password.equals(pass)) return false;
+
         user.session = new Session(config.sessionDurationS());
         repo.save();
         return true;
     }
 
     public boolean checkPassword(APIWrapper api, String[] args) {
-        if (args.length > 1 && args[1].length() >= 1)
+        if (validateString(args, 1))
             return checkPassword(api, args[1]);
         else return false;
     }
 
     private boolean checkPassword(APIWrapper api, String password) {
-        final boolean ret = checkPassword(getBotUser(api.username()), password);
-        if (!ret) wrongPass(api);
-        return ret;
+        return checkPassword(getBotUser(api.username()), password);
     }
 
-    private void wrongPass(APIWrapper api) {
+    public void wrongPass(APIWrapper api) {
         api.print(config.rejectUserMessage);
-    }
-
-    private boolean checkPassword(BotUser botUser, String[] args) {
-        if (args.length > 1 && args[1].length() >= 1)
-            return checkPassword(botUser, args[1]);
-        else return false;
     }
 
     private boolean checkPassword(BotUser botUser, String password) {
