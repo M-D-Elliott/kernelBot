@@ -11,6 +11,6 @@ public class Globals {
     public static final String REGISTER_HELP = String.format(
             "Passwords must be %1$d characters long", MIN_PASS_LENGTH)
             + System.lineSeparator() +
-            "Type without quotes: '%2$sregister myPass newUsername newUserPass newUserPassMustMatch'";
+            "Type without quotes: '%1$sregister myPass newUsername newUserPass newUserPassMustMatch'";
     public static final String REGISTER_SUCCESS = "Registration for %1$s successful!";
 }

@@ -65,18 +65,17 @@ public class BotUserController implements ICommandController {
 
     //***************************************************************//
 
-    public void register(APIWrapper api, String[] args) {
+    protected void register(APIWrapper api, String[] args) {
         if (checkPassword(api, args)) {
-            if (args.length >= 5 && register(api, args[2], args[3], args[4]))
-                return;
+            if (!(validateString(args, 4) && register(api, args[2], args[3], args[4])))
+                api.print(String.format(Globals.REGISTER_HELP, config.commandIndicator));
         } else wrongPass(api);
-        api.print(String.format(Globals.REGISTER_HELP, config.commandIndicator));
     }
 
     private boolean register(APIWrapper api, String username, String pass, String pass2) {
         if (username.length() >= 4) {
             final BotUser newUser = new BotUser(username);
-            if (changePassword(api, newUser, "", pass, pass2)) {
+            if (changePassword(newUser, newUser.password, pass, pass2)) {
                 repo.add(newUser);
                 api.print(String.format(Globals.REGISTER_SUCCESS, username));
                 return true;
@@ -86,35 +85,41 @@ public class BotUserController implements ICommandController {
         return false;
     }
 
-    public void changePassword(APIWrapper api, String[] args) {
+    protected void changePassword(APIWrapper api, String[] args) {
         if (args.length >= 4) changePassword(api, args[1], args[2], args[3]);
         else api.print(String.format(Globals.PASSWORD_RESET_HELP, config.commandIndicator));
     }
 
-    private void changePassword(APIWrapper api, String oldPass, String newPass, String newPass2) {
+    protected void changePassword(APIWrapper api, String oldPass, String newPass, String newPass2) {
         changePassword(api, getBotUser(api.username()), oldPass, newPass, newPass2);
     }
 
-    private boolean changePassword(APIWrapper api, BotUser botUser, String oldPass, String newPass, String newPass2) {
+    protected void changePassword(APIWrapper api, BotUser botUser, String oldPass, String newPass, String newPass2) {
         warnPublicChannel(api);
 
+        if (changePassword(botUser, oldPass, newPass, newPass2)) {
+            repo.save();
+            api.print(Globals.CHANGE_PASS_SUCCESS);
+        } else api.print(String.format(Globals.PASSWORD_RESET_HELP, config.commandIndicator));
+    }
+
+    private boolean changePassword(BotUser botUser, String oldPass, String newPass, String newPass2) {
         if (newPass.length() >= Globals.MIN_PASS_LENGTH
                 && checkPassword(botUser, oldPass) && newPass.equals(newPass2)) {
             botUser.password = newPass;
-            repo.save();
-            api.print(Globals.CHANGE_PASS_SUCCESS);
+
             return true;
-        } else api.print(String.format(Globals.PASSWORD_RESET_HELP, config.commandIndicator));
+        }
         return false;
     }
 
-    public void setWelcome(APIWrapper api, String[] args) {
+    protected void setWelcome(APIWrapper api, String[] args) {
         getBotUser(api.username()).welcome = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         repo.save();
         api.print("Welcome set!");
     }
 
-    private void spill(APIWrapper api, String[] args) {
+    protected void spill(APIWrapper api, String[] args) {
         if (api.access() == Access.PRIVATE) {
             if (config.securityLevel == Access.PROTECTED && !checkPassword(api, args)) {
                 wrongPass(api);
@@ -177,8 +182,8 @@ public class BotUserController implements ICommandController {
     }
 
     private void warnPublicChannel(APIWrapper api) {
-        if (api.access().value() < 3)
-            api.print(ConsoleUtils.encaseInBanner(config.publicChannelWarning, "#"));
+        if (api.access().value() < Access.PRIVATE.value())
+            api.print(sep() + ConsoleUtils.encaseInBanner(config.publicChannelWarning, "#"));
     }
 
     public BotUser getBotUser(String username) {
