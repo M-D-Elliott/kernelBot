@@ -6,8 +6,11 @@
 
     <groupId>com.mk.tv</groupId>
     <artifactId>MeekerTVBot</artifactId>
-    <version>0.9.13 PRE RELEASE</version>
+    <version>1.0.0 RELEASE</version>
     <packaging>jar</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <build>
         <plugins>
             <plugin>
@@ -17,6 +20,7 @@
                     <source>9</source>
                     <target>9</target>
                 </configuration>
+                <version>3.9.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -30,6 +34,7 @@
                         </manifest>
                     </archive>
                 </configuration>
+                <version>3.1.2</version>
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
