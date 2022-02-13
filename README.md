@@ -1,4 +1,3 @@
-<a href=#abcd>link</a>
 ```
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % Welcome to KernelBot! %
@@ -55,7 +54,6 @@ the exe name in stopvlc. Also probably change the script names to accomodate
 your users. %%%
 ```
 
-<a id="abcd">test</a>
 *********************
 3. Installation guide
 *********************
