@@ -1,8 +1,8 @@
 package jPlus.util.awt;
 
-import jPlus.async.Threads;
-
 import java.awt.*;
+
+import static jPlus.async.Threads.sleepBliss;
 
 public class RobotUtils {
     public static final int SLEEP_DUR = 100000;
@@ -37,31 +37,31 @@ public class RobotUtils {
     //***************************************************************//
 
     private static void upAndSleep(int[] keyEvents) {
-        for(int e : keyEvents) {
+        for (int e : keyEvents) {
             upAndSleep(e);
-            Threads.sleepBliss(0, SLEEP_DUR);
+            sleepBliss(0, SLEEP_DUR);
         }
     }
 
     private static void upAndSleep(int e) {
-        if(e >= 0) up(e);
+        if (e >= 0) up(e);
     }
 
     private static void downAndSleep(int[] keyEvents) {
-        for(int e : keyEvents) {
+        for (int e : keyEvents) {
             downAndSleep(e);
-            Threads.sleepBliss(0, SLEEP_DUR);
+            sleepBliss(0, SLEEP_DUR);
         }
     }
 
     private static void downAndSleep(int e) {
-        if(e >= 0) down(e);
-        else Threads.sleepBliss(-e);
+        if (e >= 0) down(e);
+        else sleepBliss(-e);
     }
 
     private static void pressAndSleep(int[] keyEvents) {
         downAndSleep(keyEvents);
-        Threads.sleepBliss(0, SLEEP_DUR);
+        sleepBliss(0, SLEEP_DUR);
         upAndSleep(keyEvents);
     }
 
@@ -70,23 +70,23 @@ public class RobotUtils {
     }
 
     public static void press(int[][] keyEventSets) {
-        for(int[] keyEvents : keyEventSets) {
+        for (int[] keyEvents : keyEventSets) {
             pressAndSleep(keyEvents);
-            Threads.sleepBliss(0, SLEEP_DUR);
+            sleepBliss(0, SLEEP_DUR);
         }
     }
 
     //***************************************************************//
 
-    public static void pressAsync(int[] keyEvents){
-        Threads.later(() -> {
+    public static void pressAsync(int[] keyEvents) {
+        new Thread(() -> {
             press(keyEvents);
-        }, 0);
+        }).start();
     }
 
     public static void pressAsync(int[][] keyEventSets) {
-        Threads.later(() -> {
+        new Thread(() -> {
             press(keyEventSets);
-        },0);
+        }).start();
     }
 }

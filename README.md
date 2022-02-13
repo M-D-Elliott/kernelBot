@@ -1,7 +1,7 @@
+```
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % Welcome to KernelBot! %
 %%%%%%%%%%%%%%%%%%%%%%%%%
-
 
 -------TABLE OF CONTENTS---------
 1. What is Kernelbot?
@@ -11,13 +11,13 @@
 5. User's guide
 6. Developer's guide
 ---------------------------------
+```
 
 
-
-*************************
-* 1. What is Kernelbot? *
-*************************
-
+*********************
+1. What is Kernelbot?
+*********************
+```
 Kernelbot is a discord bot a bit different than others.
 Instead of running on a server like Heroku, Kernelbot
 runs on your local machine, the host computer.
@@ -29,34 +29,36 @@ Kernelbot is capable of three main functionalities:
 Press -- presses hotkey(s)
 Script -- runs scripts (only .bat in v1.0.0)
 Mix -- runs presses or scripts (or mixes?) with waits in between.
+```
 
 
-
-***************************
-* 2. Who wants Kernelbot? *
-***************************
-
+***********************
+2. Who wants Kernelbot?
+***********************
+```
 Kernelbot is for people who host servers. Say you have a server
 for the popular video game "Project Zomboid". Say that you have
 to run a program to start the server, and/or end a program
 to stop the server. This can be done with .bat (batch) files and
-windows scheduled tasks. 
+windows scheduled tasks.
+
 However, Kernelbot can execute batch files on demand. The name of the
 .bat file becomes the command name. So if you have a .bat file
 in the myscripts folder called "stopserver.bat" then it will appear
 in your Kernelbot's menu as stopserver. So a discord friend simply needs
 to type ?stopserver to run the batch file that stop your server.
+
 %%% NOTE: in myscripts I have example .bat files for starting and stopping
 an application. You simply need to change the path in startvlc and change
 the exe name in stopvlc. Also probably change the script names to accomodate
 your users. %%%
+```
 
 
-
-*************************
-* 3. Installation guide *
-*************************
-
+*********************
+3. Installation guide
+*********************
+```
 CHECK IF JAVA IS INSTALLED
 -Open the command prompt or other command-line shell.
 -Type 'java -version' without quotes and press enter.
@@ -67,7 +69,7 @@ run in SE 8.
 
 WITH JAVA INSTALLED LOCALLY
 -Simply place the jar into its own folder and double click.
-install.bat and installWizard.bat will be generated. 
+install.bat and installWizard.bat will be generated.
 -For first time install double-click the installWizard.
 
 NO JAVA INSTALLED --OR-- WRONG JAVA VERSION
@@ -80,12 +82,13 @@ TO START APPLICATION:
 -To start you must use startbot.bat even if you have java installed.
 -The install or installWizard will provide startbot.bat based on
 your install method. The only difference is the java path referenced.
+```
 
 
-
-**************************
-* 4. Configuration guide *
-**************************
+**********************
+4. Configuration guide
+**********************
+```
 NOTE : FILES WILL BE PLACED IN PROPER POSITIONS BY EITHER INSTALLATION.
 
 %%% config.txt %%%
@@ -113,10 +116,10 @@ ANNOTATED
 {
   "token" : "my token here.", #paste your discord bot token here. If you use the wizard it will do this for you.
   "commandIndicator" : "?", #this is used to determine when your bot will respond in public channels. Must be a character, default is ?.
-  "formats" : [ "bat" ], #these are the script files the bot will search for on startup. 
+  "formats" : [ "bat" ], #these are the script files the bot will search for on startup.
                           All files must be downstream of myscripts and the bot will search recursively (subfolders).
   "border" : "+", #this determines the border for all menus except for the main help menu.
-  "securityLevel" : "PRIVATE", #PUBLIC, PROTECTED, and PRIVATE. PUBLIC means the bot will respond to anyone, 
+  "securityLevel" : "PRIVATE", #PUBLIC, PROTECTED, and PRIVATE. PUBLIC means the bot will respond to anyone,
                      PROTECTED means user-based white-list with some password commands, and PRIVATE means
 					 PROTECTED and users must sign in every userSessionDuration using their personal password.
   "userSessionDuration" : "00:48:00:00", #this setting is only used in PRIVATE securityLevel. DD:HH:MM:SS. This example is set to 48 hours.
@@ -180,9 +183,9 @@ e.g. I create a 5s wait with w(5000) for my live commands.
 -The bot will respond in discord with the contents
  of repos/secrets.txt when the ?spill command is activated.
 
- 
+
 %%% repos/users.txt %%%
- 
+
 --USABLE users.txt CONTENTS---
 {
   "myDiscordUsername" : {
@@ -203,13 +206,13 @@ e.g. I create a 5s wait with w(5000) for my live commands.
   }
 }
 --END USABLE users.txt CONTENTS---
+```
 
 
-
-*******************
-* 5. User's guide *
-*******************
-
+***************
+5. User's guide
+***************
+```
 -Once the bot is running simply type ?help
  to see the help menu. If on protected or private
  if you are whitelisted this should work in anybody
@@ -229,13 +232,13 @@ e.g. I create a 5s wait with w(5000) for my live commands.
  a new user or changing your password! The bot moderator
  of course can do this for you by modifying various files.
  NOTE any modifcation to a txt file requires a bot restart.
- 
- 
- 
-************************
-* 6. Developer's guide *
-************************
+```
 
+
+********************
+6. Developer's guide
+********************
+```
 -Most simply Kernelbot is comprised of three main components:
 
 LISTENER
@@ -263,7 +266,8 @@ by passing Jackson a class.
 -KernelBot was also broken up into a Kernel (script, mix, press, system)
  and AuthKernel (user) layers. This is so the non-essential user layer
  could easily be removed in future projects.
- 
+
 -Kernelbot heavily relies on jPlus, my general purpose Java library.
  Some of these functions may be improved by other libraries,
  but this allows the bot to have so few dependencies.
+```
