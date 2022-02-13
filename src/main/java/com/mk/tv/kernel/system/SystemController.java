@@ -16,12 +16,8 @@ import static jPlus.util.io.ConsoleUtils.sep;
 
 public class SystemController implements ICommandController {
 
-    public static final String ACTIVITY_RAW = "%scommand arg1 arg2";
-    public static final String CHANGE_INDICATOR_HELP = "to change indicator to ! type: '%sindicator !'";
     private final Config config;
-
     private final List<String> menu = new ArrayList<>();
-    private final char indicator = 'y';
 
     public SystemController(Config config) {
         this.config = config;
@@ -40,7 +36,7 @@ public class SystemController implements ICommandController {
 
     @Override
     public char indicator() {
-        return indicator;
+        return 'y';
     }
 
     public void processCommand(APIWrapper api, String[] args) {
@@ -54,9 +50,9 @@ public class SystemController implements ICommandController {
     @Override
     public void menuResponse(APIWrapper api, String[] args) {
         final String prefix = sep() + "System" + sep();
-        final String format = " %c%d  " + config.border + "        %s        ";
+        final String format = " %c%d  " + config.menuBorder + "        %s        ";
         api.print(prefix + ConsoleUtils.encaseInBanner(
-                menu, config.border, (item, i) -> String.format(format, indicator, i, item)));
+                menu, config.menuBorder, (item, i) -> String.format(format, indicator(), i, item)));
     }
 
     @Override
@@ -81,4 +77,9 @@ public class SystemController implements ICommandController {
         String version = JarUtils.version();
         api.print(version == null ? "DEVELOPMENT" : version);
     }
+
+    //***************************************************************//
+
+    public static final String ACTIVITY_RAW = "%scommand arg1 arg2";
+    public static final String CHANGE_INDICATOR_HELP = "to change indicator to ! type: '%sindicator !'";
 }

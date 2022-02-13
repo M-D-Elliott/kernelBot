@@ -1,44 +1,42 @@
 package com.mk.tv.kernel.mixes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.mk.tv.kernel.generic.ICommandController;
+import com.mk.tv.kernel.generic.IRepoCommandController;
 import com.mk.tv.kernel.generic.JacksonRepo;
 import com.mk.tv.kernel.system.Config;
 import jPlus.io.APIWrapper;
 import jPlus.lang.callback.Receivable1;
 import jPlus.lang.callback.Receivable2;
-import jPlus.util.awt.RobotUtils;
 import jPlus.util.io.ConsoleUtils;
 import jPlus.util.lang.IntUtils;
 import jPlus.util.map.MapUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import static jPlus.util.io.ConsoleIOUtils.validateString;
 import static jPlus.util.io.ConsoleUtils.sep;
 
-public class MixController implements ICommandController {
+public class MixController implements IRepoCommandController {
 
-    private Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap;
+    private final Config config;
+    private final List<String> menu = new ArrayList<>();
 
     private final JacksonRepo<String> repo = new JacksonRepo<>("repos/mixes.txt", new TypeReference<>() {
     }, MapUtils::newLinkedInstance);
 
-    private final Config config;
-
-    private final List<String> menu = new ArrayList<>();
-
-    private static String COMMAND_NOT_FOUND = "%$1s not found";
-
-    public List<Receivable1<Boolean>> synchronousReceivers = new ArrayList<>();
+    private Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap;
     private Receivable2<APIWrapper, String> iterateCommandsReceiver = this::iterateCommandsAsync;
+    public Collection<Receivable1<Boolean>> synchronicityReceivers = new ArrayList<>();
 
     public MixController(Config config) {
         this.config = config;
-        synchronousReceivers.add(this::setSynchronous);
+        synchronicityReceivers.add(this::setSynchronous);
     }
+
+    //***************************************************************//
 
     @Override
     public void readCommands(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
@@ -50,9 +48,15 @@ public class MixController implements ICommandController {
         menu.addAll(repo.map.keySet());
     }
 
-    private void processRepoCommand(APIWrapper api, String[] args) {
+    @Override
+    public void processRepoCommand(APIWrapper api, String[] args) {
         final String code = repo.get(args[0]);
         processCommand(api, code);
+    }
+
+    @Override
+    public void addCommand(APIWrapper api, String[] args) {
+
     }
 
     @Override
@@ -61,7 +65,7 @@ public class MixController implements ICommandController {
     }
 
     public void processCommand(APIWrapper api, String[] args) {
-        if (validateString(args, 1) && processCommand(api, args[1])) return;
+        if (config.allowFreeMix && validateString(args, 1) && processCommand(api, args[1])) return;
         menuResponse(api, args);
     }
 
@@ -75,9 +79,9 @@ public class MixController implements ICommandController {
 
     private void iterateCommandsAsync(APIWrapper api, String code) {
         new Thread(() -> {
-            for (Receivable1<Boolean> rec : synchronousReceivers) rec.receive(true);
+            for (Receivable1<Boolean> rec : synchronicityReceivers) rec.receive(true);
             iterateCommands(api, code);
-            for (Receivable1<Boolean> rec : synchronousReceivers) rec.receive(false);
+            for (Receivable1<Boolean> rec : synchronicityReceivers) rec.receive(false);
         }).start();
     }
 
@@ -107,13 +111,13 @@ public class MixController implements ICommandController {
         final String sep = sep();
         final String prefix = sep + "MIX PRESETS" + sep;
 
-        final String format = " %c%d  " + config.border + "        %s --  %s        ";
+        final String format = " %c%d  " + config.menuBorder + "        %s --  %s        ";
         final String[] menuFormatted = new String[menu.size()];
         for (int i = 0; i < menuFormatted.length; i++) {
             final String item = menu.get(i);
             menuFormatted[i] = String.format(format, indicator(), i, item, repo.map.get(item));
         }
-        final String body = ConsoleUtils.encaseInBanner(menuFormatted, config.border);
+        final String body = ConsoleUtils.encaseInBanner(menuFormatted, config.menuBorder);
 
         final String suffix = sep + config.displayLiteralCommand("mix scriptName+w(1000)+hotkeyName") + "will run script, wait 1s and press hotkey!"; //+
 
@@ -125,7 +129,13 @@ public class MixController implements ICommandController {
         return menu;
     }
 
+    //***************************************************************//
+
     public void setSynchronous(Boolean b) {
         iterateCommandsReceiver = b ? this::iterateCommands : this::iterateCommandsAsync;
     }
+
+    //***************************************************************//
+
+    private static final String COMMAND_NOT_FOUND = "%1$s not found";
 }

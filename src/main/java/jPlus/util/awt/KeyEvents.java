@@ -209,8 +209,8 @@ public class KeyEvents {
 
     //***************************************************************//
 
-    public static final String ADD_DEL = "\\+";
-    public static final String NEXT_DEL = "\\>";
+    public static String ADD_DEL = "\\+";
+    public static String NEXT_DEL = "\\>";
 
     private static final Map<String, Integer> specialKeys = new HashMap<>();
 

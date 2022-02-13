@@ -21,18 +21,19 @@ import static jPlus.util.io.ConsoleIOUtils.validateString;
 import static jPlus.util.io.ConsoleUtils.sep;
 
 public class PressController implements IRepoCommandController {
-    private final JacksonRepo<String> repo = new JacksonRepo<>("repos/presses.txt", new TypeReference<>() {
-    }, PressController::newHotkeyMap);
 
     private final Config config;
-
     private final List<String> menu = new ArrayList<>();
-    public final char indicator = 'p';
+
+    private final JacksonRepo<String> repo = new JacksonRepo<>("repos/presses.txt", new TypeReference<>() {
+    }, PressController::newHotkeyMap);
 
     private Receivable1<int[][]> pressReceiver = RobotUtils::pressAsync;
 
     public PressController(Config config) {
         this.config = config;
+        KeyEvents.ADD_DEL = "\\" + config.addDelimiter;
+        KeyEvents.NEXT_DEL = "\\" + config.nextDelimiter;
     }
 
     //***************************************************************//
@@ -58,7 +59,7 @@ public class PressController implements IRepoCommandController {
 
     @Override
     public char indicator() {
-        return indicator;
+        return 'p';
     }
 
     public void processCommand(APIWrapper api, String[] args) {
@@ -86,13 +87,13 @@ public class PressController implements IRepoCommandController {
 
         final String prefix = sep + "PRESS PRESETS" + sep;
 
-        final String format = " %c%d  " + config.border + "        %s --  %s        ";
+        final String format = " %c%d  " + config.menuBorder + "        %s --  %s        ";
         final String[] menuFormatted = new String[menu.size()];
         for (int i = 0; i < menuFormatted.length; i++) {
             final String item = menu.get(i);
-            menuFormatted[i] = String.format(format, indicator, i, item, repo.map.get(item));
+            menuFormatted[i] = String.format(format, indicator(), i, item, repo.map.get(item));
         }
-        final String body = ConsoleUtils.encaseInBanner(menuFormatted, config.border);
+        final String body = ConsoleUtils.encaseInBanner(menuFormatted, config.menuBorder);
 
         final String suffix = sep + config.displayLiteralCommand("press ctrl+f1") + "will press ctrl and f1 on the host comp!"; //+
 

@@ -7,9 +7,12 @@ import com.mk.tv.utils.JacksonUtils;
 public class Config {
     public String token = "paste token here...";
     public char commandIndicator = '?';
-    public String[] formats = new String[]{"bat"};
-    public String border = "+";
+    public String[] scriptFormats = new String[]{"bat"};
+    public String menuBorder = "+";
     public boolean allowFreePress = false;
+    public char addDelimiter = '+';
+    public char nextDelimiter = '>';
+    public boolean allowFreeMix = false;
 
     public Config() {
     }

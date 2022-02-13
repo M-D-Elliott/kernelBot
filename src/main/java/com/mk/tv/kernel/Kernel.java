@@ -40,7 +40,7 @@ public class Kernel {
 
         controllers.add(new SystemController(config));
 
-        mix.synchronousReceivers.add(press::setSynchronous);
+        mix.synchronicityReceivers.add(press::setSynchronous);
     }
 
     public void init() {

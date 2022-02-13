@@ -16,12 +16,10 @@ import static jPlus.util.io.ConsoleIOUtils.validateString;
 import static jPlus.util.io.ConsoleUtils.sep;
 
 public class BotUserController implements ICommandController {
-    private final JacksonRepo<BotUser> repo = new BotUserRepo();
 
     private final AuthConfig config;
-
     private final List<String> menu = new ArrayList<>();
-    private final char indicator = 'u';
+    private final JacksonRepo<BotUser> repo = new BotUserRepo();
 
     public BotUserController(AuthConfig config) {
         this.config = config;
@@ -43,7 +41,7 @@ public class BotUserController implements ICommandController {
 
     @Override
     public char indicator() {
-        return indicator;
+        return 'u';
     }
 
     public void processCommand(APIWrapper api, String[] args) {
@@ -52,10 +50,10 @@ public class BotUserController implements ICommandController {
 
     @Override
     public void menuResponse(APIWrapper api, String[] args) {
-        final String format = " %c%d  " + config.border + "        %s        ";
+        final String format = " %c%d  " + config.menuBorder + "        %s        ";
 
         api.print(sep() + ConsoleUtils.encaseInBanner(
-                menu, config.border, (item, i) -> String.format(format, this.indicator, i, item)));
+                menu, config.menuBorder, (item, i) -> String.format(format, this.indicator(), i, item)));
     }
 
     @Override

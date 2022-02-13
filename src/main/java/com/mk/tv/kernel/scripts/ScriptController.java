@@ -17,18 +17,17 @@ import static jPlus.util.io.ConsoleIOUtils.validateString;
 import static jPlus.util.io.ConsoleUtils.sep;
 
 public class ScriptController implements IRepoCommandController {
-    public static final String SUCCESSFUL_SCRIPT = "--script--%s--%s!";
-
-    public final Map<String, String> pathMap = new HashMap<>();
 
     private final List<String> menu = new ArrayList<>();
-    public final char indicator = 's';
-
     private final Config config;
+
+    public final Map<String, String> pathMap = new HashMap<>();
 
     public ScriptController(Config config) {
         this.config = config;
     }
+
+    //***************************************************************//
 
     @Override
     public void readCommands(
@@ -38,7 +37,7 @@ public class ScriptController implements IRepoCommandController {
 
         final Collection<File> scriptFiles = ApacheFileUtils.getRecursiveFiles(
                 new File(System.getProperty("user.dir") + File.separator + "myscripts"),
-                config.formats);
+                config.scriptFormats);
         scriptFiles.removeIf(File::isHidden);
 
         final Receivable2<APIWrapper, String[]> scriptCommand = this::processRepoCommand;
@@ -54,7 +53,7 @@ public class ScriptController implements IRepoCommandController {
 
     @Override
     public char indicator() {
-        return indicator;
+        return 's';
     }
 
     public void processCommand(APIWrapper api, String[] args) {
@@ -73,9 +72,9 @@ public class ScriptController implements IRepoCommandController {
         final String prefix = sep + "SCRIPT PRESETS" + sep;
         final String suffix = sep + config.displayLiteralCommand("addscript scriptName scriptCode") + " -- adds a new script preset!";
 
-        final String format = " %c%d  " + config.border + "        %s        ";
+        final String format = " %c%d  " + config.menuBorder + "        %s        ";
         api.print(prefix + ConsoleUtils.encaseInBanner(
-                menu, config.border, (item, i) -> String.format(format, indicator, i, item)) + suffix);
+                menu, config.menuBorder, (item, i) -> String.format(format, indicator(), i, item)) + suffix);
     }
 
     @Override
@@ -95,4 +94,8 @@ public class ScriptController implements IRepoCommandController {
     public void addCommand(APIWrapper api, String[] args) {
         api.print(NOT_YET_IMPLEMENTED);
     }
+
+    //***************************************************************//
+
+    public static final String SUCCESSFUL_SCRIPT = "--script--%s--%s!";
 }
