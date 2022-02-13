@@ -5,6 +5,7 @@ import com.mk.tv.kernel.generic.IRepoCommandController;
 import com.mk.tv.kernel.generic.JacksonRepo;
 import com.mk.tv.kernel.system.Config;
 import jPlus.io.APIWrapper;
+import jPlus.lang.callback.Receivable1;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.awt.KeyEvents;
 import jPlus.util.awt.RobotUtils;
@@ -28,6 +29,8 @@ public class PressController implements IRepoCommandController {
     private final List<String> menu = new ArrayList<>();
     public final char indicator = 'p';
 
+    private Receivable1<int[][]> pressReceiver = RobotUtils::pressAsync;
+
     public PressController(Config config) {
         this.config = config;
     }
@@ -36,8 +39,8 @@ public class PressController implements IRepoCommandController {
 
     private static LinkedHashMap<String, String> newHotkeyMap() {
         final LinkedHashMap<String, String> ret = new LinkedHashMap<>();
-        final String hotkey = "a+b";
-        ret.put("ab", hotkey);
+        final String preset = "a+b";
+        ret.put("ab", preset);
         return ret;
     }
 
@@ -48,8 +51,8 @@ public class PressController implements IRepoCommandController {
         commandFuncMap.put("addpress", this::addCommand);
         commandFuncMap.put("press", this::processCommand);
 
-        final Receivable2<APIWrapper, String[]> hotkeyCommand = this::processRepoCommand;
-        for (String hotkeyName : repo.map.keySet()) commandFuncMap.put(hotkeyName, hotkeyCommand);
+        final Receivable2<APIWrapper, String[]> presetCommand = this::processRepoCommand;
+        for (String presetName : repo.map.keySet()) commandFuncMap.put(presetName, presetCommand);
         menu.addAll(repo.map.keySet());
     }
 
@@ -66,7 +69,9 @@ public class PressController implements IRepoCommandController {
     public boolean processCommand(String commandBody) {
         try {
             final int[][] keyEvents = KeyEvents.parseGroup2D(commandBody);
-            RobotUtils.press(keyEvents);
+
+            pressReceiver.receive(keyEvents);
+
             return true;
         } catch (ParseException e) {
             e.printStackTrace();
@@ -101,11 +106,15 @@ public class PressController implements IRepoCommandController {
 
     @Override
     public void processRepoCommand(APIWrapper api, String[] args) {
-        final String hotkey = repo.get(args[0]);
-        processCommand(hotkey);
+        final String presetContent = repo.get(args[0]);
+        processCommand(presetContent);
     }
 
     @Override
     public void addCommand(APIWrapper api, String[] args) {
+    }
+
+    public void setSynchronous(Boolean b) {
+        pressReceiver = b ? RobotUtils::press : RobotUtils::pressAsync;
     }
 }

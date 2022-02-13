@@ -5,7 +5,9 @@ import com.mk.tv.kernel.generic.ICommandController;
 import com.mk.tv.kernel.generic.JacksonRepo;
 import com.mk.tv.kernel.system.Config;
 import jPlus.io.APIWrapper;
+import jPlus.lang.callback.Receivable1;
 import jPlus.lang.callback.Receivable2;
+import jPlus.util.awt.RobotUtils;
 import jPlus.util.io.ConsoleUtils;
 import jPlus.util.lang.IntUtils;
 import jPlus.util.map.MapUtils;
@@ -30,8 +32,12 @@ public class MixController implements ICommandController {
 
     private static String COMMAND_NOT_FOUND = "%$1s not found";
 
+    public List<Receivable1<Boolean>> synchronousReceivers = new ArrayList<>();
+    private Receivable2<APIWrapper, String> iterateCommandsReceiver = this::iterateCommandsAsync;
+
     public MixController(Config config) {
         this.config = config;
+        synchronousReceivers.add(this::setSynchronous);
     }
 
     @Override
@@ -62,28 +68,38 @@ public class MixController implements ICommandController {
     public boolean processCommand(APIWrapper api, String code) {
         if (code.length() == 0) return false;
 
-        new Thread(() -> {
-            try {
-                final String[] commandNames = code.split("\\+");
-                for (String commandName : commandNames) {
-                    final Receivable2<APIWrapper, String[]> func = commandFuncMap.get(commandName);
-                    if (func != null) func.receive(api, new String[]{commandName});
-                    else if (commandName.charAt(0) == 'w') {
-                        final String wvs = commandName.substring(2, commandName.length() - 1);
-                        if (IntUtils.canBeParsedAsInt(wvs)) {
-                            final int waitValue = Integer.parseInt(wvs);
-                            Thread.sleep(waitValue);
-                        }
-                    } else {
-                        api.print(String.format(COMMAND_NOT_FOUND, commandName));
-                    }
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        iterateCommandsReceiver.receive(api, code);
 
         return true;
+    }
+
+    private void iterateCommandsAsync(APIWrapper api, String code) {
+        new Thread(() -> {
+            for (Receivable1<Boolean> rec : synchronousReceivers) rec.receive(true);
+            iterateCommands(api, code);
+            for (Receivable1<Boolean> rec : synchronousReceivers) rec.receive(false);
+        }).start();
+    }
+
+    private void iterateCommands(APIWrapper api, String code) {
+        try {
+            final String[] commandNames = code.split("\\+");
+            for (String commandName : commandNames) {
+                final Receivable2<APIWrapper, String[]> func = commandFuncMap.get(commandName);
+                if (func != null) func.receive(api, new String[]{commandName});
+                else if (commandName.charAt(0) == 'w') {
+                    final String wvs = commandName.substring(2, commandName.length() - 1);
+                    if (IntUtils.canBeParsedAsInt(wvs)) {
+                        final int waitValue = Integer.parseInt(wvs);
+                        Thread.sleep(waitValue);
+                    }
+                } else {
+                    api.print(String.format(COMMAND_NOT_FOUND, commandName));
+                }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -107,5 +123,9 @@ public class MixController implements ICommandController {
     @Override
     public List<String> menu() {
         return menu;
+    }
+
+    public void setSynchronous(Boolean b) {
+        iterateCommandsReceiver = b ? this::iterateCommands : this::iterateCommandsAsync;
     }
 }

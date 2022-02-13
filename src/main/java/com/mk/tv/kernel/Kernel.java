@@ -30,10 +30,17 @@ public class Kernel {
 
     public Kernel(Config config) {
         this.config = config;
-        controllers.add(new PressController(config));
+
+        final PressController press = new PressController(config);
+        controllers.add(press);
         controllers.add(new ScriptController(config));
-        controllers.add(new MixController(config));
+
+        final MixController mix = new MixController(config);
+        controllers.add(mix);
+
         controllers.add(new SystemController(config));
+
+        mix.synchronousReceivers.add(press::setSynchronous);
     }
 
     public void init() {

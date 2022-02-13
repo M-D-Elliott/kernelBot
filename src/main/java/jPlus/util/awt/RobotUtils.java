@@ -17,9 +17,10 @@ public class RobotUtils {
         }
     }
 
+    //***************************************************************//
+
     public static void down(int keyEvent) {
         start();
-        System.out.println(keyEvent);
         robot.keyPress(keyEvent);
     }
 
@@ -33,18 +34,7 @@ public class RobotUtils {
         up(keyEvent);
     }
 
-    public static void press(int[] keyEvents){
-        Threads.later(() -> {
-            pressAndSleep(keyEvents);
-        }, 0);
-    }
-
-    private static void pressAndSleep(int[] keyEvents) {
-        downAndSleep(keyEvents);
-        Threads.sleepBliss(0, SLEEP_DUR);
-        upAndSleep(keyEvents);
-
-    }
+    //***************************************************************//
 
     private static void upAndSleep(int[] keyEvents) {
         for(int e : keyEvents) {
@@ -69,12 +59,34 @@ public class RobotUtils {
         else Threads.sleepBliss(-e);
     }
 
+    private static void pressAndSleep(int[] keyEvents) {
+        downAndSleep(keyEvents);
+        Threads.sleepBliss(0, SLEEP_DUR);
+        upAndSleep(keyEvents);
+    }
+
+    public static void press(int[] keyEvents) {
+        pressAndSleep(keyEvents);
+    }
+
     public static void press(int[][] keyEventSets) {
+        for(int[] keyEvents : keyEventSets) {
+            pressAndSleep(keyEvents);
+            Threads.sleepBliss(0, SLEEP_DUR);
+        }
+    }
+
+    //***************************************************************//
+
+    public static void pressAsync(int[] keyEvents){
         Threads.later(() -> {
-            for(int[] keyEvents : keyEventSets) {
-                pressAndSleep(keyEvents);
-                Threads.sleepBliss(0, SLEEP_DUR);
-            }
+            press(keyEvents);
+        }, 0);
+    }
+
+    public static void pressAsync(int[][] keyEventSets) {
+        Threads.later(() -> {
+            press(keyEventSets);
         },0);
     }
 }
