@@ -1,26 +1,19 @@
 package com.mk.tv.kernel.system;
 
-import com.mk.tv.kernel.generic.ICommandController;
+import com.mk.tv.kernel.generic.CommandController;
 import jPlus.io.APIWrapper;
 import jPlus.lang.callback.Receivable2;
-import jPlus.util.io.ConsoleUtils;
 import jPlus.util.io.JarUtils;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import static jPlus.util.io.ConsoleIOUtils.validateChar;
-import static jPlus.util.io.ConsoleUtils.sep;
 
-public class SystemController implements ICommandController {
-
-    private final Config config;
-    private final List<String> menu = new ArrayList<>();
+public class SystemController extends CommandController {
 
     public SystemController(Config config) {
-        this.config = config;
+        super(config);
     }
 
     //***************************************************************//
@@ -35,29 +28,30 @@ public class SystemController implements ICommandController {
     }
 
     @Override
-    public char indicator() {
-        return 'y';
-    }
-
     public void processCommand(APIWrapper api, String[] args) {
         menuResponse(api, args);
     }
 
-    public boolean processCommand(String commandBody) {
-        return false;
+    //***************************************************************//
+
+    @Override
+    public char indicator() {
+        return 'y';
     }
 
     @Override
-    public void menuResponse(APIWrapper api, String[] args) {
-        final String prefix = sep() + "System" + sep();
-        final String format = " %c%d  " + config.menuBorder + "        %s        ";
-        api.print(prefix + ConsoleUtils.encaseInBanner(
-                menu, config.menuBorder, (item, i) -> String.format(format, indicator(), i, item)));
+    protected String menuPrefix() {
+        return "System";
     }
 
     @Override
-    public List<String> menu() {
-        return menu;
+    protected String menuSuffix() {
+        return "";
+    }
+
+    @Override
+    protected String commandDesc(String item) {
+        return "";
     }
 
     //***************************************************************//

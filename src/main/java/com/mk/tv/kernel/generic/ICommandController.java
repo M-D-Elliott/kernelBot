@@ -12,6 +12,8 @@ public interface ICommandController {
 
     char indicator();
 
+    void processCommand(APIWrapper api, String[] args);
+
     void menuResponse(APIWrapper api, String[] args);
 
     List<String> menu();

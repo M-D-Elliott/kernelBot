@@ -1,28 +1,22 @@
 package com.mk.tv.kernel.mixes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.mk.tv.kernel.generic.IRepoCommandController;
 import com.mk.tv.kernel.generic.JacksonRepo;
+import com.mk.tv.kernel.generic.RepoCommandController;
 import com.mk.tv.kernel.system.Config;
 import jPlus.io.APIWrapper;
 import jPlus.lang.callback.Receivable1;
 import jPlus.lang.callback.Receivable2;
-import jPlus.util.io.ConsoleUtils;
 import jPlus.util.lang.IntUtils;
 import jPlus.util.map.MapUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import static jPlus.util.io.ConsoleIOUtils.validateString;
-import static jPlus.util.io.ConsoleUtils.sep;
 
-public class MixController implements IRepoCommandController {
-
-    private final Config config;
-    private final List<String> menu = new ArrayList<>();
+public class MixController extends RepoCommandController {
 
     private final JacksonRepo<String> repo = new JacksonRepo<>("repos/mixes.txt", new TypeReference<>() {
     }, MapUtils::newLinkedInstance);
@@ -32,7 +26,7 @@ public class MixController implements IRepoCommandController {
     public Collection<Receivable1<Boolean>> synchronicityReceivers = new ArrayList<>();
 
     public MixController(Config config) {
-        this.config = config;
+        super(config);
         synchronicityReceivers.add(this::setSynchronous);
     }
 
@@ -41,11 +35,20 @@ public class MixController implements IRepoCommandController {
     @Override
     public void readCommands(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
         this.commandFuncMap = commandFuncMap;
-        commandFuncMap.put("mix", this::processCommand);
+        super.readCommands(commandFuncMap);
+    }
 
-        final Receivable2<APIWrapper, String[]> command = this::processRepoCommand;
-        for (String commandName : repo.map.keySet()) commandFuncMap.put(commandName, command);
-        menu.addAll(repo.map.keySet());
+    @Override
+    public void processCommand(APIWrapper api, String[] args) {
+        if (config.allowFreeMix && validateString(args, 1) && processCommand(api, args[1])) return;
+        menuResponse(api, args);
+    }
+
+    private boolean processCommand(APIWrapper api, String code) {
+        if (code.length() == 0) return false;
+        iterateCommandsReceiver.receive(api, code);
+
+        return true;
     }
 
     @Override
@@ -54,28 +57,7 @@ public class MixController implements IRepoCommandController {
         processCommand(api, code);
     }
 
-    @Override
-    public void addCommand(APIWrapper api, String[] args) {
-
-    }
-
-    @Override
-    public char indicator() {
-        return 'm';
-    }
-
-    public void processCommand(APIWrapper api, String[] args) {
-        if (config.allowFreeMix && validateString(args, 1) && processCommand(api, args[1])) return;
-        menuResponse(api, args);
-    }
-
-    public boolean processCommand(APIWrapper api, String code) {
-        if (code.length() == 0) return false;
-
-        iterateCommandsReceiver.receive(api, code);
-
-        return true;
-    }
+    //***************************************************************//
 
     private void iterateCommandsAsync(APIWrapper api, String code) {
         new Thread(() -> {
@@ -87,7 +69,7 @@ public class MixController implements IRepoCommandController {
 
     private void iterateCommands(APIWrapper api, String code) {
         try {
-            final String[] commandNames = code.split("\\+");
+            final String[] commandNames = code.split(config.nextDelimiterS());
             for (String commandName : commandNames) {
                 final Receivable2<APIWrapper, String[]> func = commandFuncMap.get(commandName);
                 if (func != null) func.receive(api, new String[]{commandName});
@@ -106,36 +88,39 @@ public class MixController implements IRepoCommandController {
         }
     }
 
-    @Override
-    public void menuResponse(APIWrapper api, String[] args) {
-        final String sep = sep();
-        final String prefix = sep + "MIX PRESETS" + sep;
-
-        final String format = " %c%d  " + config.menuBorder + "        %s --  %s        ";
-        final String[] menuFormatted = new String[menu.size()];
-        for (int i = 0; i < menuFormatted.length; i++) {
-            final String item = menu.get(i);
-            menuFormatted[i] = String.format(format, indicator(), i, item, repo.map.get(item));
-        }
-        final String body = ConsoleUtils.encaseInBanner(menuFormatted, config.menuBorder);
-
-        final String suffix = sep + config.displayLiteralCommand("mix scriptName+w(1000)+hotkeyName") + "will run script, wait 1s and press hotkey!"; //+
-
-        api.print(prefix + body + suffix);
-    }
-
-    @Override
-    public List<String> menu() {
-        return menu;
-    }
-
     //***************************************************************//
+
+    @Override
+    public char indicator() {
+        return 'm';
+    }
+
+    @Override
+    protected String entryPointName() {
+        return "mix";
+    }
+
+    @Override
+    protected String commandDesc(String item) {
+        return " --  " + repo.map.get(item);
+    }
+
+    @Override
+    protected Collection<String> commandNames() {
+        return repo.map.keySet();
+    }
+
+    @Override
+    protected String menuPrefix() {
+        return "MIX PRESETS";
+    }
+
+    @Override
+    protected String menuSuffix() {
+        return config.displayLiteralCommand("mix scriptName+w(1000)+hotkeyName") + "will run script, wait 1s and press hotkey!";
+    }
 
     public void setSynchronous(Boolean b) {
         iterateCommandsReceiver = b ? this::iterateCommands : this::iterateCommandsAsync;
     }
-
-    //***************************************************************//
-
-    private static final String COMMAND_NOT_FOUND = "%1$s not found";
 }

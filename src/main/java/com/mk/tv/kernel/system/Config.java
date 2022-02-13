@@ -6,9 +6,12 @@ import com.mk.tv.utils.JacksonUtils;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Config {
     public String token = "paste token here...";
+
     public char commandIndicator = '?';
-    public String[] scriptFormats = new String[]{"bat"};
     public String menuBorder = "+";
+
+    public String[] scriptFormats = new String[]{"bat"};
+
     public boolean allowFreePress = false;
     public char addDelimiter = '+';
     public char nextDelimiter = '>';
@@ -33,5 +36,9 @@ public class Config {
 
     public String displayLiteralCommand(String s) {
         return String.format(LITERAL_COMMAND, commandIndicator, s);
+    }
+
+    public String nextDelimiterS() {
+        return Character.toString(nextDelimiter);
     }
 }

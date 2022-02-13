@@ -110,7 +110,7 @@ public class ConsoleUtils {
         final int hL = hor.length();
         final int maxBorderLength = maxLengthF - sep.length();
         final int borderCount = (maxBorderLength + 1) / hL;
-        final String border = StringUtils.repeat(hor, borderCount).substring(0, maxBorderLength);
+        final String border = StringUtils.repeat(hor, borderCount).substring(0, Math.max(0, maxBorderLength));
 
         return String.format(BANNER_FORMAT, border, formattedLines.toString());
     }

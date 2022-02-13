@@ -6,7 +6,7 @@
 
     <groupId>com.mk.tv</groupId>
     <artifactId>MeekerTVBot</artifactId>
-    <version>1.0.3 --MOAR CONFIG AND... CONTROLLERS SIMPLIFICATION--</version>
+    <version>1.0.4 --Finish MOAR Config And Controller Hierarchy Refactor NO JAR--</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

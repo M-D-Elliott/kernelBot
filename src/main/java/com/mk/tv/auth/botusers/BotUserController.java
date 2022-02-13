@@ -2,7 +2,7 @@ package com.mk.tv.auth.botusers;
 
 import com.mk.tv.auth.config.AuthConfig;
 import com.mk.tv.auth.config.Globals;
-import com.mk.tv.kernel.generic.ICommandController;
+import com.mk.tv.kernel.generic.CommandController;
 import com.mk.tv.kernel.generic.JacksonRepo;
 import jPlus.io.APIWrapper;
 import jPlus.io.file.FileUtils;
@@ -15,14 +15,14 @@ import java.util.*;
 import static jPlus.util.io.ConsoleIOUtils.validateString;
 import static jPlus.util.io.ConsoleUtils.sep;
 
-public class BotUserController implements ICommandController {
+public class BotUserController extends CommandController {
 
-    private final AuthConfig config;
-    private final List<String> menu = new ArrayList<>();
+    private final AuthConfig authConfig;
     private final JacksonRepo<BotUser> repo = new BotUserRepo();
 
     public BotUserController(AuthConfig config) {
-        this.config = config;
+        super(config);
+        this.authConfig = config;
     }
 
     //***************************************************************//
@@ -40,25 +40,30 @@ public class BotUserController implements ICommandController {
     }
 
     @Override
-    public char indicator() {
-        return 'u';
-    }
-
     public void processCommand(APIWrapper api, String[] args) {
         menuResponse(api, args);
     }
 
-    @Override
-    public void menuResponse(APIWrapper api, String[] args) {
-        final String format = " %c%d  " + config.menuBorder + "        %s        ";
+    //***************************************************************//
 
-        api.print(sep() + ConsoleUtils.encaseInBanner(
-                menu, config.menuBorder, (item, i) -> String.format(format, this.indicator(), i, item)));
+    @Override
+    public char indicator() {
+        return 'u';
     }
 
     @Override
-    public List<String> menu() {
-        return menu;
+    protected String menuPrefix() {
+        return "USERS";
+    }
+
+    @Override
+    protected String menuSuffix() {
+        return "";
+    }
+
+    @Override
+    protected String commandDesc(String item) {
+        return "";
     }
 
     //***************************************************************//
@@ -119,12 +124,12 @@ public class BotUserController implements ICommandController {
 
     protected void spill(APIWrapper api, String[] args) {
         if (api.access() == Access.PRIVATE) {
-            if (config.securityLevel == Access.PROTECTED && !checkPassword(api, args)) {
+            if (authConfig.securityLevel == Access.PROTECTED && !checkPassword(api, args)) {
                 wrongPass(api);
                 return;
             }
         } else {
-            api.print(config.onlySecureChannelWarning);
+            api.print(authConfig.onlySecureChannelWarning);
             return;
         }
 
@@ -156,7 +161,7 @@ public class BotUserController implements ICommandController {
         final BotUser user = getBotUser(api.username());
         if (user == null || !user.password.equals(pass)) return false;
 
-        user.session = new Session(config.sessionDurationS());
+        user.session = new Session(authConfig.sessionDurationS());
         repo.save();
         return true;
     }
@@ -172,7 +177,7 @@ public class BotUserController implements ICommandController {
     }
 
     public void wrongPass(APIWrapper api) {
-        api.print(config.rejectUserMessage);
+        api.print(authConfig.rejectUserMessage);
     }
 
     private boolean checkPassword(BotUser botUser, String password) {
@@ -181,7 +186,7 @@ public class BotUserController implements ICommandController {
 
     private void warnPublicChannel(APIWrapper api) {
         if (api.access().value() < Access.PRIVATE.value())
-            api.print(sep() + ConsoleUtils.encaseInBanner(config.publicChannelWarning, "#"));
+            api.print(sep() + ConsoleUtils.encaseInBanner(authConfig.publicChannelWarning, "#"));
     }
 
     public BotUser getBotUser(String username) {
