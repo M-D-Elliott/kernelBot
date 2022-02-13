@@ -1,21 +1,26 @@
+
 ```
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % Welcome to KernelBot! %
 %%%%%%%%%%%%%%%%%%%%%%%%%
-
--------TABLE OF CONTENTS---------
-1. What is Kernelbot?
-2. Who wants Kernelbot?
-3. Installation guide
-4. Configuration guide
-5. User's guide
-6. Developer's guide
----------------------------------
 ```
 
+<h4 id="top">-------TABLE OF CONTENTS---------</h4></br>
+
+<a href=#s1>1. What is Kernelbot?</a></br>
+<a href=#s2>2. Who wants Kernelbot?</a></br>
+<a href=#s3>3. Installation guide</a></br>
+<a href=#s4>4. Configuration guide</a></br>
+<a href=#s5>5. User's guide</a></br>
+<a href=#s6>6. Developer's guide</a></br>
 
 *********************
+
+<h5 id="s1">
 1. What is Kernelbot?
+<a href="#top">^</>
+</h5>
+
 *********************
 ```
 Kernelbot is a discord bot a bit different than others.
@@ -33,7 +38,12 @@ Mix -- runs presses or scripts (or mixes?) with waits in between.
 
 
 ***********************
+
+<h5 id="s2">
 2. Who wants Kernelbot?
+<a href="#top">^</>
+</h5>
+
 ***********************
 ```
 Kernelbot is for people who host servers. Say you have a server
@@ -56,7 +66,12 @@ your users. %%%
 
 
 *********************
+
+<h5 id="s3">
 3. Installation guide
+<a href="#top">^</>
+</h5>
+
 *********************
 ```
 CHECK IF JAVA IS INSTALLED
@@ -86,7 +101,12 @@ your install method. The only difference is the java path referenced.
 
 
 **********************
-4. Configuration guide
+
+<h5 id="s4">
+4. Configuration Guide
+<a href="#top">^</>
+</h5>
+
 **********************
 ```
 NOTE : FILES WILL BE PLACED IN PROPER POSITIONS BY EITHER INSTALLATION.
@@ -210,7 +230,12 @@ e.g. I create a 5s wait with w(5000) for my live commands.
 
 
 ***************
-5. User's guide
+
+<h5 id="s5">
+5. Configuration Guide
+<a href="#top">^</>
+</h5>
+
 ***************
 ```
 -Once the bot is running simply type ?help
@@ -236,7 +261,12 @@ e.g. I create a 5s wait with w(5000) for my live commands.
 
 
 ********************
+
+<h5 id="s6">
 6. Developer's guide
+<a href="#top">^</>
+</h5>
+
 ********************
 ```
 -Most simply Kernelbot is comprised of three main components:
