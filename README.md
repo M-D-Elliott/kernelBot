@@ -64,7 +64,6 @@ the exe name in stopvlc. Also probably change the script names to accomodate
 your users. %%%
 ```
 
-
 *********************
 
 <h5 id="s3">
