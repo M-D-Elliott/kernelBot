@@ -1,7 +1,5 @@
-@echo off
+@echo off && setlocal enableextensions && cd /d "%~dp0"
 
-echo starting discord...
-
-cmd /c start "" C:\Users\MDEll\AppData\Local\Discord\Update.exe --processStart Discord.exe
+cmd /c libs\startExe "C:\Users\MDEll\AppData\Local\Discord\Update.exe" --processStart Discord.exe
 
 exit
