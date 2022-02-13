@@ -1,9 +1,7 @@
 package com.mk.tv.auth.botusers;
 
 import com.mk.tv.auth.config.AuthConfig;
-import com.mk.tv.auth.config.Globals;
 import com.mk.tv.kernel.generic.CommandController;
-import com.mk.tv.kernel.generic.JacksonRepo;
 import jPlus.io.APIWrapper;
 import jPlus.io.file.FileUtils;
 import jPlus.io.security.Access;
@@ -19,8 +17,8 @@ import static jPlus.util.io.ConsoleUtils.sep;
 
 public class BotUserController extends CommandController {
 
-    private final AuthConfig authConfig;
-    private final JacksonRepo<BotUser> repo = new BotUserRepo();
+    protected final AuthConfig authConfig;
+    public final BotUserService service = new BotUserService();
 
     public BotUserController(AuthConfig config) {
         super(config);
@@ -72,55 +70,24 @@ public class BotUserController extends CommandController {
 
     protected void register(APIWrapper api, String[] args) {
         if (checkPassword(api, args)) {
-            if (!(validateString(args, 4) && register(api, args[2], args[3], args[4])))
-                api.print(String.format(Globals.REGISTER_HELP, config.commandIndicator));
+            if (!(validateString(args, 4) && service.register(args[2], args[3], args[4], api.out())))
+                api.print(String.format(BotUserService.REGISTER_HELP, config.commandIndicator));
         } else wrongPass(api);
-    }
-
-    private boolean register(APIWrapper api, String username, String pass, String pass2) {
-        if (username.length() >= 4) {
-            final BotUser newUser = new BotUser(username);
-            if (changePassword(newUser, newUser.password, pass, pass2)) {
-                repo.add(newUser);
-                api.print(String.format(Globals.REGISTER_SUCCESS, username));
-                return true;
-            }
-        }
-
-        return false;
     }
 
     protected void changePassword(APIWrapper api, String[] args) {
         if (args.length >= 4) changePassword(api, args[1], args[2], args[3]);
-        else api.print(String.format(Globals.PASSWORD_RESET_HELP, config.commandIndicator));
+        else api.print(String.format(BotUserService.PASSWORD_RESET_HELP, config.commandIndicator));
     }
 
     protected void changePassword(APIWrapper api, String oldPass, String newPass, String newPass2) {
-        changePassword(api, getBotUser(api.username()), oldPass, newPass, newPass2);
-    }
-
-    protected void changePassword(APIWrapper api, BotUser botUser, String oldPass, String newPass, String newPass2) {
         warnPublicChannel(api);
-
-        if (changePassword(botUser, oldPass, newPass, newPass2)) {
-            repo.save();
-            api.print(Globals.CHANGE_PASS_SUCCESS);
-        } else api.print(String.format(Globals.PASSWORD_RESET_HELP, config.commandIndicator));
-    }
-
-    private boolean changePassword(BotUser botUser, String oldPass, String newPass, String newPass2) {
-        if (newPass.length() >= Globals.MIN_PASS_LENGTH
-                && checkPassword(botUser, oldPass) && newPass.equals(newPass2)) {
-            botUser.password = newPass;
-
-            return true;
-        }
-        return false;
+        service.changePassword(api.username(), oldPass, newPass, newPass2, api.out(), indicator());
     }
 
     protected void setWelcome(APIWrapper api, String[] args) {
-        getBotUser(api.username()).welcome = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-        repo.save();
+        final String welcome = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+        service.setWelcome(api.username(), welcome);
         api.print("Welcome set!");
     }
 
@@ -139,59 +106,34 @@ public class BotUserController extends CommandController {
         final String sep = sep();
         FileUtils.read("repos/secrets.txt").forEach(item -> building.append(item).append(sep));
         api.print(building.toString());
-
     }
 
     //***************************************************************//
 
     public boolean authenticate(APIWrapper api) {
-        return getBotUser(api.username()) != null;
+        return service.authenticate(api.username());
     }
 
-
-    public boolean authenticateWPass(APIWrapper api) {
-        final BotUser user = getBotUser(api.username());
-        final boolean userExists = user != null;
-
-        if (userExists) return user.getSession().active();
-        else api.print("User must be registered first.");
-
-        return false;
+    public boolean authenticateSession(APIWrapper api) {
+        return service.authenticateSession(api.username(), api.out());
     }
 
     public boolean initiateSession(APIWrapper api, String pass) {
-        final BotUser user = getBotUser(api.username());
-        if (user == null || !user.password.equals(pass)) return false;
-
-        user.session = new Session(authConfig.sessionDurationS());
-        repo.save();
-        return true;
+        return service.initiateSession(api.username(), pass, authConfig.sessionDurationS());
     }
 
     public boolean checkPassword(APIWrapper api, String[] args) {
         if (validateString(args, 1))
-            return checkPassword(api, args[1]);
+            return service.checkPassword(api.username(), args[1]);
         else return false;
-    }
-
-    private boolean checkPassword(APIWrapper api, String password) {
-        return checkPassword(getBotUser(api.username()), password);
     }
 
     public void wrongPass(APIWrapper api) {
         api.print(authConfig.rejectUserMessage);
     }
 
-    private boolean checkPassword(BotUser botUser, String password) {
-        return botUser.password.equals(password);
-    }
-
-    private void warnPublicChannel(APIWrapper api) {
+    protected void warnPublicChannel(APIWrapper api) {
         if (api.access().value() < Access.PRIVATE.value())
             api.print(sep() + ConsoleUtils.encaseInBanner(authConfig.publicChannelWarning, "#"));
-    }
-
-    public BotUser getBotUser(String username) {
-        return repo.get(username);
     }
 }

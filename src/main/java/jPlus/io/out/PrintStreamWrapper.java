@@ -1,5 +1,7 @@
 package jPlus.io.out;
 
+import jPlus.lang.callback.Receivable1;
+
 import java.io.PrintStream;
 
 public class PrintStreamWrapper implements IOWrapper {
@@ -28,5 +30,10 @@ public class PrintStreamWrapper implements IOWrapper {
     @Override
     public void setStatus(String actString) {
 
+    }
+
+    @Override
+    public Receivable1<String> out() {
+        return System.out::println;
     }
 }

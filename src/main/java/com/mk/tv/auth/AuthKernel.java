@@ -28,7 +28,7 @@ public class AuthKernel extends Kernel {
 
     @Override
     protected void noCommandFoundResponse(APIWrapper api) {
-        api.print(userController.getBotUser(api.username()).welcome);
+        api.print(userController.service.getWelcome(api.username()));
     }
 
     @Override
@@ -43,7 +43,7 @@ public class AuthKernel extends Kernel {
                 }
                 break;
             case PRIVATE:
-                if (userController.authenticateWPass(api)) break;
+                if (userController.authenticateSession(api)) break;
                 if (ConsoleIOUtils.validateString(parsedM, 0)
                         && parsedM[0].equals("signin")
                         && ConsoleIOUtils.validateString(parsedM, 1)) {

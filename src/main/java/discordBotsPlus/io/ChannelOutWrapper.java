@@ -2,6 +2,7 @@ package discordBotsPlus.io;
 
 import jPlus.io.APIWrapper;
 import jPlus.io.security.Access;
+import jPlus.lang.callback.Receivable1;
 import jPlus.lang.callback.Retrievable2;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.PrivateChannel;
@@ -12,6 +13,8 @@ import java.util.Collection;
 public class ChannelOutWrapper implements APIWrapper {
     private final MessageReceivedEvent e;
     private final Access access;
+
+    private final Receivable1<String> out = this::println;
 
     public ChannelOutWrapper(MessageReceivedEvent e) {
         this.e = e;
@@ -38,6 +41,11 @@ public class ChannelOutWrapper implements APIWrapper {
     public void setStatus(String status) {
         final Activity listeningOnIndicator = Activity.listening(status);
         e.getJDA().getPresence().setActivity(listeningOnIndicator);
+    }
+
+    @Override
+    public Receivable1<String> out() {
+        return out;
     }
 
     @Override

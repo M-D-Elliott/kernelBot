@@ -83,7 +83,7 @@ public class PressController extends RepoCommandController {
 
     @Override
     protected String commandDesc(String item) {
-        return  " --  " + repo.map.get(item);
+        return " --  " + repo.map.get(item);
     }
 
     @Override
