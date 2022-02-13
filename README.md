@@ -231,7 +231,7 @@ e.g. I create a 5s wait with w(5000) for my live commands.
 ***************
 
 <h5 id="s5">
-5. Configuration Guide
+5. User's Guide
 <a href="#top">^</a>
 </h5>
 
