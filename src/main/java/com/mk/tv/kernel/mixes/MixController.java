@@ -39,12 +39,12 @@ public class MixController extends RepoCommandController {
     }
 
     @Override
-    public void processCommand(APIWrapper api, String[] args) {
+    protected void processCommand(APIWrapper api, String[] args) {
         if (config.allowFreeMix && validateString(args, 1) && processCommand(api, args[1])) return;
-        menuResponse(api, args);
+        super.processCommand(api, args);
     }
 
-    private boolean processCommand(APIWrapper api, String code) {
+    protected boolean processCommand(APIWrapper api, String code) {
         if (code.length() == 0) return false;
         iterateCommandsReceiver.receive(api, code);
 
@@ -52,7 +52,7 @@ public class MixController extends RepoCommandController {
     }
 
     @Override
-    public void processRepoCommand(APIWrapper api, String[] args) {
+    protected void processRepoCommand(APIWrapper api, String[] args) {
         final String code = repo.get(args[0]);
         processCommand(api, code);
     }

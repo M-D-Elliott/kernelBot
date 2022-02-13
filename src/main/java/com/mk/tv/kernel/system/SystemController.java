@@ -20,19 +20,19 @@ public class SystemController extends CommandController {
 
     @Override
     public void readCommands(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
-        commandFuncMap.put("system", this::processCommand);
+        super.readCommands(commandFuncMap);
 
         commandFuncMap.put("indicator", this::changeIndicator);
         commandFuncMap.put("version", this::speakVersion);
         Collections.addAll(menu, "indicator", "version");
     }
 
-    @Override
-    public void processCommand(APIWrapper api, String[] args) {
-        menuResponse(api, args);
-    }
-
     //***************************************************************//
+
+    @Override
+    protected String entryPointName() {
+        return "system";
+    }
 
     @Override
     public char indicator() {

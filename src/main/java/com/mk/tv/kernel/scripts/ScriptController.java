@@ -24,9 +24,9 @@ public class ScriptController extends RepoCommandController {
     //***************************************************************//
 
     @Override
-    public void processCommand(APIWrapper api, String[] args) {
+    protected void processCommand(APIWrapper api, String[] args) {
         if (validateString(args, 1) && processCommand(args[1])) return;
-        menuResponse(api, args);
+        super.processCommand(api, args);
     }
 
     private boolean processCommand(String commandBody) {
@@ -34,7 +34,7 @@ public class ScriptController extends RepoCommandController {
     }
 
     @Override
-    public void processRepoCommand(APIWrapper api, String[] args) {
+    protected void processRepoCommand(APIWrapper api, String[] args) {
         final String commandPath = pathMap.get(args[0]);
         final boolean success = processCommand(commandPath);
         api.print(String.format(SUCCESSFUL_SCRIPT, args[0],
@@ -44,13 +44,13 @@ public class ScriptController extends RepoCommandController {
     //***************************************************************//
 
     @Override
-    public char indicator() {
-        return 's';
+    protected String entryPointName() {
+        return "script";
     }
 
     @Override
-    protected String entryPointName() {
-        return "script";
+    public char indicator() {
+        return 's';
     }
 
     @Override

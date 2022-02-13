@@ -40,12 +40,12 @@ public class PressController extends RepoCommandController {
     //***************************************************************//
 
     @Override
-    public void processCommand(APIWrapper api, String[] args) {
+    protected void processCommand(APIWrapper api, String[] args) {
         if (config.allowFreePress && validateString(args, 1) && processCommand(args[1])) return;
-        menuResponse(api, args);
+        super.processCommand(api, args);
     }
 
-    private boolean processCommand(String commandBody) {
+    protected boolean processCommand(String commandBody) {
         try {
             final int[][] keyEvents = KeyEvents.parseGroup2D(commandBody);
             pressReceiver.receive(keyEvents);
@@ -59,7 +59,7 @@ public class PressController extends RepoCommandController {
     }
 
     @Override
-    public void processRepoCommand(APIWrapper api, String[] args) {
+    protected void processRepoCommand(APIWrapper api, String[] args) {
         final String presetContent = repo.get(args[0]);
         processCommand(presetContent);
     }
@@ -83,7 +83,7 @@ public class PressController extends RepoCommandController {
 
     @Override
     protected String commandDesc(String item) {
-        return " --  " + repo.map.get(item);
+        return  " --  " + repo.map.get(item);
     }
 
     @Override

@@ -2,10 +2,12 @@ package com.mk.tv.kernel.generic;
 
 import com.mk.tv.kernel.system.Config;
 import jPlus.io.APIWrapper;
+import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.ConsoleUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static jPlus.util.io.ConsoleUtils.sep;
 
@@ -18,20 +20,20 @@ public abstract class CommandController implements ICommandController {
         this.config = config;
     }
 
+    //***************************************************************//
+
     @Override
-    public List<String> menu() {
-        return menu;
+    public void readCommands(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
+        commandFuncMap.put(entryPointName(), this::processCommand);
     }
 
-    protected abstract String menuPrefix();
+    //***************************************************************//
 
-    protected abstract String menuSuffix();
+    protected void processCommand(APIWrapper api, String[] args) {
+        menuResponse(api, args);
+    }
 
-
-    protected abstract String commandDesc(String item);
-
-    @Override
-    public void menuResponse(APIWrapper api, String[] args) {
+    protected void menuResponse(APIWrapper api, String[] args) {
         final String format = " %c%d  " + config.menuBorder + "        %s%s        ";
         final String[] menuFormatted = new String[menu.size()];
         for (int i = 0; i < menuFormatted.length; i++) {
@@ -43,4 +45,19 @@ public abstract class CommandController implements ICommandController {
         final String sep = sep();
         api.print(sep + menuPrefix() + sep + body + sep + menuSuffix());
     }
+
+    //***************************************************************//
+
+    @Override
+    public List<String> menu() {
+        return menu;
+    }
+
+    protected abstract String entryPointName();
+
+    protected abstract String menuPrefix();
+
+    protected abstract String menuSuffix();
+
+    protected abstract String commandDesc(String item);
 }

@@ -10,7 +10,9 @@ import jPlus.io.security.Access;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.ConsoleUtils;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
 
 import static jPlus.util.io.ConsoleIOUtils.validateString;
 import static jPlus.util.io.ConsoleUtils.sep;
@@ -29,7 +31,7 @@ public class BotUserController extends CommandController {
 
     @Override
     public void readCommands(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
-        commandFuncMap.put("user", this::processCommand);
+        super.readCommands(commandFuncMap);
 
         commandFuncMap.put("spill", this::spill);
         commandFuncMap.put("changepass", this::changePassword);
@@ -39,16 +41,16 @@ public class BotUserController extends CommandController {
         Collections.addAll(menu, "spill", "changepass", "setwelcome", "register");
     }
 
-    @Override
-    public void processCommand(APIWrapper api, String[] args) {
-        menuResponse(api, args);
-    }
-
     //***************************************************************//
 
     @Override
     public char indicator() {
         return 'u';
+    }
+
+    @Override
+    protected String entryPointName() {
+        return "user";
     }
 
     @Override
