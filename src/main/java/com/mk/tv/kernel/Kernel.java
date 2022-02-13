@@ -1,7 +1,7 @@
 package com.mk.tv.kernel;
 
 import com.mk.tv.kernel.generic.ICommandController;
-import com.mk.tv.kernel.hotkeys.HotkeyController;
+import com.mk.tv.kernel.presses.PressController;
 import com.mk.tv.kernel.mixes.MixController;
 import com.mk.tv.kernel.scripts.ScriptController;
 import com.mk.tv.kernel.system.Config;
@@ -30,7 +30,7 @@ public class Kernel {
 
     public Kernel(Config config) {
         this.config = config;
-        controllers.add(new HotkeyController(config));
+        controllers.add(new PressController(config));
         controllers.add(new ScriptController(config));
         controllers.add(new MixController(config));
         controllers.add(new SystemController(config));

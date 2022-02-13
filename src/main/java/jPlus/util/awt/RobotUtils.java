@@ -5,7 +5,7 @@ import jPlus.async.Threads;
 import java.awt.*;
 
 public class RobotUtils {
-    public static final int DUR = 1;
+    public static final int SLEEP_DUR = 100000;
     public static Robot robot;
 
     public static void start() {
@@ -19,21 +19,8 @@ public class RobotUtils {
 
     public static void down(int keyEvent) {
         start();
+        System.out.println(keyEvent);
         robot.keyPress(keyEvent);
-    }
-
-    private static void down(int[] keyEvents, int i) {
-        down(keyEvents, i, 1);
-    }
-
-    private static void down(int[] keyEvents, int i, int dir) {
-        if (i < keyEvents.length && i >= 0) {
-            final int key = keyEvents[i];
-            down(key);
-            Threads.later(() -> {
-                down(keyEvents, i + dir, dir);
-            }, DUR);
-        }
     }
 
     public static void up(int keyEvent) {
@@ -41,29 +28,53 @@ public class RobotUtils {
         robot.keyRelease(keyEvent);
     }
 
-    private static void up(int[] keyEvents, int i) {
-        up(keyEvents, i, 1);
-    }
-
-    private static void up(int[] keyEvents, int i, int dir) {
-        if (i < keyEvents.length && i >= 0) {
-            final int key = keyEvents[i];
-            up(key);
-            Threads.later(() -> {
-                up(keyEvents, i + dir, dir);
-            }, DUR);
-        }
-    }
-
     public static void press(int keyEvent) {
         down(keyEvent);
         up(keyEvent);
     }
 
-    public static void press(int[] keyEvents) {
-        down(keyEvents, 0);
-        Threads.later(() ->{
-            up(keyEvents, keyEvents.length - 1, -1);
-        }, (keyEvents.length -1) * DUR);
+    public static void press(int[] keyEvents){
+        Threads.later(() -> {
+            pressAndSleep(keyEvents);
+        }, 0);
+    }
+
+    private static void pressAndSleep(int[] keyEvents) {
+        downAndSleep(keyEvents);
+        Threads.sleepBliss(0, SLEEP_DUR);
+        upAndSleep(keyEvents);
+
+    }
+
+    private static void upAndSleep(int[] keyEvents) {
+        for(int e : keyEvents) {
+            upAndSleep(e);
+            Threads.sleepBliss(0, SLEEP_DUR);
+        }
+    }
+
+    private static void upAndSleep(int e) {
+        if(e >= 0) up(e);
+    }
+
+    private static void downAndSleep(int[] keyEvents) {
+        for(int e : keyEvents) {
+            downAndSleep(e);
+            Threads.sleepBliss(0, SLEEP_DUR);
+        }
+    }
+
+    private static void downAndSleep(int e) {
+        if(e >= 0) down(e);
+        else Threads.sleepBliss(-e);
+    }
+
+    public static void press(int[][] keyEventSets) {
+        Threads.later(() -> {
+            for(int[] keyEvents : keyEventSets) {
+                pressAndSleep(keyEvents);
+                Threads.sleepBliss(0, SLEEP_DUR);
+            }
+        },0);
     }
 }

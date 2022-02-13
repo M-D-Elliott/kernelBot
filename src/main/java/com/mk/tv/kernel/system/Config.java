@@ -9,6 +9,7 @@ public class Config {
     public char commandIndicator = '?';
     public String[] formats = new String[]{"bat"};
     public String border = "+";
+    public boolean allowFreePress = false;
 
     public Config() {
     }

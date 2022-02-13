@@ -1,4 +1,4 @@
-package com.mk.tv.kernel.hotkeys;
+package com.mk.tv.kernel.presses;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.mk.tv.kernel.generic.IRepoCommandController;
@@ -19,16 +19,16 @@ import java.util.Map;
 import static jPlus.util.io.ConsoleIOUtils.validateString;
 import static jPlus.util.io.ConsoleUtils.sep;
 
-public class HotkeyController implements IRepoCommandController {
-    private final JacksonRepo<String> repo = new JacksonRepo<>("repos/hotkeys.txt", new TypeReference<>() {
-    }, HotkeyController::newHotkeyMap);
+public class PressController implements IRepoCommandController {
+    private final JacksonRepo<String> repo = new JacksonRepo<>("repos/presses.txt", new TypeReference<>() {
+    }, PressController::newHotkeyMap);
 
     private final Config config;
 
     private final List<String> menu = new ArrayList<>();
     public final char indicator = 'p';
 
-    public HotkeyController(Config config) {
+    public PressController(Config config) {
         this.config = config;
     }
 
@@ -59,13 +59,13 @@ public class HotkeyController implements IRepoCommandController {
     }
 
     public void processCommand(APIWrapper api, String[] args) {
-        if (validateString(args, 1) && processCommand(args[1])) return;
+        if (config.allowFreePress && validateString(args, 1) && processCommand(args[1])) return;
         menuResponse(api, args);
     }
 
     public boolean processCommand(String commandBody) {
         try {
-            final int[] keyEvents = KeyEvents.parseGroup(commandBody);
+            final int[][] keyEvents = KeyEvents.parseGroup2D(commandBody);
             RobotUtils.press(keyEvents);
             return true;
         } catch (ParseException e) {

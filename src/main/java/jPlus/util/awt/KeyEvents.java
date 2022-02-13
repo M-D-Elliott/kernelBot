@@ -1,5 +1,7 @@
 package jPlus.util.awt;
 
+import jPlus.util.lang.IntUtils;
+
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,25 +9,35 @@ import java.util.Map;
 import static java.awt.event.KeyEvent.*;
 
 public class KeyEvents {
-    public static int[] parseGroup(String s) throws ParseException {
-        return parseGroup(s, DEL);
-    }
 
-    public static int[] parseGroup(String s, String del) throws ParseException {
-        final String[] split = s.split(del);
+    public static int[] parseGroup(String s) throws ParseException {
+        final String[] split = s.split(ADD_DEL);
         final int[] ret = new int[split.length];
         for (int i = 0; i < split.length; i++) ret[i] = parse(split[i]);
         return ret;
     }
 
+    public static int[][] parseGroup2D(String s) throws ParseException {
+        final String[] split = s.split(NEXT_DEL);
+        final int[][] ret = new int[split.length][];
+        for (int i = 0; i < split.length; i++) ret[i] = parseGroup(split[i]);
+        return ret;
+    }
+
+
     public static int parse(String s) throws ParseException {
         fillSpecialKeys();
         if (s.length() == 1) return parse(s.charAt(0));
-        else {
-            final Integer ret = specialKeys.get(s.toLowerCase());
-            if (ret == null) throw new ParseException("Cannot parse special key " + s, 0);
-            return ret;
+        else if (s.charAt(0) == 'w') {
+            final String wvs = s.substring(2, s.length() - 1);
+            if (IntUtils.canBeParsedAsInt(wvs)) {
+                return -Integer.parseInt(wvs);
+            }
         }
+        final Integer ret = specialKeys.get(s.toLowerCase());
+        if (ret == null) throw new ParseException("Cannot parse special key " + s, 0);
+        return ret;
+
     }
 
     public static int parse(char c) throws ParseException {
@@ -197,39 +209,47 @@ public class KeyEvents {
 
     //***************************************************************//
 
-    public static final String DEL = "\\+";
+    public static final String ADD_DEL = "\\+";
+    public static final String NEXT_DEL = "\\>";
 
     private static final Map<String, Integer> specialKeys = new HashMap<>();
 
     private static void fillSpecialKeys() {
-        specialKeys.put("ctrl", VK_CONTROL);
-        specialKeys.put("alt", VK_ALT);
-        specialKeys.put("shift", VK_SHIFT);
-        specialKeys.put("tab", VK_TAB);
-        specialKeys.put("capslock", VK_CAPS_LOCK);
-        specialKeys.put("f1", VK_F1);
-        specialKeys.put("f2", VK_F2);
-        specialKeys.put("f3", VK_F3);
-        specialKeys.put("f4", VK_F4);
-        specialKeys.put("f5", VK_F5);
-        specialKeys.put("f6", VK_F6);
-        specialKeys.put("f7", VK_F7);
-        specialKeys.put("f8", VK_F8);
-        specialKeys.put("f9", VK_F9);
-        specialKeys.put("f10", VK_F10);
-        specialKeys.put("f11", VK_F11);
-        specialKeys.put("f12", VK_F12);
-        specialKeys.put("f13", VK_F13);
-        specialKeys.put("f14", VK_F14);
-        specialKeys.put("f15", VK_F15);
-        specialKeys.put("f16", VK_F16);
-        specialKeys.put("f17", VK_F17);
-        specialKeys.put("f18", VK_F18);
-        specialKeys.put("f19", VK_F19);
-        specialKeys.put("f20", VK_F20);
-        specialKeys.put("f21", VK_F21);
-        specialKeys.put("f22", VK_F22);
-        specialKeys.put("f23", VK_F23);
-        specialKeys.put("f24", VK_F24);
+        if (specialKeys.size() == 0) {
+            specialKeys.put("ctrl", VK_CONTROL);
+            specialKeys.put("alt", VK_ALT);
+            specialKeys.put("shift", VK_SHIFT);
+            specialKeys.put("tab", VK_TAB);
+            specialKeys.put("capslock", VK_CAPS_LOCK);
+            specialKeys.put("enter", VK_ENTER);
+            specialKeys.put("f1", VK_F1);
+            specialKeys.put("f2", VK_F2);
+            specialKeys.put("f3", VK_F3);
+            specialKeys.put("f4", VK_F4);
+            specialKeys.put("f5", VK_F5);
+            specialKeys.put("f6", VK_F6);
+            specialKeys.put("f7", VK_F7);
+            specialKeys.put("f8", VK_F8);
+            specialKeys.put("f9", VK_F9);
+            specialKeys.put("f10", VK_F10);
+            specialKeys.put("f11", VK_F11);
+            specialKeys.put("f12", VK_F12);
+            specialKeys.put("f13", VK_F13);
+            specialKeys.put("f14", VK_F14);
+            specialKeys.put("f15", VK_F15);
+            specialKeys.put("f16", VK_F16);
+            specialKeys.put("f17", VK_F17);
+            specialKeys.put("f18", VK_F18);
+            specialKeys.put("f19", VK_F19);
+            specialKeys.put("f20", VK_F20);
+            specialKeys.put("f21", VK_F21);
+            specialKeys.put("f22", VK_F22);
+            specialKeys.put("f23", VK_F23);
+            specialKeys.put("f24", VK_F24);
+            specialKeys.put("up", VK_UP);
+            specialKeys.put("down", VK_DOWN);
+            specialKeys.put("left", VK_LEFT);
+            specialKeys.put("right", VK_RIGHT);
+        }
     }
 }
