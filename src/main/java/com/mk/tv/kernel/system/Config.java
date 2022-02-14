@@ -1,7 +1,7 @@
 package com.mk.tv.kernel.system;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mk.tv.utils.JacksonUtils;
+import jPlusLibs.jackson.JacksonUtils;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Config {

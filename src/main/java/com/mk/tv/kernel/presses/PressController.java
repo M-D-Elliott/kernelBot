@@ -1,13 +1,14 @@
 package com.mk.tv.kernel.presses;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.mk.tv.kernel.generic.JacksonRepo;
+import jPlusLibs.jackson.JacksonRepo;
 import com.mk.tv.kernel.generic.RepoCommandController;
 import com.mk.tv.kernel.system.Config;
 import jPlus.io.APIWrapper;
 import jPlus.lang.callback.Receivable1;
 import jPlus.util.awt.KeyEvents;
 import jPlus.util.awt.RobotUtils;
+import jPlusLibs.jackson.Repo;
 
 import java.text.ParseException;
 import java.util.Collection;
@@ -17,7 +18,7 @@ import static jPlus.util.io.ConsoleIOUtils.validateString;
 
 public class PressController extends RepoCommandController {
 
-    protected final JacksonRepo<String> repo = new JacksonRepo<>("repos/presses.txt", new TypeReference<>() {
+    protected final Repo<String> repo = new JacksonRepo<>("repos/presses.txt", new TypeReference<>() {
     }, PressController::newHotkeyMap);
 
     private Receivable1<int[][]> pressReceiver = RobotUtils::pressAsync;
@@ -78,12 +79,12 @@ public class PressController extends RepoCommandController {
 
     @Override
     protected Collection<String> commandNames() {
-        return repo.map.keySet();
+        return repo.keys();
     }
 
     @Override
     protected String commandDesc(String item) {
-        return " --  " + repo.map.get(item);
+        return " --  " + repo.get(item);
     }
 
     @Override

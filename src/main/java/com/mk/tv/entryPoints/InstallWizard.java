@@ -3,7 +3,7 @@ package com.mk.tv.entryPoints;
 import com.mk.tv.auth.botusers.BotUser;
 import com.mk.tv.auth.botusers.BotUserRepo;
 import com.mk.tv.auth.config.AuthConfig;
-import com.mk.tv.utils.JacksonUtils;
+import jPlusLibs.jackson.JacksonUtils;
 import jPlus.lang.Runnables;
 import jPlus.util.io.ConsoleUtils;
 import jPlus.util.io.JarUtils;

@@ -1,7 +1,7 @@
 package com.mk.tv.kernel.mixes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.mk.tv.kernel.generic.JacksonRepo;
+import jPlusLibs.jackson.JacksonRepo;
 import com.mk.tv.kernel.generic.RepoCommandController;
 import com.mk.tv.kernel.system.Config;
 import jPlus.io.APIWrapper;
@@ -9,6 +9,7 @@ import jPlus.lang.callback.Receivable1;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.lang.IntUtils;
 import jPlus.util.map.MapUtils;
+import jPlusLibs.jackson.Repo;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,7 +19,7 @@ import static jPlus.util.io.ConsoleIOUtils.validateString;
 
 public class MixController extends RepoCommandController {
 
-    private final JacksonRepo<String> repo = new JacksonRepo<>("repos/mixes.txt", new TypeReference<>() {
+    private final Repo<String> repo = new JacksonRepo<>("repos/mixes.txt", new TypeReference<>() {
     }, MapUtils::newLinkedInstance);
 
     private Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap;
@@ -102,12 +103,12 @@ public class MixController extends RepoCommandController {
 
     @Override
     protected String commandDesc(String item) {
-        return " --  " + repo.map.get(item);
+        return " --  " + repo.get(item);
     }
 
     @Override
     protected Collection<String> commandNames() {
-        return repo.map.keySet();
+        return repo.keys();
     }
 
     @Override

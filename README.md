@@ -18,7 +18,7 @@
 
 <h5 id="s1">
 1. What is Kernelbot?
-<a href="#top">^</a>
+<a href="#top">^Top</a>
 </h5>
 
 *********************
@@ -41,7 +41,7 @@ Mix -- runs presses or scripts (or mixes?) with waits in between.
 
 <h5 id="s2">
 2. Who wants Kernelbot?
-<a href="#top">^</a>
+<a href="#top">^Top</a>
 </h5>
 
 ***********************
@@ -68,7 +68,7 @@ your users. %%%
 
 <h5 id="s3">
 3. Installation guide
-<a href="#top">^</a>
+<a href="#top">^Top</a>
 </h5>
 
 *********************
@@ -103,7 +103,7 @@ your install method. The only difference is the java path referenced.
 
 <h5 id="s4">
 4. Configuration Guide
-<a href="#top">^</a>
+<a href="#top">^Top</a>
 </h5>
 
 **********************
@@ -232,7 +232,7 @@ e.g. I create a 5s wait with w(5000) for my live commands.
 
 <h5 id="s5">
 5. User's Guide
-<a href="#top">^</a>
+<a href="#top">^Top</a>
 </h5>
 
 ***************
@@ -263,7 +263,7 @@ e.g. I create a 5s wait with w(5000) for my live commands.
 
 <h5 id="s6">
 6. Developer's guide
-<a href="#top">^</a>
+<a href="#top">^Top</a>
 </h5>
 
 ********************

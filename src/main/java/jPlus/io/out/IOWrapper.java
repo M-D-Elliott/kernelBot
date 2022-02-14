@@ -1,9 +1,6 @@
 package jPlus.io.out;
 
 import jPlus.lang.callback.Receivable1;
-import jPlus.lang.callback.Retrievable2;
-
-import java.util.Collection;
 
 public interface IOWrapper {
     String in();
