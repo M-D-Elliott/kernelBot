@@ -1,10 +1,9 @@
 package com.mk.tv.kernel.presses;
 
-import com.mk.tv.kernel.generic.CommandController;
-import com.mk.tv.kernel.generic.CommandService;
+import com.mk.tv.kernel.generic.FuncController;
+import com.mk.tv.kernel.generic.FuncService;
 import com.mk.tv.kernel.system.Config;
 import jPlus.io.APIWrapper;
-import jPlus.lang.callback.Receivable1;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.awt.KeyEvents;
 import jPlus.util.awt.RobotUtils;
@@ -15,9 +14,9 @@ import java.util.Map;
 
 import static jPlus.util.io.ConsoleIOUtils.validateString;
 
-public class PressController extends CommandController {
+public class PressController extends FuncController {
 
-    protected final CommandService<String> service;
+    protected final FuncService<String> service;
 
     public PressController(Config config) {
         super(config);
@@ -25,7 +24,7 @@ public class PressController extends CommandController {
         KeyEvents.NEXT_DEL = "\\" + config.nextDelimiter;
 
         final IRepo<String> repo = new PressRepo();
-        service = new CommandService<>(repo) {
+        service = new FuncService<>(repo) {
             @Override
             protected void process(APIWrapper api, String[] args) {
                 final String presetContent = repo.get(args[0]);
@@ -38,7 +37,7 @@ public class PressController extends CommandController {
     public void read(Map<String, Receivable2<APIWrapper, String[]>> sync,
                      Map<String, Receivable2<APIWrapper, String[]>> async) {
         super.read(async, sync);
-        service.read(async, entryPointName(), menu);
+        service.read(async, menuName(), menu);
     }
 
     //***************************************************************//
@@ -70,12 +69,12 @@ public class PressController extends CommandController {
     }
 
     @Override
-    public String entryPointName() {
+    public String menuName() {
         return "press";
     }
 
     @Override
-    protected String commandDesc(String item) {
+    protected String funcDesc(String item) {
         return " --  " + service.repo.get(item);
     }
 

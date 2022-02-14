@@ -6,7 +6,7 @@
 
     <groupId>com.mk.tv</groupId>
     <artifactId>KernelBot</artifactId>
-    <version>1.0.10 --Async blocking, 1 threaad of scripts, presses and mixes--</version>
+    <version>1.1.0 --Synchronous Asynchronicity, or how kB learned to stop worrying and be busy sometimes--</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

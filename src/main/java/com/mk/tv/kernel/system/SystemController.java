@@ -1,6 +1,6 @@
 package com.mk.tv.kernel.system;
 
-import com.mk.tv.kernel.generic.CommandController;
+import com.mk.tv.kernel.generic.FuncController;
 import jPlus.io.APIWrapper;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.JarUtils;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static jPlus.util.io.ConsoleIOUtils.validateChar;
 
-public class SystemController extends CommandController {
+public class SystemController extends FuncController {
 
     public SystemController(Config config) {
         super(config);
@@ -31,7 +31,7 @@ public class SystemController extends CommandController {
     //***************************************************************//
 
     @Override
-    public String entryPointName() {
+    public String menuName() {
         return "system";
     }
 
@@ -51,7 +51,7 @@ public class SystemController extends CommandController {
     }
 
     @Override
-    protected String commandDesc(String item) {
+    protected String funcDesc(String item) {
         return "";
     }
 

@@ -1,21 +1,26 @@
 package com.mk.tv.auth;
 
+import com.mk.tv.auth.botusers.BotUser;
 import com.mk.tv.auth.botusers.BotUserController;
 import com.mk.tv.auth.config.AuthConfig;
 import com.mk.tv.kernel.Kernel;
 import jPlus.io.APIWrapper;
 import jPlus.util.io.ConsoleIOUtils;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class AuthKernel extends Kernel {
 
     private final BotUserController userController;
     private final AuthConfig authConfig;
+    protected Set<BotUser> busyUsers = new HashSet<>();
 
     public AuthKernel(AuthConfig config) {
         super(config);
         authConfig = config;
         userController = new BotUserController(config);
-        controllers.add(userController);
+        controllers.add(3, userController);
     }
 
     //***************************************************************//

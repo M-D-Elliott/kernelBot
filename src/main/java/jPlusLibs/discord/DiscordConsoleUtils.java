@@ -10,4 +10,8 @@ public class DiscordConsoleUtils {
         message = StringUtils.isNullWhiteSpaceOrEmpty(message) ? "` `" : encase(message, '`');
         e.getChannel().sendMessage(message).queue();
     }
+
+    public static void println(MessageReceivedEvent e, String message) {
+        print(e, message + System.lineSeparator());
+    }
 }

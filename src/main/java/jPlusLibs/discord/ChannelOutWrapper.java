@@ -11,7 +11,7 @@ public class ChannelOutWrapper implements APIWrapper {
     private final MessageReceivedEvent e;
     private final Access access;
 
-    private final Receivable1<String> out = this::println;
+    private final Receivable1<String> out = this::print;
 
     public ChannelOutWrapper(MessageReceivedEvent e) {
         this.e = e;
@@ -31,7 +31,7 @@ public class ChannelOutWrapper implements APIWrapper {
 
     @Override
     public void println(String s) {
-        DiscordConsoleUtils.print(e, s);
+        DiscordConsoleUtils.println(e, s);
     }
 
     @Override

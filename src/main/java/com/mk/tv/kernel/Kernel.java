@@ -1,6 +1,6 @@
 package com.mk.tv.kernel;
 
-import com.mk.tv.kernel.generic.ICommandController;
+import com.mk.tv.kernel.generic.IFuncController;
 import com.mk.tv.kernel.mixes.MixController;
 import com.mk.tv.kernel.presses.PressController;
 import com.mk.tv.kernel.scripts.ScriptController;
@@ -8,34 +8,28 @@ import com.mk.tv.kernel.system.Config;
 import com.mk.tv.kernel.system.SystemController;
 import jPlus.io.APIWrapper;
 import jPlus.io.security.Access;
+import jPlus.lang.callback.Receivable1;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.ConsoleUtils;
 import jPlus.util.lang.IntUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static jPlus.util.io.ConsoleUtils.sep;
-import static jPlus.util.io.JarUtils.version;
 import static jPlus.util.lang.IntUtils.boundsMin;
 
-public class Kernel {
+public class Kernel implements Receivable1<APIWrapper> {
 
     protected final Config config;
-    protected final List<ICommandController> controllers = new ArrayList<>();
-
-    //***************************************************************//
+    protected final List<IFuncController> controllers = new ArrayList<>();
+    protected final List<String> menu = new ArrayList<>();
+    protected final Map<Character, List<String>> indicatorMenuMap = new LinkedHashMap<>();
 
     protected final Map<String, Receivable2<APIWrapper, String[]>> syncFunctions = new LinkedHashMap<>();
     protected final Map<String, Receivable2<APIWrapper, String[]>> asyncFunctions = new LinkedHashMap<>();
-    protected Thread asyncThread = null;
-    protected String busyMessage = "";
-    // protected Set<BotUser> busyUsers = new HashSet<>();
+    protected final BusyCommand asyncThread = new BusyCommand();
 
-    protected final List<String> menu = new ArrayList<>();
-    protected final Map<Character, List<String>> indicatorMenuMap = new LinkedHashMap<>();
+    //***************************************************************//
 
     public Kernel(Config config) {
         this.config = config;
@@ -48,40 +42,42 @@ public class Kernel {
     }
 
     public void init() {
-        prepareCommandMap();
+        prepareFuncMap();
         prepareMenu();
     }
 
-    protected void prepareCommandMap() {
+    protected void prepareFuncMap() {
         syncFunctions.put("help", this::menuResponse);
 
-        controllers.forEach(c -> {
+        for (IFuncController c : controllers)
             c.read(this.syncFunctions, this.asyncFunctions);
-        });
     }
 
     protected void prepareMenu() {
         menu.add("help");
-        controllers.forEach(c -> {
-            menu.add(c.entryPointName());
+        for (IFuncController c : controllers) {
+            menu.add(c.menuName());
             indicatorMenuMap.put(c.indicator(), c.menu());
-        });
+        }
     }
 
     //***************************************************************//
 
-    public void parse(APIWrapper api) {
+    @Override
+    public void receive(APIWrapper api) {
         String message = api.in();
         if (message.charAt(0) == config.commandIndicator) {
             message = message.substring(1);
         } else if (api.access().value() < Access.PRIVATE.value()) return;
 
-        final String[] parsedM = message.split(" ");
-        interpret(api, parsedM);
+        interpret(api, message.split(" "));
     }
 
-    protected void interpret(APIWrapper api, String[] parsedM) {
+    protected void interpret(APIWrapper api, String[] message) {
+        thread(api, parse(message));
+    }
 
+    protected String[] parse(String[] parsedM) {
         Integer intIndicator = IntUtils.parseInteger(parsedM[0]);
         if (intIndicator != null) parsedM[0] = menu.get(boundsMin(intIndicator, 0));
 
@@ -92,37 +88,42 @@ public class Kernel {
                 parsedM[0] = menuList.get(intIndicator);
         }
 
-        final String commandN = parsedM[0];
-        final Receivable2<APIWrapper, String[]> syncF = syncFunctions.get(commandN);
-        if (syncF != null) receiveCommand(api, parsedM, syncF);
-
-        final Receivable2<APIWrapper, String[]> asyncF = asyncFunctions.get(commandN);
-        if (asyncF != null)
-            if (asyncThread == null) {
-                asyncThread = new Thread(() -> {
-                    receiveCommand(api, parsedM, asyncF);
-                    asyncThread = null;
-                });
-                busyMessage = String.format(busyMessageUnf(), commandN, api.username());
-                asyncThread.start();
-            } else api.print(busyMessage);
+        return parsedM;
     }
 
-    private void receiveCommand(APIWrapper api, String[] parsedM, Receivable2<APIWrapper, String[]> command) {
-        if (command == null) {
-            System.out.println(api.username() + " -- unknown");
-            noCommandFoundResponse(api);
-        } else {
-            System.out.println(api.username() + " -- " + parsedM[0]);
-            command.receive(api, parsedM);
+    protected void thread(APIWrapper api, String[] parsedM) {
+        final String funcName = parsedM[0];
+        final Receivable2<APIWrapper, String[]> syncF = syncFunctions.get(funcName);
+        if (syncF != null) receiveFunc(api, parsedM, syncF);
+
+        final Receivable2<APIWrapper, String[]> asyncF = asyncFunctions.get(funcName);
+        if (asyncF != null) {
+            if (asyncThread.isDormant()) {
+                asyncThread.busyMessage = String.format(busyMessageUnf(), funcName, api.username());
+                asyncThread.body = () -> receiveValidFunc(api, parsedM, asyncF);
+                asyncThread.onBusy = () -> api.print(asyncThread.busyMessage);
+            }
+            asyncThread.run();
         }
     }
 
-    //***************************************************************//
+    protected void receiveFunc(APIWrapper api, String[] parsedM, Receivable2<APIWrapper, String[]> func) {
+        if (func == null) {
+            System.out.println(api.username() + " -- unknown");
+            noCommandFoundResponse(api);
+        } else receiveValidFunc(api, parsedM, func);
+    }
+
+    protected void receiveValidFunc(APIWrapper api, String[] parsedM, Receivable2<APIWrapper, String[]> func) {
+        System.out.println(api.username() + " -- " + parsedM[0]);
+        func.receive(api, parsedM);
+    }
 
     protected void noCommandFoundResponse(APIWrapper api) {
         api.print("No command found...");
     }
+
+    //***************************************************************//
 
     protected void menuResponse(APIWrapper api, String[] args) {
         final String border = "?-";
@@ -134,7 +135,7 @@ public class Kernel {
 
     //***************************************************************//
 
-    protected final String busyMessageUnf() {
+    protected static String busyMessageUnf() {
         final String sep = sep();
         return "I am performing %1$s for %2$s" + sep +
                 "Scripts, presses, or mixes are async. I can only run 1 async task at a time. " + sep +

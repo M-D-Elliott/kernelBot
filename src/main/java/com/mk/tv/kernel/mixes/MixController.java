@@ -1,8 +1,8 @@
 package com.mk.tv.kernel.mixes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.mk.tv.kernel.generic.CommandController;
-import com.mk.tv.kernel.generic.CommandService;
+import com.mk.tv.kernel.generic.FuncController;
+import com.mk.tv.kernel.generic.FuncService;
 import com.mk.tv.kernel.system.Config;
 import jPlus.io.APIWrapper;
 import jPlus.lang.callback.Receivable1;
@@ -16,12 +16,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-import static com.mk.tv.kernel.generic.CommandService.COMMAND_NOT_FOUND;
+import static com.mk.tv.kernel.generic.FuncService.FUNC_NOT_FOUND;
 import static jPlus.util.io.ConsoleIOUtils.validateString;
 
-public class MixController extends CommandController {
+public class MixController extends FuncController {
 
-    protected final CommandService<String> service;
+    protected final FuncService<String> service;
 
     private Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap;
     public Collection<Receivable1<Boolean>> synchronicityReceivers = new ArrayList<>();
@@ -31,7 +31,7 @@ public class MixController extends CommandController {
 
         final IRepo<String> repo = new JacksonRepo<>("repos/mixes.txt", new TypeReference<>() {
         }, MapUtils::newLinkedInstance);
-        service = new CommandService<>(repo) {
+        service = new FuncService<>(repo) {
             @Override
             protected void process(APIWrapper api, String[] args) {
                 final String code = repo.get(args[0]);
@@ -47,7 +47,7 @@ public class MixController extends CommandController {
                      Map<String, Receivable2<APIWrapper, String[]>> async) {
         this.commandFuncMap = async;
         super.read(async, sync);
-        service.read(async, entryPointName(), menu);
+        service.read(async, menuName(), menu);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class MixController extends CommandController {
                         Thread.sleep(waitValue);
                     }
                 } else {
-                    api.print(String.format(COMMAND_NOT_FOUND, commandName));
+                    api.print(String.format(FUNC_NOT_FOUND, commandName));
                 }
             }
         } catch (InterruptedException e) {
@@ -94,12 +94,12 @@ public class MixController extends CommandController {
     }
 
     @Override
-    public String entryPointName() {
+    public String menuName() {
         return "mix";
     }
 
     @Override
-    protected String commandDesc(String item) {
+    protected String funcDesc(String item) {
         return " --  " + service.repo.get(item);
     }
 

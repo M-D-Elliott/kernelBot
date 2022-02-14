@@ -1,5 +1,6 @@
 package jPlusLibs.discord;
 
+import jPlus.async.command.ThreadCommand;
 import jPlus.io.APIWrapper;
 import jPlus.lang.callback.Receivable1;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -39,5 +40,6 @@ public class DiscordOutListener extends ListenerAdapter {
     @Override
     public void onShutdown(@NotNull ShutdownEvent event) {
         System.out.println("Shutting down...");
+        ThreadCommand.terminateAllAndWait();
     }
 }

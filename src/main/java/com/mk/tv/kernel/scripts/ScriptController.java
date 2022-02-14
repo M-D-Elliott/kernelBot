@@ -1,7 +1,7 @@
 package com.mk.tv.kernel.scripts;
 
-import com.mk.tv.kernel.generic.CommandController;
-import com.mk.tv.kernel.generic.CommandService;
+import com.mk.tv.kernel.generic.FuncController;
+import com.mk.tv.kernel.generic.FuncService;
 import com.mk.tv.kernel.system.Config;
 import jPlus.io.APIWrapper;
 import jPlus.io.file.FileUtils;
@@ -17,16 +17,16 @@ import java.util.stream.Collectors;
 import static jPlus.util.io.ConsoleIOUtils.validateString;
 import static jPlus.util.io.RuntimeUtils.*;
 
-public class ScriptController extends CommandController {
+public class ScriptController extends FuncController {
 
-    protected final CommandService<String> service;
+    protected final FuncService<String> service;
 
     public ScriptController(Config config) {
         super(config);
 
         final IRepo<String> repo = new MapRepoS<>(pathMap()) {
         };
-        service = new CommandService<>(repo) {
+        service = new FuncService<>(repo) {
             @Override
             protected void process(APIWrapper api, String[] args) {
                 final String commandPath = repo.get(args[0]);
@@ -48,7 +48,7 @@ public class ScriptController extends CommandController {
     public void read(Map<String, Receivable2<APIWrapper, String[]>> sync,
                      Map<String, Receivable2<APIWrapper, String[]>> async) {
         super.read(async, sync);
-        service.read(async, entryPointName(), menu);
+        service.read(async, menuName(), menu);
     }
 
     //***************************************************************//
@@ -66,7 +66,7 @@ public class ScriptController extends CommandController {
     //***************************************************************//
 
     @Override
-    public String entryPointName() {
+    public String menuName() {
         return "script";
     }
 
@@ -76,7 +76,7 @@ public class ScriptController extends CommandController {
     }
 
     @Override
-    protected String commandDesc(String item) {
+    protected String funcDesc(String item) {
         return "";
     }
 

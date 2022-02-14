@@ -1,64 +1,57 @@
 package jPlus.async.command;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
+
+import static jPlus.async.Threads.sleepBliss;
 
 public abstract class ThreadCommand implements Command {
-
     protected Thread thread;
 
-    protected boolean terminated = false;
+    protected abstract void body();
+
+    //***************************************************************//
 
     @Override
     public final void run() {
         if (isDormant()) {
-            terminated = false;
-            ACTIVE_THREAD_COMMANDS.put(this, null);
-            thread = new Thread(this::startLoop);
+            initialize();
+            beforeSuccessfulRun();
+            thread = new Thread(this::start);
             thread.start();
-        }
+        } else onBusy();
     }
 
-    public final void terminate() {
-        terminated = true;
-        onTerminate();
+    protected void beforeSuccessfulRun() {
+        ACTIVE_THREAD_COMMANDS.add(this);
     }
 
-    //***************************************************************//
-
-    protected abstract boolean condition();
-
-    protected abstract void loopBody();
-
-    protected void initialize() {
-        reverse();
-    }
-
-    protected void onEnd() {
-    }
-
-    protected void onStandardEnd() {
-
-    }
-
-    protected void onTerminate() {
-    }
-
-    private void startLoop() {
-        initialize();
-        while (baseCondition() && condition()) loopBody();
-        if (!terminated) onStandardEnd();
+    protected void start() {
+        body();
         end();
     }
 
-    private void end() {
+    protected void onBusy(){
+    }
+
+    public void terminate() {
+    }
+
+    protected void initialize() {
+    }
+
+    @Override
+    public void reverse() {
+        initialize();
+    }
+
+    protected void end() {
         thread = null;
         ACTIVE_THREAD_COMMANDS.remove(this);
         onEnd();
     }
 
-    private boolean baseCondition() {
-        return !terminated;
+    protected void onEnd() {
     }
 
     //***************************************************************//
@@ -69,26 +62,19 @@ public abstract class ThreadCommand implements Command {
 
     //***************************************************************//
 
-    private static final Map<ThreadCommand, Void> ACTIVE_THREAD_COMMANDS = new HashMap<>();
-    private static final long TERMINATE_AND_WAIT_INCREMENT = 50;
+    static final Set<ThreadCommand> ACTIVE_THREAD_COMMANDS = new HashSet<>();
+    private static final int TERMINATE_AND_WAIT_INCREMENT = 50;
 
     public static void terminateAll() {
-        ACTIVE_THREAD_COMMANDS.keySet().forEach(ThreadCommand::terminate);
+        ACTIVE_THREAD_COMMANDS.forEach(ThreadCommand::terminate);
     }
 
     public static void terminateAllAndWait() {
         terminateAll();
-        while (activeThreadCommandsExist()) trySleep(TERMINATE_AND_WAIT_INCREMENT);
+        while (activeThreadCommandsExist()) sleepBliss(TERMINATE_AND_WAIT_INCREMENT);
     }
 
     public static boolean activeThreadCommandsExist() {
         return ACTIVE_THREAD_COMMANDS.size() > 0;
-    }
-
-    public static void trySleep(long millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException ignored) {
-        }
     }
 }

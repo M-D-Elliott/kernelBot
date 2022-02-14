@@ -1,7 +1,7 @@
 package com.mk.tv.auth.botusers;
 
 import com.mk.tv.auth.config.AuthConfig;
-import com.mk.tv.kernel.generic.CommandController;
+import com.mk.tv.kernel.generic.FuncController;
 import jPlus.io.APIWrapper;
 import jPlus.io.file.FileUtils;
 import jPlus.io.security.Access;
@@ -15,7 +15,7 @@ import java.util.Map;
 import static jPlus.util.io.ConsoleIOUtils.validateString;
 import static jPlus.util.io.ConsoleUtils.sep;
 
-public class BotUserController extends CommandController {
+public class BotUserController extends FuncController {
 
     protected final AuthConfig authConfig;
     public final BotUserService service = new BotUserService();
@@ -48,7 +48,7 @@ public class BotUserController extends CommandController {
     }
 
     @Override
-    public String entryPointName() {
+    public String menuName() {
         return "user";
     }
 
@@ -63,7 +63,7 @@ public class BotUserController extends CommandController {
     }
 
     @Override
-    protected String commandDesc(String item) {
+    protected String funcDesc(String item) {
         return "";
     }
 
