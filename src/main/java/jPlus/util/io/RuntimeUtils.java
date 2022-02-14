@@ -5,21 +5,39 @@ import jPlus.lang.SystemUtils;
 import java.io.IOException;
 
 public class RuntimeUtils {
+    protected static boolean exec(String body) throws IOException {
+        return Runtime.getRuntime().exec(body).isAlive();
+    }
+
     public static boolean execBliss(String body) {
         try {
-            final Process process = Runtime.getRuntime().exec(body);
-            return process.isAlive();
+            return exec(body);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         return false;
+    }
+
+    protected static void execWait(String body) throws IOException, InterruptedException {
+        Runtime.getRuntime().exec(body).waitFor();
+    }
+
+    public static void execWaitBliss(String body) {
+        try {
+            execWait(body);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected static boolean exec(String[] body) throws IOException {
+        return Runtime.getRuntime().exec(body).isAlive();
     }
 
     public static boolean execBliss(String[] body) {
         try {
-            final Process process = Runtime.getRuntime().exec(body);
-            return process.isAlive();
+            return exec(body);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -27,8 +45,22 @@ public class RuntimeUtils {
         return false;
     }
 
-    public static boolean batch(String path) {
-        return execBliss("cmd.exe /c start \"\" \"" + path + "\"");
+    protected static void execWait(String[] body) throws IOException, InterruptedException {
+        Runtime.getRuntime().exec(body).waitFor();
+    }
+
+    public static void execWaitBliss(String[] body) {
+        try {
+            execWait(body);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //***************************************************************//
+
+    public static String cmdStartString(String path){
+        return "cmd.exe /c start \"\" \"" + path + "\"";
     }
 
     static void waitForProcess(String... process) throws IOException, InterruptedException {

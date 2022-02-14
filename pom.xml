@@ -6,7 +6,7 @@
 
     <groupId>com.mk.tv</groupId>
     <artifactId>KernelBot</artifactId>
-    <version>1.0.8 --Full Service Refactor--</version>
+    <version>1.0.9 --Prepping RuntimeUtils with thread blocking -- No jar--</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

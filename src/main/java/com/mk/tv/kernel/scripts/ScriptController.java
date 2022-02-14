@@ -6,7 +6,6 @@ import com.mk.tv.kernel.system.Config;
 import jPlus.io.APIWrapper;
 import jPlus.io.file.FileUtils;
 import jPlus.lang.callback.Receivable2;
-import jPlus.util.io.RuntimeUtils;
 import jPlusLibs.apache.commons.ApacheFileUtils;
 import jPlusLibs.generic.IRepo;
 import jPlusLibs.generic.MapRepoS;
@@ -16,6 +15,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static jPlus.util.io.ConsoleIOUtils.validateString;
+import static jPlus.util.io.RuntimeUtils.cmdStartString;
+import static jPlus.util.io.RuntimeUtils.execBliss;
 
 public class ScriptController extends CommandController {
 
@@ -61,7 +62,7 @@ public class ScriptController extends CommandController {
     }
 
     protected boolean process(String commandBody) {
-        return RuntimeUtils.batch(commandBody);
+        return execBliss(cmdStartString(commandBody));
     }
 
     //***************************************************************//
