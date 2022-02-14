@@ -23,13 +23,13 @@ public abstract class FuncService<DATA_TYPE> {
 
     protected abstract void process(APIWrapper api, String[] args);
 
-    public void read(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap,
+    public void read(Map<String, Receivable2<APIWrapper, String[]>> funcMap,
                      String epName, Collection<String> menu) {
-        commandFuncMap.put("add" + epName, this::add);
+        funcMap.put("add" + epName, this::add);
 
         final Receivable2<APIWrapper, String[]> repoCommand = this::process;
         final Collection<String> commandNames = repo.keys();
-        for (String commandName : commandNames) commandFuncMap.put(commandName, repoCommand);
+        for (String commandName : commandNames) funcMap.put(commandName, repoCommand);
         menu.addAll(commandNames);
     }
 
