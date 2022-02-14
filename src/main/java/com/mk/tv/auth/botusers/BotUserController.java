@@ -28,13 +28,14 @@ public class BotUserController extends CommandController {
     //***************************************************************//
 
     @Override
-    public void read(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
-        super.read(commandFuncMap);
+    public void read(Map<String, Receivable2<APIWrapper, String[]>> sync,
+                     Map<String, Receivable2<APIWrapper, String[]>> async) {
+        super.read(sync, async);
 
-        commandFuncMap.put("spill", this::spill);
-        commandFuncMap.put("changepass", this::changePassword);
-        commandFuncMap.put("setwelcome", this::setWelcome);
-        commandFuncMap.put("register", this::register);
+        sync.put("spill", this::spill);
+        sync.put("changepass", this::changePassword);
+        sync.put("setwelcome", this::setWelcome);
+        sync.put("register", this::register);
 
         Collections.addAll(menu, "spill", "changepass", "setwelcome", "register");
     }
@@ -47,7 +48,7 @@ public class BotUserController extends CommandController {
     }
 
     @Override
-    protected String entryPointName() {
+    public String entryPointName() {
         return "user";
     }
 

@@ -44,11 +44,11 @@ public class ConsoleUtils {
     }
 
     private static void clsWin() throws IOException, InterruptedException {
-        RuntimeUtils.waitForProcess("cmd", "/c", "cls");
+        RuntimeUtils.execWait("cmd", "/c", "cls");
     }
 
     private static void clsLinux() throws IOException, InterruptedException {
-        RuntimeUtils.waitForProcess("clear");
+        RuntimeUtils.execWait("clear");
     }
 
     //***************************************************************//

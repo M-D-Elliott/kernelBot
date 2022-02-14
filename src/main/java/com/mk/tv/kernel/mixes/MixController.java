@@ -24,12 +24,10 @@ public class MixController extends CommandController {
     protected final CommandService<String> service;
 
     private Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap;
-    private Receivable2<APIWrapper, String> iterateCommandsReceiver = this::iterateCommandsAsync;
     public Collection<Receivable1<Boolean>> synchronicityReceivers = new ArrayList<>();
 
     public MixController(Config config) {
         super(config);
-        synchronicityReceivers.add(this::setSynchronous);
 
         final IRepo<String> repo = new JacksonRepo<>("repos/mixes.txt", new TypeReference<>() {
         }, MapUtils::newLinkedInstance);
@@ -45,10 +43,11 @@ public class MixController extends CommandController {
     //***************************************************************//
 
     @Override
-    public void read(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
-        this.commandFuncMap = commandFuncMap;
-        super.read(commandFuncMap);
-        service.read(commandFuncMap, entryPointName(), menu);
+    public void read(Map<String, Receivable2<APIWrapper, String[]>> sync,
+                     Map<String, Receivable2<APIWrapper, String[]>> async) {
+        this.commandFuncMap = async;
+        super.read(async, sync);
+        service.read(async, entryPointName(), menu);
     }
 
     @Override
@@ -59,20 +58,12 @@ public class MixController extends CommandController {
 
     protected boolean process(APIWrapper api, String code) {
         if (code.length() == 0) return false;
-        iterateCommandsReceiver.receive(api, code);
+        iterateCommands(api, code);
 
         return true;
     }
 
     //***************************************************************//
-
-    private void iterateCommandsAsync(APIWrapper api, String code) {
-        new Thread(() -> {
-            for (Receivable1<Boolean> rec : synchronicityReceivers) rec.receive(true);
-            iterateCommands(api, code);
-            for (Receivable1<Boolean> rec : synchronicityReceivers) rec.receive(false);
-        }).start();
-    }
 
     private void iterateCommands(APIWrapper api, String code) {
         try {
@@ -103,7 +94,7 @@ public class MixController extends CommandController {
     }
 
     @Override
-    protected String entryPointName() {
+    public String entryPointName() {
         return "mix";
     }
 
@@ -120,9 +111,5 @@ public class MixController extends CommandController {
     @Override
     protected String menuSuffix() {
         return config.displayLiteralCommand("mix scriptName+w(1000)+hotkeyName") + "will run script, wait 1s and press hotkey!";
-    }
-
-    public void setSynchronous(Boolean b) {
-        iterateCommandsReceiver = b ? this::iterateCommands : this::iterateCommandsAsync;
     }
 }

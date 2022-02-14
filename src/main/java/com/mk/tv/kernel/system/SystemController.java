@@ -19,18 +19,19 @@ public class SystemController extends CommandController {
     //***************************************************************//
 
     @Override
-    public void read(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
-        super.read(commandFuncMap);
+    public void read(Map<String, Receivable2<APIWrapper, String[]>> sync,
+                     Map<String, Receivable2<APIWrapper, String[]>> async) {
+        super.read(sync, async);
 
-        commandFuncMap.put("indicator", this::changeIndicator);
-        commandFuncMap.put("version", this::speakVersion);
+        sync.put("indicator", this::changeIndicator);
+        sync.put("version", this::speakVersion);
         Collections.addAll(menu, "indicator", "version");
     }
 
     //***************************************************************//
 
     @Override
-    protected String entryPointName() {
+    public String entryPointName() {
         return "system";
     }
 

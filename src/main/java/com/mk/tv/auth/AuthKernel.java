@@ -18,12 +18,6 @@ public class AuthKernel extends Kernel {
         controllers.add(userController);
     }
 
-    @Override
-    public void init(){
-        super.init();
-        menu.add(4, "user");
-    }
-
     //***************************************************************//
 
     @Override

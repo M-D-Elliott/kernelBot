@@ -23,8 +23,9 @@ public abstract class CommandController implements ICommandController {
     //***************************************************************//
 
     @Override
-    public void read(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
-        commandFuncMap.put(entryPointName(), this::process);
+    public void read(Map<String, Receivable2<APIWrapper, String[]>> sync,
+                     Map<String, Receivable2<APIWrapper, String[]>> async) {
+        sync.put(entryPointName(), this::process);
     }
 
     //***************************************************************//
@@ -52,8 +53,6 @@ public abstract class CommandController implements ICommandController {
     public List<String> menu() {
         return menu;
     }
-
-    protected abstract String entryPointName();
 
     protected abstract String menuPrefix();
 

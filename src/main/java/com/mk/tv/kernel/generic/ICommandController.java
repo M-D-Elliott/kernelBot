@@ -8,9 +8,11 @@ import java.util.Map;
 
 public interface ICommandController {
     void read(
-            Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap);
+            Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap, Map<String, Receivable2<APIWrapper, String[]>> asyncFunctionMap);
 
     char indicator();
 
     List<String> menu();
+
+    String entryPointName();
 }

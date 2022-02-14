@@ -19,8 +19,6 @@ public class PressController extends CommandController {
 
     protected final CommandService<String> service;
 
-    private Receivable1<int[][]> pressReceiver = RobotUtils::pressAsync;
-
     public PressController(Config config) {
         super(config);
         KeyEvents.ADD_DEL = "\\" + config.addDelimiter;
@@ -37,9 +35,10 @@ public class PressController extends CommandController {
     }
 
     @Override
-    public void read(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
-        super.read(commandFuncMap);
-        service.read(commandFuncMap, entryPointName(), menu);
+    public void read(Map<String, Receivable2<APIWrapper, String[]>> sync,
+                     Map<String, Receivable2<APIWrapper, String[]>> async) {
+        super.read(async, sync);
+        service.read(async, entryPointName(), menu);
     }
 
     //***************************************************************//
@@ -53,7 +52,7 @@ public class PressController extends CommandController {
     protected boolean process(String commandBody) {
         try {
             final int[][] keyEvents = KeyEvents.parseGroup2D(commandBody);
-            pressReceiver.receive(keyEvents);
+            RobotUtils.press(keyEvents);
 
             return true;
         } catch (ParseException e) {
@@ -71,7 +70,7 @@ public class PressController extends CommandController {
     }
 
     @Override
-    protected String entryPointName() {
+    public String entryPointName() {
         return "press";
     }
 
@@ -88,9 +87,5 @@ public class PressController extends CommandController {
     @Override
     protected String menuSuffix() {
         return config.displayLiteralCommand("press ctrl+f1") + "will press ctrl and f1 on the host comp!";
-    }
-
-    public void setSynchronous(Boolean b) {
-        pressReceiver = b ? RobotUtils::press : RobotUtils::pressAsync;
     }
 }

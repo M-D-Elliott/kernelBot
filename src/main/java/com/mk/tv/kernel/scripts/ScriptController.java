@@ -15,8 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static jPlus.util.io.ConsoleIOUtils.validateString;
-import static jPlus.util.io.RuntimeUtils.cmdStartString;
-import static jPlus.util.io.RuntimeUtils.execBliss;
+import static jPlus.util.io.RuntimeUtils.*;
 
 public class ScriptController extends CommandController {
 
@@ -31,9 +30,7 @@ public class ScriptController extends CommandController {
             @Override
             protected void process(APIWrapper api, String[] args) {
                 final String commandPath = repo.get(args[0]);
-                final boolean success = ScriptController.this.process(commandPath);
-                api.print(String.format(SUCCESSFUL_SCRIPT, args[0],
-                        success ? "success" : "failed"));
+                ScriptController.this.process(commandPath);
             }
         };
     }
@@ -48,27 +45,28 @@ public class ScriptController extends CommandController {
     }
 
     @Override
-    public void read(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
-        super.read(commandFuncMap);
-        service.read(commandFuncMap, entryPointName(), menu);
+    public void read(Map<String, Receivable2<APIWrapper, String[]>> sync,
+                     Map<String, Receivable2<APIWrapper, String[]>> async) {
+        super.read(async, sync);
+        service.read(async, entryPointName(), menu);
     }
 
     //***************************************************************//
 
     @Override
     protected void process(APIWrapper api, String[] args) {
-        if (validateString(args, 1) && process(args[1])) return;
+        if (validateString(args, 1)) return;
         super.process(api, args);
     }
 
-    protected boolean process(String commandBody) {
-        return execBliss(cmdStartString(commandBody));
+    protected void process(String commandBody) {
+        execWaitBliss(cmdWaitStringArr(commandBody));
     }
 
     //***************************************************************//
 
     @Override
-    protected String entryPointName() {
+    public String entryPointName() {
         return "script";
     }
 
