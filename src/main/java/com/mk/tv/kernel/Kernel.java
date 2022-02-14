@@ -50,7 +50,7 @@ public class Kernel {
 
     protected void prepareCommandMap() {
         commandFunctionMap.put("help", this::menuResponse);
-        for (ICommandController controller : controllers) controller.readCommands(this.commandFunctionMap);
+        for (ICommandController controller : controllers) controller.read(this.commandFunctionMap);
     }
 
     protected void prepareMenu() {

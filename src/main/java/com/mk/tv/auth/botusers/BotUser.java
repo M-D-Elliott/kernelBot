@@ -24,11 +24,6 @@ public class BotUser {
 
     //***************************************************************//
 
-    public static TypeReference<LinkedHashMap<String, BotUser>> typeRef() {
-        return new TypeReference<>() {
-        };
-    }
-
     public Session getSession() {
         return session;
     }

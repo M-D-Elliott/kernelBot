@@ -1,26 +1,27 @@
 package com.mk.tv.kernel.mixes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import jPlusLibs.jackson.JacksonRepo;
-import com.mk.tv.kernel.generic.RepoCommandController;
+import com.mk.tv.kernel.generic.CommandController;
+import com.mk.tv.kernel.generic.CommandService;
 import com.mk.tv.kernel.system.Config;
 import jPlus.io.APIWrapper;
 import jPlus.lang.callback.Receivable1;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.lang.IntUtils;
 import jPlus.util.map.MapUtils;
-import jPlusLibs.jackson.Repo;
+import jPlusLibs.jackson.JacksonRepo;
+import jPlusLibs.generic.IRepo;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import static com.mk.tv.kernel.generic.CommandService.COMMAND_NOT_FOUND;
 import static jPlus.util.io.ConsoleIOUtils.validateString;
 
-public class MixController extends RepoCommandController {
+public class MixController extends CommandController {
 
-    private final Repo<String> repo = new JacksonRepo<>("repos/mixes.txt", new TypeReference<>() {
-    }, MapUtils::newLinkedInstance);
+    protected final CommandService<String> service;
 
     private Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap;
     private Receivable2<APIWrapper, String> iterateCommandsReceiver = this::iterateCommandsAsync;
@@ -29,33 +30,38 @@ public class MixController extends RepoCommandController {
     public MixController(Config config) {
         super(config);
         synchronicityReceivers.add(this::setSynchronous);
+
+        final IRepo<String> repo = new JacksonRepo<>("repos/mixes.txt", new TypeReference<>() {
+        }, MapUtils::newLinkedInstance);
+        service = new CommandService<>(repo) {
+            @Override
+            protected void process(APIWrapper api, String[] args) {
+                final String code = repo.get(args[0]);
+                MixController.this.process(api, code);
+            }
+        };
     }
 
     //***************************************************************//
 
     @Override
-    public void readCommands(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
+    public void read(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
         this.commandFuncMap = commandFuncMap;
-        super.readCommands(commandFuncMap);
+        super.read(commandFuncMap);
+        service.read(commandFuncMap, entryPointName(), menu);
     }
 
     @Override
-    protected void processCommand(APIWrapper api, String[] args) {
-        if (config.allowFreeMix && validateString(args, 1) && processCommand(api, args[1])) return;
-        super.processCommand(api, args);
+    protected void process(APIWrapper api, String[] args) {
+        if (config.allowFreeMix && validateString(args, 1) && process(api, args[1])) return;
+        super.process(api, args);
     }
 
-    protected boolean processCommand(APIWrapper api, String code) {
+    protected boolean process(APIWrapper api, String code) {
         if (code.length() == 0) return false;
         iterateCommandsReceiver.receive(api, code);
 
         return true;
-    }
-
-    @Override
-    protected void processRepoCommand(APIWrapper api, String[] args) {
-        final String code = repo.get(args[0]);
-        processCommand(api, code);
     }
 
     //***************************************************************//
@@ -103,12 +109,7 @@ public class MixController extends RepoCommandController {
 
     @Override
     protected String commandDesc(String item) {
-        return " --  " + repo.get(item);
-    }
-
-    @Override
-    protected Collection<String> commandNames() {
-        return repo.keys();
+        return " --  " + service.repo.get(item);
     }
 
     @Override

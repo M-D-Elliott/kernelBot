@@ -19,8 +19,8 @@ public class SystemController extends CommandController {
     //***************************************************************//
 
     @Override
-    public void readCommands(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
-        super.readCommands(commandFuncMap);
+    public void read(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
+        super.read(commandFuncMap);
 
         commandFuncMap.put("indicator", this::changeIndicator);
         commandFuncMap.put("version", this::speakVersion);

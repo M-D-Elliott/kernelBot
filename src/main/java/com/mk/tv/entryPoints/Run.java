@@ -4,7 +4,7 @@ import com.mk.tv.auth.AuthKernel;
 import com.mk.tv.auth.config.AuthConfig;
 import com.mk.tv.kernel.system.SystemController;
 import jPlusLibs.jackson.JacksonUtils;
-import jPlusLibs.discord.io.DiscordOutListener;
+import jPlusLibs.discord.DiscordOutListener;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;

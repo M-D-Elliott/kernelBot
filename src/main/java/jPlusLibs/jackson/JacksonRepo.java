@@ -1,18 +1,16 @@
 package jPlusLibs.jackson;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import jPlusLibs.jackson.JacksonUtils;
 import jPlus.lang.callback.Retrievable;
 import jPlus.util.map.MapUtils;
-import jPlusLibs.jackson.Repo;
+import jPlusLibs.generic.MapRepo;
 
-import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
-public class JacksonRepo<DATA_TYPE> implements Repo<DATA_TYPE> {
+import static jPlusLibs.jackson.JacksonUtils.readAndUpdateBliss;
+
+public class JacksonRepo<DATA_TYPE> extends MapRepo<DATA_TYPE> {
     protected final String path;
-    protected final Map<String, DATA_TYPE> map;
 
     public JacksonRepo(String path,
                        TypeReference<LinkedHashMap<String, DATA_TYPE>> ref) {
@@ -22,14 +20,8 @@ public class JacksonRepo<DATA_TYPE> implements Repo<DATA_TYPE> {
     public JacksonRepo(String path,
                        TypeReference<LinkedHashMap<String, DATA_TYPE>> ref,
                        Retrievable<LinkedHashMap<String, DATA_TYPE>> newInstance) {
+        super(readAndUpdateBliss(path, ref, newInstance));
         this.path = path;
-        map = JacksonUtils.readAndUpdateBliss(path, ref, newInstance);
-    }
-
-    @Override
-    public void add(DATA_TYPE newUser) {
-        map.put(newUser.toString(), newUser);
-        save();
     }
 
     @Override
@@ -37,13 +29,4 @@ public class JacksonRepo<DATA_TYPE> implements Repo<DATA_TYPE> {
         JacksonUtils.writeBliss(path, map);
     }
 
-    @Override
-    public DATA_TYPE get(String name) {
-        return map.get(name);
-    }
-
-    @Override
-    public Collection<String> keys() {
-        return map.keySet();
-    }
 }

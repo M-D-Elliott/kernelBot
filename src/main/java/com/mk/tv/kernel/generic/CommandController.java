@@ -23,13 +23,13 @@ public abstract class CommandController implements ICommandController {
     //***************************************************************//
 
     @Override
-    public void readCommands(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
-        commandFuncMap.put(entryPointName(), this::processCommand);
+    public void read(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
+        commandFuncMap.put(entryPointName(), this::process);
     }
 
     //***************************************************************//
 
-    protected void processCommand(APIWrapper api, String[] args) {
+    protected void process(APIWrapper api, String[] args) {
         menuResponse(api, args);
     }
 

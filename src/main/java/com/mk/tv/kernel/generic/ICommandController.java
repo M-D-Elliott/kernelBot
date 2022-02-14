@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ICommandController {
-    void readCommands(
+    void read(
             Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap);
 
     char indicator();

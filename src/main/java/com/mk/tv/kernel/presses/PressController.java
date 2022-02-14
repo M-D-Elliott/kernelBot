@@ -1,25 +1,23 @@
 package com.mk.tv.kernel.presses;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import jPlusLibs.jackson.JacksonRepo;
-import com.mk.tv.kernel.generic.RepoCommandController;
+import com.mk.tv.kernel.generic.CommandController;
+import com.mk.tv.kernel.generic.CommandService;
 import com.mk.tv.kernel.system.Config;
 import jPlus.io.APIWrapper;
 import jPlus.lang.callback.Receivable1;
+import jPlus.lang.callback.Receivable2;
 import jPlus.util.awt.KeyEvents;
 import jPlus.util.awt.RobotUtils;
-import jPlusLibs.jackson.Repo;
+import jPlusLibs.generic.IRepo;
 
 import java.text.ParseException;
-import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static jPlus.util.io.ConsoleIOUtils.validateString;
 
-public class PressController extends RepoCommandController {
+public class PressController extends CommandController {
 
-    protected final Repo<String> repo = new JacksonRepo<>("repos/presses.txt", new TypeReference<>() {
-    }, PressController::newHotkeyMap);
+    protected final CommandService<String> service;
 
     private Receivable1<int[][]> pressReceiver = RobotUtils::pressAsync;
 
@@ -27,26 +25,32 @@ public class PressController extends RepoCommandController {
         super(config);
         KeyEvents.ADD_DEL = "\\" + config.addDelimiter;
         KeyEvents.NEXT_DEL = "\\" + config.nextDelimiter;
+
+        final IRepo<String> repo = new PressRepo();
+        service = new CommandService<>(repo) {
+            @Override
+            protected void process(APIWrapper api, String[] args) {
+                final String presetContent = repo.get(args[0]);
+                PressController.this.process(presetContent);
+            }
+        };
     }
 
-    //***************************************************************//
-
-    private static LinkedHashMap<String, String> newHotkeyMap() {
-        final LinkedHashMap<String, String> ret = new LinkedHashMap<>();
-        final String preset = "a+b";
-        ret.put("ab", preset);
-        return ret;
+    @Override
+    public void read(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
+        super.read(commandFuncMap);
+        service.read(commandFuncMap, entryPointName(), menu);
     }
 
     //***************************************************************//
 
     @Override
-    protected void processCommand(APIWrapper api, String[] args) {
-        if (config.allowFreePress && validateString(args, 1) && processCommand(args[1])) return;
-        super.processCommand(api, args);
+    protected void process(APIWrapper api, String[] args) {
+        if (config.allowFreePress && validateString(args, 1) && process(args[1])) return;
+        super.process(api, args);
     }
 
-    protected boolean processCommand(String commandBody) {
+    protected boolean process(String commandBody) {
         try {
             final int[][] keyEvents = KeyEvents.parseGroup2D(commandBody);
             pressReceiver.receive(keyEvents);
@@ -57,12 +61,6 @@ public class PressController extends RepoCommandController {
         }
 
         return false;
-    }
-
-    @Override
-    protected void processRepoCommand(APIWrapper api, String[] args) {
-        final String presetContent = repo.get(args[0]);
-        processCommand(presetContent);
     }
 
     //***************************************************************//
@@ -78,13 +76,8 @@ public class PressController extends RepoCommandController {
     }
 
     @Override
-    protected Collection<String> commandNames() {
-        return repo.keys();
-    }
-
-    @Override
     protected String commandDesc(String item) {
-        return " --  " + repo.get(item);
+        return " --  " + service.repo.get(item);
     }
 
     @Override

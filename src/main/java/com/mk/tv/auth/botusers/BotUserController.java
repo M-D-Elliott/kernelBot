@@ -28,8 +28,8 @@ public class BotUserController extends CommandController {
     //***************************************************************//
 
     @Override
-    public void readCommands(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
-        super.readCommands(commandFuncMap);
+    public void read(Map<String, Receivable2<APIWrapper, String[]>> commandFuncMap) {
+        super.read(commandFuncMap);
 
         commandFuncMap.put("spill", this::spill);
         commandFuncMap.put("changepass", this::changePassword);

@@ -6,7 +6,7 @@
 
     <groupId>com.mk.tv</groupId>
     <artifactId>KernelBot</artifactId>
-    <version>1.0.7 --Better readme.md and controllers prepped for full service abstraction--</version>
+    <version>1.0.8 --Full Service Refactor--</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
