@@ -16,8 +16,8 @@ v.1.0.0
 
 <h4 id="top">-------TABLE OF CONTENTS---------</h4></br>
 
-<a href=#s1>1. What is Kernelbot?</a></br>
-<a href=#s2>2. Who wants Kernelbot?</a></br>
+<a href=#s1>1. What is kernelBot?</a></br>
+<a href=#s2>2. Who wants kernelBot?</a></br>
 <a href=#s3>3. Installation guide</a></br>
 <a href=#s4>4. Configuration guide</a></br>
 <a href=#s5>5. User's guide</a></br>
@@ -26,20 +26,20 @@ v.1.0.0
 *********************
 
 <h5 id="s1">
-1. What is Kernelbot?
+1. What is kernelBot?
 <a href="#top">^Top</a>
 </h5>
 
 *********************
 ```
-Kernelbot is a discord bot a bit different than others.
-Instead of running on a server like Heroku, Kernelbot
+kernelBot is a discord bot a bit different than others.
+Instead of running on a server like Heroku, kernelBot
 runs on your local machine, the host computer.
 
-Kernelbot allows predefined tasks (defined by you) to be
+kernelBot allows predefined tasks (defined by you) to be
 executed by white listed users via discord.
 
-Kernelbot is capable of three main functionalities:
+kernelBot is capable of three main functionalities:
 Press -- presses hotkey(s)
 Script -- runs scripts (only .bat in v1.0.0)
 Mix -- runs presses or scripts (or mixes?) with waits in between.
@@ -49,22 +49,22 @@ Mix -- runs presses or scripts (or mixes?) with waits in between.
 ***********************
 
 <h5 id="s2">
-2. Who wants Kernelbot?
+2. Who wants kernelBot?
 <a href="#top">^Top</a>
 </h5>
 
 ***********************
 ```
-Kernelbot is for people who host servers. Say you have a server
+kernelBot is for people who host servers. Say you have a server
 for the popular video game "Project Zomboid". Say that you have
 to run a program to start the server, and/or end a program
 to stop the server. This can be done with .bat (batch) files and
 windows scheduled tasks.
 
-However, Kernelbot can execute batch files on demand. The name of the
+However, kernelBot can execute batch files on demand. The name of the
 .bat file becomes the command name. So if you have a .bat file
 in the myscripts folder called "stopserver.bat" then it will appear
-in your Kernelbot's menu as stopserver. So a discord friend simply needs
+in your kernelBot's menu as stopserver. So a discord friend simply needs
 to type ?stopserver to run the batch file that stop your server.
 
 %%% NOTE: in myscripts I have example .bat files for starting and stopping
@@ -120,8 +120,8 @@ your install method. The only difference is the java path referenced.
 NOTE : FILES WILL BE PLACED IN PROPER POSITIONS BY EITHER INSTALLATION.
 
 %%% config.txt %%%
--This file is used for general settings for the Kernelbot.
--This file must be at the same level as Kernelbot, as generated
+-This file is used for general settings for the kernelBot.
+-This file must be at the same level as kernelBot, as generated
 by the installWizard.
 
 --USABLE config.txt CONTENTS---
@@ -277,7 +277,7 @@ e.g. I create a 5s wait with w(5000) for my live commands.
 
 ********************
 ```
--Most simply Kernelbot is comprised of three main components:
+-Most simply kernelBot is comprised of three main components:
 
 LISTENER
 A discord bot listener that sends interacts with the bot code
@@ -305,7 +305,7 @@ by passing Jackson a class.
  and AuthKernel (user) layers. This is so the non-essential user layer
  could easily be removed in future projects.
 
--Kernelbot heavily relies on jPlus, my general purpose Java library.
+-kernelBot heavily relies on jPlus, my general purpose Java library.
  Some of these functions may be improved by other libraries,
  but this allows the bot to have so few dependencies.
 ```
