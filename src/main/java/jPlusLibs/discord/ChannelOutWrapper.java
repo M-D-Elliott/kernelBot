@@ -36,8 +36,8 @@ public class ChannelOutWrapper implements IAPIWrapper {
 
     @Override
     public void setStatus(String status) {
-        final Activity listeningOnIndicator = Activity.listening(status);
-        e.getJDA().getPresence().setActivity(listeningOnIndicator);
+        final Activity activity = Activity.listening(status);
+        e.getJDA().getPresence().setActivity(activity);
     }
 
     @Override

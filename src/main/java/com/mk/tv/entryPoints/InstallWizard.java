@@ -1,14 +1,14 @@
 package com.mk.tv.entryPoints;
 
+import com.mk.tv.auth.AuthConfig;
 import com.mk.tv.auth.botusers.BotUser;
 import com.mk.tv.auth.botusers.BotUserRepo;
-import com.mk.tv.auth.config.AuthConfig;
-import jPlusLibs.jackson.JacksonUtils;
 import jPlus.lang.Runnables;
 import jPlus.util.io.ConsoleUtils;
 import jPlus.util.io.JarUtils;
 import jPlus.util.io.RuntimeUtils;
 import jPlus.util.map.MapUtils;
+import jPlusLibs.jackson.JacksonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,8 +144,12 @@ public class InstallWizard extends Install {
 
     private static final String discordDevPortalURL = "https://discord.com/developers/applications";
 
-    private static final String SPLASH = "  |  /                           |    __ )          |   \n" +
-            "  ' /    _ \\   __|  __ \\    _ \\  |    __ \\    _ \\   __| \n" +
-            "  . \\    __/  |     |   |   __/  |    |   |  (   |  |   \n" +
-            " _|\\_\\ \\___| _|    _|  _| \\___| _|   ____/  \\___/  \\__|";
+    private static final String SPLASH = "888                                         888 888888b.            888    \n" +
+            "888                                         888 888  \"88b           888    \n" +
+            "888                                         888 888  .88P           888    \n" +
+            "888  888  .d88b.  888d888 88888b.   .d88b.  888 8888888K.   .d88b.  888888 \n" +
+            "888 .88P d8P  Y8b 888P\"   888 \"88b d8P  Y8b 888 888  \"Y88b d88\"\"88b 888    \n" +
+            "888888K  88888888 888     888  888 88888888 888 888    888 888  888 888    \n" +
+            "888 \"88b Y8b.     888     888  888 Y8b.     888 888   d88P Y88..88P Y88b.  \n" +
+            "888  888  \"Y8888  888     888  888  \"Y8888  888 8888888P\"   \"Y88P\"   \"Y888 ";
 }

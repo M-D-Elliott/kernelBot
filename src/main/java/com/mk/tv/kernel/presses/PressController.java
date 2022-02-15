@@ -2,7 +2,7 @@ package com.mk.tv.kernel.presses;
 
 import com.mk.tv.kernel.generic.FuncController;
 import com.mk.tv.kernel.generic.FuncService;
-import com.mk.tv.kernel.system.Config;
+import com.mk.tv.kernel.Config;
 import jPlus.io.out.IAPIWrapper;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.awt.KeyEvents;
@@ -44,7 +44,7 @@ public class PressController extends FuncController {
 
     @Override
     protected void process(IAPIWrapper api, String[] args) {
-        if (config.allowFreePress && validateString(args, 1) && process(args[1])) return;
+        if (config.press.allowFreePress && validateString(args, 1) && process(args[1])) return;
         super.process(api, args);
     }
 

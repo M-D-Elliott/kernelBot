@@ -4,7 +4,6 @@ import com.mk.tv.kernel.generic.IFuncController;
 import com.mk.tv.kernel.mixes.MixController;
 import com.mk.tv.kernel.presses.PressController;
 import com.mk.tv.kernel.scripts.ScriptController;
-import com.mk.tv.kernel.system.Config;
 import com.mk.tv.kernel.system.SystemController;
 import jPlus.io.out.DummyAPIWrapper;
 import jPlus.io.out.IAPIWrapper;

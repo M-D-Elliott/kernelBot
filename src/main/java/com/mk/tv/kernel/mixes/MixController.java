@@ -1,19 +1,16 @@
 package com.mk.tv.kernel.mixes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.mk.tv.kernel.Config;
 import com.mk.tv.kernel.generic.FuncController;
 import com.mk.tv.kernel.generic.FuncService;
-import com.mk.tv.kernel.system.Config;
 import jPlus.io.out.IAPIWrapper;
-import jPlus.lang.callback.Receivable1;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.lang.IntUtils;
 import jPlus.util.map.MapUtils;
-import jPlusLibs.jackson.JacksonRepo;
 import jPlusLibs.generic.IRepo;
+import jPlusLibs.jackson.JacksonRepo;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 import static com.mk.tv.kernel.generic.FuncService.FUNC_NOT_FOUND;
@@ -24,7 +21,6 @@ public class MixController extends FuncController {
     protected final FuncService<String> service;
 
     private Map<String, Receivable2<IAPIWrapper, String[]>> commandFuncMap;
-    public Collection<Receivable1<Boolean>> synchronicityReceivers = new ArrayList<>();
 
     public MixController(Config config) {
         super(config);
@@ -52,7 +48,7 @@ public class MixController extends FuncController {
 
     @Override
     protected void process(IAPIWrapper api, String[] args) {
-        if (config.allowFreeMix && validateString(args, 1) && process(api, args[1])) return;
+        if (config.mix.allowFreeMix && validateString(args, 1) && process(api, args[1])) return;
         super.process(api, args);
     }
 

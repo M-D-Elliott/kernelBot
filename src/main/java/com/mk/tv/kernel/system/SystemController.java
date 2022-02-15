@@ -1,5 +1,6 @@
 package com.mk.tv.kernel.system;
 
+import com.mk.tv.kernel.Config;
 import com.mk.tv.kernel.generic.FuncController;
 import jPlus.io.out.IAPIWrapper;
 import jPlus.lang.callback.Receivable2;
@@ -75,6 +76,6 @@ public class SystemController extends FuncController {
 
     //***************************************************************//
 
-    public static final String ACTIVITY_RAW = "%scommand arg1 arg2";
+    public static final String ACTIVITY_RAW = "%sfunction [args]";
     public static final String CHANGE_INDICATOR_HELP = "to change indicator to ! type: '%sindicator !'";
 }

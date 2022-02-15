@@ -6,7 +6,7 @@
 
     <groupId>com.mk.tv</groupId>
     <artifactId>KernelBot</artifactId>
-    <version>1.1.2 --startup func in config--</version>
+    <version>1.1.3 --Config sections added for user readability--</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

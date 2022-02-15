@@ -1,9 +1,9 @@
 package com.mk.tv.auth.botusers;
 
-import com.mk.tv.auth.config.AuthConfig;
+import com.mk.tv.auth.AuthConfig;
 import com.mk.tv.kernel.generic.FuncController;
-import jPlus.io.out.IAPIWrapper;
 import jPlus.io.file.FileUtils;
+import jPlus.io.out.IAPIWrapper;
 import jPlus.io.security.Access;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.ConsoleUtils;
@@ -17,12 +17,12 @@ import static jPlus.util.io.ConsoleUtils.sep;
 
 public class BotUserController extends FuncController {
 
-    protected final AuthConfig authConfig;
+    protected final UserConfig userConfig;
     public final BotUserService service = new BotUserService();
 
     public BotUserController(AuthConfig config) {
         super(config);
-        this.authConfig = config;
+        this.userConfig = config.user;
     }
 
     //***************************************************************//
@@ -94,12 +94,12 @@ public class BotUserController extends FuncController {
 
     protected void spill(IAPIWrapper api, String[] args) {
         if (api.access() == Access.PRIVATE) {
-            if (authConfig.securityLevel == Access.PROTECTED && !checkPassword(api, args)) {
+            if (userConfig.securityLevel == Access.PROTECTED && !checkPassword(api, args)) {
                 wrongPass(api);
                 return;
             }
         } else {
-            api.print(authConfig.onlySecureChannelWarning);
+            api.print(userConfig.onlySecureChannelWarning);
             return;
         }
 
@@ -120,7 +120,7 @@ public class BotUserController extends FuncController {
     }
 
     public boolean initiateSession(IAPIWrapper api, String pass) {
-        return service.initiateSession(api.username(), pass, authConfig.sessionDurationS());
+        return service.initiateSession(api.username(), pass, userConfig.sessionDurationS());
     }
 
     public boolean checkPassword(IAPIWrapper api, String[] args) {
@@ -130,11 +130,11 @@ public class BotUserController extends FuncController {
     }
 
     public void wrongPass(IAPIWrapper api) {
-        api.print(authConfig.rejectUserMessage);
+        api.print(userConfig.rejectUserMessage);
     }
 
     protected void warnPublicChannel(IAPIWrapper api) {
         if (api.access().value() < Access.PRIVATE.value())
-            api.print(sep() + ConsoleUtils.encaseInBanner(authConfig.publicChannelWarning, "#"));
+            api.print(sep() + ConsoleUtils.encaseInBanner(userConfig.publicChannelWarning, "#"));
     }
 }

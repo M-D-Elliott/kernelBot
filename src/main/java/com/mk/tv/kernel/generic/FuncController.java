@@ -1,6 +1,6 @@
 package com.mk.tv.kernel.generic;
 
-import com.mk.tv.kernel.system.Config;
+import com.mk.tv.kernel.Config;
 import jPlus.io.out.IAPIWrapper;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.ConsoleUtils;
@@ -35,13 +35,13 @@ public abstract class FuncController implements IFuncController {
     }
 
     protected void menuResponse(IAPIWrapper api, String[] args) {
-        final String format = " %c%d  " + config.menuBorder + "        %s%s        ";
+        final String format = " %c%d  " + config.getMenuBorder() + "        %s%s        ";
         final String[] menuFormatted = new String[menu.size()];
         for (int i = 0; i < menuFormatted.length; i++) {
             final String item = menu.get(i);
             menuFormatted[i] = String.format(format, indicator(), i, item, funcDesc(item));
         }
-        final String body = ConsoleUtils.encaseInBanner(menuFormatted, config.menuBorder);
+        final String body = ConsoleUtils.encaseInBanner(menuFormatted, config.getMenuBorder());
 
         final String sep = sep();
         api.print(sep + menuPrefix() + sep + body + sep + menuSuffix());

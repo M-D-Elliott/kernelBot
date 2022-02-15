@@ -1,10 +1,10 @@
 package com.mk.tv.kernel.scripts;
 
+import com.mk.tv.kernel.Config;
 import com.mk.tv.kernel.generic.FuncController;
 import com.mk.tv.kernel.generic.FuncService;
-import com.mk.tv.kernel.system.Config;
-import jPlus.io.out.IAPIWrapper;
 import jPlus.io.file.FileUtils;
+import jPlus.io.out.IAPIWrapper;
 import jPlus.lang.callback.Receivable2;
 import jPlusLibs.apache.commons.ApacheFileUtils;
 import jPlusLibs.generic.IRepo;
@@ -15,7 +15,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static jPlus.util.io.ConsoleIOUtils.validateString;
-import static jPlus.util.io.RuntimeUtils.*;
+import static jPlus.util.io.RuntimeUtils.cmdWaitStringArr;
+import static jPlus.util.io.RuntimeUtils.execWaitBliss;
 
 public class ScriptController extends FuncController {
 
@@ -38,7 +39,7 @@ public class ScriptController extends FuncController {
     protected Map<String, String> pathMap() {
         return ApacheFileUtils.getRecursiveFiles(
                 new File(System.getProperty("user.dir") + File.separator + "myscripts"),
-                config.scriptFormats)
+                config.script.formats)
                 .stream()
                 .filter(f -> !f.isHidden())
                 .collect(Collectors.toMap(FileUtils::simpleName, File::getAbsolutePath));

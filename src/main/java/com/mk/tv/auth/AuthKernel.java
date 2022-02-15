@@ -2,7 +2,6 @@ package com.mk.tv.auth;
 
 import com.mk.tv.auth.botusers.BotUser;
 import com.mk.tv.auth.botusers.BotUserController;
-import com.mk.tv.auth.config.AuthConfig;
 import com.mk.tv.kernel.Kernel;
 import jPlus.io.out.IAPIWrapper;
 import jPlus.util.io.ConsoleIOUtils;
@@ -32,12 +31,12 @@ public class AuthKernel extends Kernel {
 
     @Override
     protected void interpret(IAPIWrapper api, String[] parsedM) {
-        switch (authConfig.securityLevel) {
+        switch (authConfig.user.securityLevel) {
             case PUBLIC:
                 break;
             case PROTECTED:
                 if (!userController.authenticate(api)) {
-                    api.print(authConfig.rejectUserMessage);
+                    api.print(authConfig.user.rejectUserMessage);
                     return;
                 }
                 break;
