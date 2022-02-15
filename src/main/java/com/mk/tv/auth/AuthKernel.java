@@ -4,7 +4,7 @@ import com.mk.tv.auth.botusers.BotUser;
 import com.mk.tv.auth.botusers.BotUserController;
 import com.mk.tv.auth.config.AuthConfig;
 import com.mk.tv.kernel.Kernel;
-import jPlus.io.APIWrapper;
+import jPlus.io.out.IAPIWrapper;
 import jPlus.util.io.ConsoleIOUtils;
 
 import java.util.HashSet;
@@ -26,12 +26,12 @@ public class AuthKernel extends Kernel {
     //***************************************************************//
 
     @Override
-    protected void noCommandFoundResponse(APIWrapper api) {
+    protected void noCommandFoundResponse(IAPIWrapper api) {
         api.print(userController.service.getWelcome(api.username()));
     }
 
     @Override
-    protected void interpret(APIWrapper api, String[] parsedM) {
+    protected void interpret(IAPIWrapper api, String[] parsedM) {
         switch (authConfig.securityLevel) {
             case PUBLIC:
                 break;

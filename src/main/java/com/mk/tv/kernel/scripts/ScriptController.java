@@ -3,7 +3,7 @@ package com.mk.tv.kernel.scripts;
 import com.mk.tv.kernel.generic.FuncController;
 import com.mk.tv.kernel.generic.FuncService;
 import com.mk.tv.kernel.system.Config;
-import jPlus.io.APIWrapper;
+import jPlus.io.out.IAPIWrapper;
 import jPlus.io.file.FileUtils;
 import jPlus.lang.callback.Receivable2;
 import jPlusLibs.apache.commons.ApacheFileUtils;
@@ -28,7 +28,7 @@ public class ScriptController extends FuncController {
         };
         service = new FuncService<>(repo) {
             @Override
-            protected void process(APIWrapper api, String[] args) {
+            protected void process(IAPIWrapper api, String[] args) {
                 final String commandPath = repo.get(args[0]);
                 ScriptController.this.process(commandPath);
             }
@@ -45,8 +45,8 @@ public class ScriptController extends FuncController {
     }
 
     @Override
-    public void read(Map<String, Receivable2<APIWrapper, String[]>> sync,
-                     Map<String, Receivable2<APIWrapper, String[]>> async) {
+    public void read(Map<String, Receivable2<IAPIWrapper, String[]>> sync,
+                     Map<String, Receivable2<IAPIWrapper, String[]>> async) {
         super.read(async, sync);
         service.read(async, menuName(), menu);
     }
@@ -54,7 +54,7 @@ public class ScriptController extends FuncController {
     //***************************************************************//
 
     @Override
-    protected void process(APIWrapper api, String[] args) {
+    protected void process(IAPIWrapper api, String[] args) {
         if (validateString(args, 1)) return;
         super.process(api, args);
     }

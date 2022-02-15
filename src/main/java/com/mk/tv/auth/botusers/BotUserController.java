@@ -2,7 +2,7 @@ package com.mk.tv.auth.botusers;
 
 import com.mk.tv.auth.config.AuthConfig;
 import com.mk.tv.kernel.generic.FuncController;
-import jPlus.io.APIWrapper;
+import jPlus.io.out.IAPIWrapper;
 import jPlus.io.file.FileUtils;
 import jPlus.io.security.Access;
 import jPlus.lang.callback.Receivable2;
@@ -28,8 +28,8 @@ public class BotUserController extends FuncController {
     //***************************************************************//
 
     @Override
-    public void read(Map<String, Receivable2<APIWrapper, String[]>> sync,
-                     Map<String, Receivable2<APIWrapper, String[]>> async) {
+    public void read(Map<String, Receivable2<IAPIWrapper, String[]>> sync,
+                     Map<String, Receivable2<IAPIWrapper, String[]>> async) {
         super.read(sync, async);
 
         sync.put("spill", this::spill);
@@ -69,30 +69,30 @@ public class BotUserController extends FuncController {
 
     //***************************************************************//
 
-    protected void register(APIWrapper api, String[] args) {
+    protected void register(IAPIWrapper api, String[] args) {
         if (checkPassword(api, args)) {
             if (!(validateString(args, 4) && service.register(args[2], args[3], args[4], api.out())))
                 api.print(String.format(BotUserService.REGISTER_HELP, config.commandIndicator));
         } else wrongPass(api);
     }
 
-    protected void changePassword(APIWrapper api, String[] args) {
+    protected void changePassword(IAPIWrapper api, String[] args) {
         if (args.length >= 4) changePassword(api, args[1], args[2], args[3]);
         else api.print(String.format(BotUserService.PASSWORD_RESET_HELP, config.commandIndicator));
     }
 
-    protected void changePassword(APIWrapper api, String oldPass, String newPass, String newPass2) {
+    protected void changePassword(IAPIWrapper api, String oldPass, String newPass, String newPass2) {
         warnPublicChannel(api);
         service.changePassword(api.username(), oldPass, newPass, newPass2, api.out(), indicator());
     }
 
-    protected void setWelcome(APIWrapper api, String[] args) {
+    protected void setWelcome(IAPIWrapper api, String[] args) {
         final String welcome = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         service.setWelcome(api.username(), welcome);
         api.print("Welcome set!");
     }
 
-    protected void spill(APIWrapper api, String[] args) {
+    protected void spill(IAPIWrapper api, String[] args) {
         if (api.access() == Access.PRIVATE) {
             if (authConfig.securityLevel == Access.PROTECTED && !checkPassword(api, args)) {
                 wrongPass(api);
@@ -111,29 +111,29 @@ public class BotUserController extends FuncController {
 
     //***************************************************************//
 
-    public boolean authenticate(APIWrapper api) {
+    public boolean authenticate(IAPIWrapper api) {
         return service.authenticate(api.username());
     }
 
-    public boolean authenticateSession(APIWrapper api) {
+    public boolean authenticateSession(IAPIWrapper api) {
         return service.authenticateSession(api.username(), api.out());
     }
 
-    public boolean initiateSession(APIWrapper api, String pass) {
+    public boolean initiateSession(IAPIWrapper api, String pass) {
         return service.initiateSession(api.username(), pass, authConfig.sessionDurationS());
     }
 
-    public boolean checkPassword(APIWrapper api, String[] args) {
+    public boolean checkPassword(IAPIWrapper api, String[] args) {
         if (validateString(args, 1))
             return service.checkPassword(api.username(), args[1]);
         else return false;
     }
 
-    public void wrongPass(APIWrapper api) {
+    public void wrongPass(IAPIWrapper api) {
         api.print(authConfig.rejectUserMessage);
     }
 
-    protected void warnPublicChannel(APIWrapper api) {
+    protected void warnPublicChannel(IAPIWrapper api) {
         if (api.access().value() < Access.PRIVATE.value())
             api.print(sep() + ConsoleUtils.encaseInBanner(authConfig.publicChannelWarning, "#"));
     }

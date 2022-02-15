@@ -3,7 +3,7 @@ package com.mk.tv.kernel.presses;
 import com.mk.tv.kernel.generic.FuncController;
 import com.mk.tv.kernel.generic.FuncService;
 import com.mk.tv.kernel.system.Config;
-import jPlus.io.APIWrapper;
+import jPlus.io.out.IAPIWrapper;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.awt.KeyEvents;
 import jPlus.util.awt.RobotUtils;
@@ -26,7 +26,7 @@ public class PressController extends FuncController {
         final IRepo<String> repo = new PressRepo();
         service = new FuncService<>(repo) {
             @Override
-            protected void process(APIWrapper api, String[] args) {
+            protected void process(IAPIWrapper api, String[] args) {
                 final String presetContent = repo.get(args[0]);
                 PressController.this.process(presetContent);
             }
@@ -34,8 +34,8 @@ public class PressController extends FuncController {
     }
 
     @Override
-    public void read(Map<String, Receivable2<APIWrapper, String[]>> sync,
-                     Map<String, Receivable2<APIWrapper, String[]>> async) {
+    public void read(Map<String, Receivable2<IAPIWrapper, String[]>> sync,
+                     Map<String, Receivable2<IAPIWrapper, String[]>> async) {
         super.read(async, sync);
         service.read(async, menuName(), menu);
     }
@@ -43,7 +43,7 @@ public class PressController extends FuncController {
     //***************************************************************//
 
     @Override
-    protected void process(APIWrapper api, String[] args) {
+    protected void process(IAPIWrapper api, String[] args) {
         if (config.allowFreePress && validateString(args, 1) && process(args[1])) return;
         super.process(api, args);
     }

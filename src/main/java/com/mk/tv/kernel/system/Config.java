@@ -17,6 +17,8 @@ public class Config {
     public char nextDelimiter = '>';
     public boolean allowFreeMix = false;
 
+    public String startup = "";
+
     public Config() {
     }
 

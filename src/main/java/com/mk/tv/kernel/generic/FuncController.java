@@ -1,7 +1,7 @@
 package com.mk.tv.kernel.generic;
 
 import com.mk.tv.kernel.system.Config;
-import jPlus.io.APIWrapper;
+import jPlus.io.out.IAPIWrapper;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.ConsoleUtils;
 
@@ -23,18 +23,18 @@ public abstract class FuncController implements IFuncController {
     //***************************************************************//
 
     @Override
-    public void read(Map<String, Receivable2<APIWrapper, String[]>> sync,
-                     Map<String, Receivable2<APIWrapper, String[]>> async) {
+    public void read(Map<String, Receivable2<IAPIWrapper, String[]>> sync,
+                     Map<String, Receivable2<IAPIWrapper, String[]>> async) {
         sync.put(menuName(), this::process);
     }
 
     //***************************************************************//
 
-    protected void process(APIWrapper api, String[] args) {
+    protected void process(IAPIWrapper api, String[] args) {
         menuResponse(api, args);
     }
 
-    protected void menuResponse(APIWrapper api, String[] args) {
+    protected void menuResponse(IAPIWrapper api, String[] args) {
         final String format = " %c%d  " + config.menuBorder + "        %s%s        ";
         final String[] menuFormatted = new String[menu.size()];
         for (int i = 0; i < menuFormatted.length; i++) {

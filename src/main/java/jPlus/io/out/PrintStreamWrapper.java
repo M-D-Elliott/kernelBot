@@ -4,7 +4,7 @@ import jPlus.lang.callback.Receivable1;
 
 import java.io.PrintStream;
 
-public class PrintStreamWrapper implements IOWrapper {
+public class PrintStreamWrapper implements IIOWrapper {
     private final PrintStream ps;
 
     public PrintStreamWrapper(PrintStream ps) {

@@ -6,27 +6,31 @@ import com.mk.tv.kernel.presses.PressController;
 import com.mk.tv.kernel.scripts.ScriptController;
 import com.mk.tv.kernel.system.Config;
 import com.mk.tv.kernel.system.SystemController;
-import jPlus.io.APIWrapper;
+import jPlus.io.out.DummyAPIWrapper;
+import jPlus.io.out.IAPIWrapper;
 import jPlus.io.security.Access;
 import jPlus.lang.callback.Receivable1;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.ConsoleUtils;
 import jPlus.util.lang.IntUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import static jPlus.util.io.ConsoleUtils.sep;
 import static jPlus.util.lang.IntUtils.boundsMin;
 
-public class Kernel implements Receivable1<APIWrapper> {
+public class Kernel implements Receivable1<IAPIWrapper> {
 
     protected final Config config;
     protected final List<IFuncController> controllers = new ArrayList<>();
     protected final List<String> menu = new ArrayList<>();
     protected final Map<Character, List<String>> indicatorMenuMap = new LinkedHashMap<>();
 
-    protected final Map<String, Receivable2<APIWrapper, String[]>> syncFunctions = new LinkedHashMap<>();
-    protected final Map<String, Receivable2<APIWrapper, String[]>> asyncFunctions = new LinkedHashMap<>();
+    protected final Map<String, Receivable2<IAPIWrapper, String[]>> syncFunctions = new LinkedHashMap<>();
+    protected final Map<String, Receivable2<IAPIWrapper, String[]>> asyncFunctions = new LinkedHashMap<>();
     protected final BusyCommand asyncThread = new BusyCommand();
 
     //***************************************************************//
@@ -44,6 +48,7 @@ public class Kernel implements Receivable1<APIWrapper> {
     public void init() {
         prepareFuncMap();
         prepareMenu();
+        callStartupFunc();
     }
 
     protected void prepareFuncMap() {
@@ -61,10 +66,16 @@ public class Kernel implements Receivable1<APIWrapper> {
         }
     }
 
+    private void callStartupFunc() {
+        final String[] parsedM = config.startup.split(" ");
+        final IAPIWrapper dummy = new DummyAPIWrapper();
+        thread(dummy, parsedM);
+    }
+
     //***************************************************************//
 
     @Override
-    public void receive(APIWrapper api) {
+    public void receive(IAPIWrapper api) {
         String message = api.in();
         if (message.charAt(0) == config.commandIndicator) {
             message = message.substring(1);
@@ -73,7 +84,7 @@ public class Kernel implements Receivable1<APIWrapper> {
         interpret(api, message.split(" "));
     }
 
-    protected void interpret(APIWrapper api, String[] message) {
+    protected void interpret(IAPIWrapper api, String[] message) {
         thread(api, parse(message));
     }
 
@@ -91,41 +102,40 @@ public class Kernel implements Receivable1<APIWrapper> {
         return parsedM;
     }
 
-    protected void thread(APIWrapper api, String[] parsedM) {
+    protected void thread(IAPIWrapper api, String[] parsedM) {
         final String funcName = parsedM[0];
-        final Receivable2<APIWrapper, String[]> syncF = syncFunctions.get(funcName);
+        final Receivable2<IAPIWrapper, String[]> syncF = syncFunctions.get(funcName);
         if (syncF != null) receiveFunc(api, parsedM, syncF);
 
-        final Receivable2<APIWrapper, String[]> asyncF = asyncFunctions.get(funcName);
+        final Receivable2<IAPIWrapper, String[]> asyncF = asyncFunctions.get(funcName);
         if (asyncF != null) {
             if (asyncThread.isDormant()) {
                 asyncThread.busyMessage = String.format(busyMessageUnf(), funcName, api.username());
                 asyncThread.body = () -> receiveValidFunc(api, parsedM, asyncF);
-                asyncThread.onBusy = () -> api.print(asyncThread.busyMessage);
-            }
+            } else api.print(asyncThread.busyMessage);
             asyncThread.run();
         }
     }
 
-    protected void receiveFunc(APIWrapper api, String[] parsedM, Receivable2<APIWrapper, String[]> func) {
+    protected void receiveFunc(IAPIWrapper api, String[] parsedM, Receivable2<IAPIWrapper, String[]> func) {
         if (func == null) {
             System.out.println(api.username() + " -- unknown");
             noCommandFoundResponse(api);
         } else receiveValidFunc(api, parsedM, func);
     }
 
-    protected void receiveValidFunc(APIWrapper api, String[] parsedM, Receivable2<APIWrapper, String[]> func) {
+    protected void receiveValidFunc(IAPIWrapper api, String[] parsedM, Receivable2<IAPIWrapper, String[]> func) {
         System.out.println(api.username() + " -- " + parsedM[0]);
         func.receive(api, parsedM);
     }
 
-    protected void noCommandFoundResponse(APIWrapper api) {
+    protected void noCommandFoundResponse(IAPIWrapper api) {
         api.print("No command found...");
     }
 
     //***************************************************************//
 
-    protected void menuResponse(APIWrapper api, String[] args) {
+    protected void menuResponse(IAPIWrapper api, String[] args) {
         final String border = "?-";
         final String format = "  %d  " + border + "        %s        ";
 

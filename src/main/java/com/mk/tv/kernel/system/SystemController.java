@@ -1,7 +1,7 @@
 package com.mk.tv.kernel.system;
 
 import com.mk.tv.kernel.generic.FuncController;
-import jPlus.io.APIWrapper;
+import jPlus.io.out.IAPIWrapper;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.JarUtils;
 
@@ -19,8 +19,8 @@ public class SystemController extends FuncController {
     //***************************************************************//
 
     @Override
-    public void read(Map<String, Receivable2<APIWrapper, String[]>> sync,
-                     Map<String, Receivable2<APIWrapper, String[]>> async) {
+    public void read(Map<String, Receivable2<IAPIWrapper, String[]>> sync,
+                     Map<String, Receivable2<IAPIWrapper, String[]>> async) {
         super.read(sync, async);
 
         sync.put("indicator", this::changeIndicator);
@@ -57,7 +57,7 @@ public class SystemController extends FuncController {
 
     //***************************************************************//
 
-    public void changeIndicator(APIWrapper api, String[] args) {
+    public void changeIndicator(IAPIWrapper api, String[] args) {
         if (validateChar(args, 1)) {
             config.commandIndicator = args[1].charAt(0);
             config.store();
@@ -68,7 +68,7 @@ public class SystemController extends FuncController {
             api.print(String.format(CHANGE_INDICATOR_HELP, config.commandIndicator));
     }
 
-    public void speakVersion(APIWrapper api, String[] args) {
+    public void speakVersion(IAPIWrapper api, String[] args) {
         String version = JarUtils.version();
         api.print(version == null ? "DEVELOPMENT" : version);
     }

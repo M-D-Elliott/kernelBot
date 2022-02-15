@@ -1,13 +1,13 @@
 package jPlusLibs.discord;
 
-import jPlus.io.APIWrapper;
+import jPlus.io.out.IAPIWrapper;
 import jPlus.io.security.Access;
 import jPlus.lang.callback.Receivable1;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class ChannelOutWrapper implements APIWrapper {
+public class ChannelOutWrapper implements IAPIWrapper {
     private final MessageReceivedEvent e;
     private final Access access;
 
