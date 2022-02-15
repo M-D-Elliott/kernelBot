@@ -31,4 +31,12 @@ public class Threads {
             e.printStackTrace();
         }
     }
+
+    public static void interruptibleSleep(int sleep) {
+        try {
+            Thread.sleep(sleep);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
 }

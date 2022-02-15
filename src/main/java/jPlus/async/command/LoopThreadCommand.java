@@ -26,9 +26,6 @@ public abstract class LoopThreadCommand extends ThreadCommand {
 
     }
 
-    protected void onTerminate() {
-    }
-
     @Override
     protected void body() {
         initialize();

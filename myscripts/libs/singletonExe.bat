@@ -1,6 +1,6 @@
 @echo off && setlocal enableextensions
 
-CMD /c kill.bat %~1
+CMD /c %~dp0/kill.bat "%~1"
 
 echo starting %~1 ...
 

@@ -2,6 +2,12 @@ package jPlus.util.io;
 
 public class JarUtils {
     public static String version() {
-        return JarUtils.class.getPackage().getImplementationVersion();
+        final String ret = JarUtils.class.getPackage().getImplementationVersion();
+        return ret == null ? "DEVELOPMENT" : ret;
+    }
+
+    public static String title() {
+        final String ret = JarUtils.class.getPackage().getImplementationVersion();
+        return ret == null ? "DEVELOPMENTtitle" : ret;
     }
 }

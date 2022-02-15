@@ -5,6 +5,7 @@ import com.mk.tv.kernel.generic.FuncController;
 import com.mk.tv.kernel.generic.FuncService;
 import jPlus.io.file.FileUtils;
 import jPlus.io.out.IAPIWrapper;
+import jPlus.lang.callback.Receivable1;
 import jPlus.lang.callback.Receivable2;
 import jPlusLibs.apache.commons.ApacheFileUtils;
 import jPlusLibs.generic.IRepo;
@@ -15,8 +16,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static jPlus.util.io.ConsoleIOUtils.validateString;
-import static jPlus.util.io.RuntimeUtils.cmdWaitStringArr;
-import static jPlus.util.io.RuntimeUtils.execWaitBliss;
+import static jPlus.util.io.JarUtils.title;
+import static jPlus.util.io.RuntimeUtils.*;
 
 public class ScriptController extends FuncController {
 
@@ -24,14 +25,14 @@ public class ScriptController extends FuncController {
 
     public ScriptController(Config config) {
         super(config);
-
+        TASK_LIST_PREPEND = title();
         final IRepo<String> repo = new MapRepoS<>(pathMap()) {
         };
         service = new FuncService<>(repo) {
             @Override
             protected void process(IAPIWrapper api, String[] args) {
                 final String commandPath = repo.get(args[0]);
-                ScriptController.this.process(commandPath);
+                ScriptController.this.process(args[0], commandPath);
             }
         };
     }
@@ -60,8 +61,11 @@ public class ScriptController extends FuncController {
         super.process(api, args);
     }
 
-    protected void process(String commandBody) {
-        execWaitBliss(cmdWaitStringArr(commandBody));
+    protected void process(String scriptName, String scriptPath) {
+        final Receivable1<InterruptedException> onErr = (e) -> {
+            if (killBliss(scriptPath, scriptName)) System.out.println(scriptName + " terminated.");
+        };
+        execWaitBliss(onErr, startSWin(scriptPath, scriptName));
     }
 
     //***************************************************************//

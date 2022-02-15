@@ -71,7 +71,7 @@ public class SystemController extends FuncController {
 
     public void speakVersion(IAPIWrapper api, String[] args) {
         String version = JarUtils.version();
-        api.print(version == null ? "DEVELOPMENT" : version);
+        api.print(version);
     }
 
     //***************************************************************//

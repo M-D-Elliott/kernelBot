@@ -62,23 +62,24 @@ public class MixController extends FuncController {
     //***************************************************************//
 
     private void iterateCommands(IAPIWrapper api, String code) {
+
+        final String[] funcNames = code.split(config.nextDelimiterS());
         try {
-            final String[] commandNames = code.split(config.nextDelimiterS());
-            for (String commandName : commandNames) {
-                final Receivable2<IAPIWrapper, String[]> func = commandFuncMap.get(commandName);
-                if (func != null) func.receive(api, new String[]{commandName});
-                else if (commandName.charAt(0) == 'w') {
-                    final String wvs = commandName.substring(2, commandName.length() - 1);
+            for (String funcName : funcNames) {
+                final Receivable2<IAPIWrapper, String[]> func = commandFuncMap.get(funcName);
+                if (func != null) func.receive(api, new String[]{funcName});
+                else if (funcName.charAt(0) == 'w') {
+                    final String wvs = funcName.substring(2, funcName.length() - 1);
                     if (IntUtils.canBeParsedAsInt(wvs)) {
-                        final int waitValue = Integer.parseInt(wvs);
-                        Thread.sleep(waitValue);
+                        final int wait = Integer.parseInt(wvs);
+                        Thread.sleep(wait);
                     }
                 } else {
-                    api.print(String.format(FUNC_NOT_FOUND, commandName));
+                    api.print(String.format(FUNC_NOT_FOUND, funcName));
                 }
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 

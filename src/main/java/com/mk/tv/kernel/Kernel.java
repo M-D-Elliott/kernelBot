@@ -52,6 +52,9 @@ public class Kernel implements Receivable1<IAPIWrapper> {
 
     protected void prepareFuncMap() {
         syncFunctions.put("help", this::menuResponse);
+        syncFunctions.put("term", (api, args) -> {
+            asyncThread.terminate();
+        });
 
         for (IFuncController c : controllers)
             c.read(this.syncFunctions, this.asyncFunctions);

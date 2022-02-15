@@ -31,10 +31,15 @@ public abstract class ThreadCommand implements Command {
         end();
     }
 
-    protected void onBusy(){
+    protected void onBusy() {
     }
 
     public void terminate() {
+        if(isActive()) thread.interrupt();
+        onTerminate();
+    }
+
+    protected void onTerminate() {
     }
 
     protected void initialize() {
@@ -58,6 +63,10 @@ public abstract class ThreadCommand implements Command {
 
     public boolean isDormant() {
         return thread == null;
+    }
+
+    public boolean isActive() {
+        return thread != null;
     }
 
     //***************************************************************//

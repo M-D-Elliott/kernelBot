@@ -2,10 +2,8 @@ package jPlus.util.awt;
 
 import java.awt.*;
 
-import static jPlus.async.Threads.sleepBliss;
-
 public class RobotUtils {
-    public static final int SLEEP_DUR = 100000;
+    public static final int BETWEEN_ACTION_SLEEP = 100000;
     public static Robot robot;
 
     public static void start() {
@@ -22,11 +20,13 @@ public class RobotUtils {
     public static void down(int keyEvent) {
         start();
         robot.keyPress(keyEvent);
+        robot.waitForIdle();
     }
 
     public static void up(int keyEvent) {
         start();
         robot.keyRelease(keyEvent);
+        robot.waitForIdle();
     }
 
     public static void press(int keyEvent) {
@@ -37,56 +37,35 @@ public class RobotUtils {
     //***************************************************************//
 
     private static void upAndSleep(int[] keyEvents) {
+        for (int e : keyEvents) if (e >= 0) up(e);
+    }
+
+    private static void downAndSleep(int[] keyEvents) throws InterruptedException {
         for (int e : keyEvents) {
-            upAndSleep(e);
-            sleepBliss(0, SLEEP_DUR);
+            if (e >= 0) down(e);
+            else Thread.sleep(-e);
         }
     }
 
-    private static void upAndSleep(int e) {
-        if (e >= 0) up(e);
-    }
-
-    private static void downAndSleep(int[] keyEvents) {
-        for (int e : keyEvents) {
-            downAndSleep(e);
-            sleepBliss(0, SLEEP_DUR);
-        }
-    }
-
-    private static void downAndSleep(int e) {
-        if (e >= 0) down(e);
-        else sleepBliss(-e);
-    }
-
-    private static void pressAndSleep(int[] keyEvents) {
+    private static void pressAndSleep(int[] keyEvents) throws InterruptedException {
         downAndSleep(keyEvents);
-        sleepBliss(0, SLEEP_DUR);
         upAndSleep(keyEvents);
     }
 
-    public static void press(int[] keyEvents) {
+    public static void press(int[] keyEvents) throws InterruptedException {
         pressAndSleep(keyEvents);
     }
 
-    public static void press(int[][] keyEventSets) {
-        for (int[] keyEvents : keyEventSets) {
-            pressAndSleep(keyEvents);
-            sleepBliss(0, SLEEP_DUR);
-        }
+    public static void press(int[][] keyEventSets) throws InterruptedException {
+        for (int[] keyEvents : keyEventSets) pressAndSleep(keyEvents);
     }
 
-    //***************************************************************//
-
-    public static void pressAsync(int[] keyEvents) {
-        new Thread(() -> {
-            press(keyEvents);
-        }).start();
-    }
-
-    public static void pressAsync(int[][] keyEventSets) {
-        new Thread(() -> {
+    public static void pressBliss(int[][] keyEventSets) {
+        try {
             press(keyEventSets);
-        }).start();
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+            System.out.println("Press interrupted.");
+        }
     }
 }

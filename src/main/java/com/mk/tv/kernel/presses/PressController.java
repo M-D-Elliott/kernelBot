@@ -49,16 +49,16 @@ public class PressController extends FuncController {
     }
 
     protected boolean process(String commandBody) {
+        int[][] keyEvents;
         try {
-            final int[][] keyEvents = KeyEvents.parseGroup2D(commandBody);
-            RobotUtils.press(keyEvents);
-
-            return true;
+            keyEvents = KeyEvents.parseGroup2D(commandBody);
         } catch (ParseException e) {
             e.printStackTrace();
+            return false;
         }
+        RobotUtils.pressBliss(keyEvents);
 
-        return false;
+        return true;
     }
 
     //***************************************************************//

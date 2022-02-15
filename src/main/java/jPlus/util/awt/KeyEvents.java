@@ -17,6 +17,16 @@ public class KeyEvents {
         return ret;
     }
 
+    public static int[][] parseGroup2DBliss(String s) {
+        try {
+            return parseGroup2D(s);
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        return new int[0][];
+    }
+
     public static int[][] parseGroup2D(String s) throws ParseException {
         final String[] split = s.split(NEXT_DEL);
         final int[][] ret = new int[split.length][];

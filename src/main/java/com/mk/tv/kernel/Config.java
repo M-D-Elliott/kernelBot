@@ -12,14 +12,6 @@ public class Config {
     public char commandIndicator = '?';
     private String menuBorder = "+";
 
-    public String getMenuBorder() {
-        return menuBorder;
-    }
-
-    public void setMenuBorder(String menuBorder) {
-        this.menuBorder = menuBorder.replaceAll("%", "%%");
-    }
-
     public char addDelimiter = '+';
     public char nextDelimiter = '>';
     public String startup = "";
@@ -47,5 +39,17 @@ public class Config {
 
     public String nextDelimiterS() {
         return Character.toString(nextDelimiter);
+    }
+
+    public String getMenuBorder() {
+        return menuBorder;
+    }
+
+    //TODO I need a regex that turns all single '%' into '%%' but only if they are singles.
+    // I used replaceAll but of course that causes the % count to multiply each run.
+    // of course I could hide this prop from jackson and have something like menuBorder()
+    // or getAdjustedMenuBorder() but I am so nitpicky!!!!
+    public void setMenuBorder(String menuBorder) {
+        this.menuBorder = menuBorder.equals("%") ? "%%" : menuBorder;
     }
 }
