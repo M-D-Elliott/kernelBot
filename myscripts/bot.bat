@@ -1,13 +1,7 @@
-@echo off
+@echo off && setlocal enableextensions && cd /d "%~dp0" && cd ..
 
-Taskkill /FI "WINDOWTITLE eq mktvbot"
-
+cmd /c libs\kill.bat kernelbot
 timeout /t 5
-
-@setlocal enableextensions
-@cd /d "%~dp0"
-@cd ..
-
-CMD /C startbot.bat
+cmd /c libs\startExe.bat "startbot.bat"
 
 exit

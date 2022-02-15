@@ -1,4 +1,4 @@
-@echo off && setlocal enableextensions && cd /d "%~dp0"
+@echo off && setlocal enableextensions
 
 CMD /c kill.bat %~1
 
