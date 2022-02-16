@@ -36,15 +36,21 @@ public class RobotUtils {
 
     //***************************************************************//
 
-    private static void up(int[] keyEvents) {
-        for (int e : keyEvents) if (e >= 0) up(e);
+    protected static void up(int[] keyEvents) {
+        for (int e : keyEvents) validUp(e);
     }
 
-    private static void downOrSleep(int[] keyEvents) throws InterruptedException {
-        for (int e : keyEvents) {
-            if (e >= 0) down(e);
-            else Thread.sleep(-e);
-        }
+    protected static void validUp(int e) {
+        if (e >= 0) up(e);
+    }
+
+    protected static void downOrSleep(int[] keyEvents) throws InterruptedException {
+        for (int e : keyEvents) downOrSleep(e);
+    }
+
+    protected static void downOrSleep(int e) throws InterruptedException {
+        if (e >= 0) down(e);
+        else Thread.sleep(-e);
     }
 
     public static void press(int[] keyEvents) throws InterruptedException {

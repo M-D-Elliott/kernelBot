@@ -17,9 +17,13 @@ public abstract class LoopCommand extends Command {
     //***************************************************************//
     
     @Override
-    public void body(){
-        while (baseCondition() && condition()) loopBody();
+    public final void body(){
+        while (isActive()) loopBody();
         if (!terminated) onStandardEnd();
+    }
+
+    public final boolean isActive() {
+        return baseCondition() && condition();
     }
 
     protected boolean baseCondition() {

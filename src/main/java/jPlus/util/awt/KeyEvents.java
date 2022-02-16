@@ -3,19 +3,13 @@ package jPlus.util.awt;
 import jPlus.util.lang.IntUtils;
 
 import java.text.ParseException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.awt.event.KeyEvent.*;
 
 public class KeyEvents {
-
-    public static int[] parseGroup(String s) throws ParseException {
-        final String[] split = s.split(ADD_DEL);
-        final int[] ret = new int[split.length];
-        for (int i = 0; i < split.length; i++) ret[i] = parse(split[i]);
-        return ret;
-    }
 
     public static int[][] parseGroup2DBliss(String s) {
         try {
@@ -28,12 +22,43 @@ public class KeyEvents {
     }
 
     public static int[][] parseGroup2D(String s) throws ParseException {
-        final String[] split = s.split(NEXT_DEL);
+        final String[] split = splitNext(s);
         final int[][] ret = new int[split.length][];
         for (int i = 0; i < split.length; i++) ret[i] = parseGroup(split[i]);
         return ret;
     }
 
+    public static String[] splitNext(String s) {
+        return s.split(NEXT_DEL);
+    }
+
+    public static int[] parseGroup(String s) throws ParseException {
+        final String[] split = s.split(ADD_DEL);
+        final int[] ret = new int[split.length];
+        for (int i = 0; i < split.length; i++) ret[i] = parse(split[i]);
+        return ret;
+    }
+
+    //***************************************************************//
+
+    public static void parseGroup2DCBliss(String[] split, Collection<Collection<Integer>> collection) {
+        try {
+            parseGroupC2D(split, collection);
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void parseGroupC2D(String[] split, Collection<Collection<Integer>> collection) throws ParseException {
+        int index = 0;
+        for (Collection<Integer> innerCollection : collection) parseGroupC(split[index++], innerCollection);
+    }
+
+    public static void parseGroupC(String s, Collection<Integer> collection) throws ParseException {
+        final String[] split = s.split(ADD_DEL);
+        for (String value : split) collection.add(parse(value));
+    }
+    //***************************************************************//
 
     public static int parse(String s) throws ParseException {
         fillSpecialKeys();
@@ -220,7 +245,7 @@ public class KeyEvents {
     //***************************************************************//
 
     public static String ADD_DEL = "\\+";
-    public static String NEXT_DEL = "\\>";
+    public static String NEXT_DEL = ">";
 
     private static final Map<String, Integer> specialKeys = new HashMap<>();
 
