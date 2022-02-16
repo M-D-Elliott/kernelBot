@@ -7,7 +7,7 @@ public class BusyCommand extends ThreadCommand {
     protected Runnable body = null;
 
     @Override
-    protected void body() {
+    protected void threadBody() {
         body.run();
     }
 }

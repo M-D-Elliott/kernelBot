@@ -5,73 +5,69 @@ import java.util.Set;
 
 import static jPlus.async.Threads.sleepBliss;
 
-public abstract class ThreadCommand implements Command {
+public abstract class ThreadCommand extends Command {
     protected Thread thread;
-
-    protected abstract void body();
 
     //***************************************************************//
 
     @Override
     public final void run() {
         if (isDormant()) {
-            initialize();
-            beforeSuccessfulRun();
-            thread = new Thread(this::start);
-            thread.start();
+            super.run();
         } else onBusy();
     }
 
-    protected void beforeSuccessfulRun() {
+    @Override
+    protected void initialize() {
         ACTIVE_THREAD_COMMANDS.add(this);
     }
 
-    protected void start() {
-        body();
-        end();
+    @Override
+    protected final void body() {
+        thread = new Thread(this::threadEP);
+        thread.start();
+    }
+
+    @Override
+    protected final void end() {
     }
 
     protected void onBusy() {
     }
 
-    public void terminate() {
-        if(isActive()) thread.interrupt();
-        onTerminate();
-    }
-
-    protected void onTerminate() {
-    }
-
-    protected void initialize() {
-    }
-
     @Override
-    public void reverse() {
-        initialize();
+    public void terminate() {
+        if (isActive()) thread.interrupt();
+        super.terminate();
     }
 
-    protected void end() {
+    //***************************************************************//
+
+    protected void threadEP() {
+        threadBody();
+        close();
+    }
+
+    protected abstract void threadBody();
+
+    protected final void close() {
         thread = null;
         ACTIVE_THREAD_COMMANDS.remove(this);
         onEnd();
     }
 
-    protected void onEnd() {
-    }
 
-    //***************************************************************//
-
-    public boolean isDormant() {
+    public final boolean isDormant() {
         return thread == null;
     }
 
-    public boolean isActive() {
+    public final boolean isActive() {
         return thread != null;
     }
 
     //***************************************************************//
 
-    static final Set<ThreadCommand> ACTIVE_THREAD_COMMANDS = new HashSet<>();
+    private static final Set<ThreadCommand> ACTIVE_THREAD_COMMANDS = new HashSet<>();
     private static final int TERMINATE_AND_WAIT_INCREMENT = 50;
 
     public static void terminateAll() {

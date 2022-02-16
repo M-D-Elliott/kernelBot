@@ -18,6 +18,8 @@ public class PressController extends FuncController {
 
     protected final FuncService<String> service;
 
+    protected final PressCommand pressCommand = new PressCommand();
+
     public PressController(Config config) {
         super(config);
         KeyEvents.ADD_DEL = "\\" + config.system.addDelimiter;

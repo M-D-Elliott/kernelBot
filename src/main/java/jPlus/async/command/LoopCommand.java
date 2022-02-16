@@ -1,25 +1,23 @@
 package jPlus.async.command;
 
-public abstract class LoopThreadCommand extends ThreadCommand {
-
+public abstract class LoopCommand extends Command {
     protected boolean terminated = false;
 
     @Override
     protected final void initialize() {
         terminated = false;
-        super.initialize();
     }
 
     @Override
     public final void terminate() {
         terminated = true;
-        onTerminate();
+        super.terminate();
     }
 
     //***************************************************************//
-
+    
     @Override
-    protected final void threadBody() {
+    public void body(){
         while (baseCondition() && condition()) loopBody();
         if (!terminated) onStandardEnd();
     }
