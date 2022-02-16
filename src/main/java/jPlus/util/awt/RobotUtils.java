@@ -36,28 +36,24 @@ public class RobotUtils {
 
     //***************************************************************//
 
-    private static void upAndSleep(int[] keyEvents) {
+    private static void up(int[] keyEvents) {
         for (int e : keyEvents) if (e >= 0) up(e);
     }
 
-    private static void downAndSleep(int[] keyEvents) throws InterruptedException {
+    private static void downOrSleep(int[] keyEvents) throws InterruptedException {
         for (int e : keyEvents) {
             if (e >= 0) down(e);
             else Thread.sleep(-e);
         }
     }
 
-    private static void pressAndSleep(int[] keyEvents) throws InterruptedException {
-        downAndSleep(keyEvents);
-        upAndSleep(keyEvents);
-    }
-
     public static void press(int[] keyEvents) throws InterruptedException {
-        pressAndSleep(keyEvents);
+        downOrSleep(keyEvents);
+        up(keyEvents);
     }
 
     public static void press(int[][] keyEventSets) throws InterruptedException {
-        for (int[] keyEvents : keyEventSets) pressAndSleep(keyEvents);
+        for (int[] keyEvents : keyEventSets) press(keyEvents);
     }
 
     public static void pressBliss(int[][] keyEventSets) {

@@ -72,13 +72,13 @@ public class BotUserController extends FuncController {
     protected void register(IAPIWrapper api, String[] args) {
         if (checkPassword(api, args)) {
             if (!(validateString(args, 4) && service.register(args[2], args[3], args[4], api.out())))
-                api.print(String.format(BotUserService.REGISTER_HELP, config.commandIndicator));
+                api.print(String.format(BotUserService.REGISTER_HELP, config.system.commandIndicator));
         } else wrongPass(api);
     }
 
     protected void changePassword(IAPIWrapper api, String[] args) {
         if (args.length >= 4) changePassword(api, args[1], args[2], args[3]);
-        else api.print(String.format(BotUserService.PASSWORD_RESET_HELP, config.commandIndicator));
+        else api.print(String.format(BotUserService.PASSWORD_RESET_HELP, config.system.commandIndicator));
     }
 
     protected void changePassword(IAPIWrapper api, String oldPass, String newPass, String newPass2) {

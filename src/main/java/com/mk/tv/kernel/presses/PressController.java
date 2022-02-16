@@ -20,8 +20,8 @@ public class PressController extends FuncController {
 
     public PressController(Config config) {
         super(config);
-        KeyEvents.ADD_DEL = "\\" + config.addDelimiter;
-        KeyEvents.NEXT_DEL = "\\" + config.nextDelimiter;
+        KeyEvents.ADD_DEL = "\\" + config.system.addDelimiter;
+        KeyEvents.NEXT_DEL = "\\" + config.system.nextDelimiter;
 
         final IRepo<String> repo = new PressRepo();
         service = new FuncService<>(repo) {
@@ -56,6 +56,7 @@ public class PressController extends FuncController {
             e.printStackTrace();
             return false;
         }
+        // TODO figure out why press can't be interrupted. Use LoopThread command.
         RobotUtils.pressBliss(keyEvents);
 
         return true;
@@ -85,6 +86,6 @@ public class PressController extends FuncController {
 
     @Override
     protected String menuSuffix() {
-        return config.displayLiteralCommand("press ctrl+f1") + "will press ctrl and f1 on the host comp!";
+        return config.system.displayLiteralCommand("press ctrl+f1") + "will press ctrl and f1 on the host comp!";
     }
 }

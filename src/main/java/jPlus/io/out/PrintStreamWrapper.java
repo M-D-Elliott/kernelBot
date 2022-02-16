@@ -28,6 +28,16 @@ public class PrintStreamWrapper implements IIOWrapper {
     }
 
     @Override
+    public void printUnf(String s) {
+        print(s);
+    }
+
+    @Override
+    public void printLink(String url) {
+        print(url);
+    }
+
+    @Override
     public void setStatus(String actString) {
 
     }

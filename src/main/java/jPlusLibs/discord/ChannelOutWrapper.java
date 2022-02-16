@@ -35,6 +35,16 @@ public class ChannelOutWrapper implements IAPIWrapper {
     }
 
     @Override
+    public void printUnf(String s) {
+        DiscordConsoleUtils.printUnf(e, s);
+    }
+
+    @Override
+    public void printLink(String url) {
+        DiscordConsoleUtils.printLink(e, url);
+    }
+
+    @Override
     public void setStatus(String status) {
         final Activity activity = Activity.listening(status);
         e.getJDA().getPresence().setActivity(activity);

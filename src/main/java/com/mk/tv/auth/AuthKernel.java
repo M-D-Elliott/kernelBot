@@ -13,7 +13,7 @@ public class AuthKernel extends Kernel {
 
     private final BotUserController userController;
     private final AuthConfig authConfig;
-    protected Set<BotUser> busyUsers = new HashSet<>();
+    //protected Set<BotUser> busyUsers = new HashSet<>();
 
     public AuthKernel(AuthConfig config) {
         super(config);
@@ -49,7 +49,7 @@ public class AuthKernel extends Kernel {
                         api.print("Sign in successful!");
                         break;
                     } else userController.wrongPass(api);
-                } else api.print("You are not signed in. " + config.commandIndicator + "signin mypass");
+                } else api.print("You are not signed in. " + config.system.commandIndicator + "signin mypass");
             default:
                 return;
         }

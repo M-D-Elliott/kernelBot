@@ -20,7 +20,8 @@ public class MixController extends FuncController {
 
     protected final FuncService<String> service;
 
-    private Map<String, Receivable2<IAPIWrapper, String[]>> commandFuncMap;
+    private Map<String, Receivable2<IAPIWrapper, String[]>> sync;
+    private Map<String, Receivable2<IAPIWrapper, String[]>> async;
 
     public MixController(Config config) {
         super(config);
@@ -41,7 +42,8 @@ public class MixController extends FuncController {
     @Override
     public void read(Map<String, Receivable2<IAPIWrapper, String[]>> sync,
                      Map<String, Receivable2<IAPIWrapper, String[]>> async) {
-        this.commandFuncMap = async;
+        this.sync = sync;
+        this.async = async;
         super.read(async, sync);
         service.read(async, menuName(), menu);
     }
@@ -63,10 +65,11 @@ public class MixController extends FuncController {
 
     private void iterateCommands(IAPIWrapper api, String code) {
 
-        final String[] funcNames = code.split(config.nextDelimiterS());
+        final String[] funcNames = code.split(config.system.nextDelimiterS());
         try {
             for (String funcName : funcNames) {
-                final Receivable2<IAPIWrapper, String[]> func = commandFuncMap.get(funcName);
+
+                Receivable2<IAPIWrapper, String[]> func = async.get(funcName);
                 if (func != null) func.receive(api, new String[]{funcName});
                 else if (funcName.charAt(0) == 'w') {
                     final String wvs = funcName.substring(2, funcName.length() - 1);
@@ -75,7 +78,9 @@ public class MixController extends FuncController {
                         Thread.sleep(wait);
                     }
                 } else {
-                    api.print(String.format(FUNC_NOT_FOUND, funcName));
+                    func = sync.get(funcName);
+                    if (func != null) func.receive(api, new String[]{funcName});
+                    else api.print(String.format(FUNC_NOT_FOUND, funcName));
                 }
             }
         } catch (InterruptedException e) {
@@ -107,6 +112,6 @@ public class MixController extends FuncController {
 
     @Override
     protected String menuSuffix() {
-        return config.displayLiteralCommand("mix scriptName+w(1000)+hotkeyName") + "will run script, wait 1s and press hotkey!";
+        return config.system.displayLiteralCommand("mix scriptName+w(1000)+hotkeyName") + "will run script, wait 1s and press hotkey!";
     }
 }

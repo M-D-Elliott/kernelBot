@@ -92,7 +92,7 @@ public class ScriptController extends FuncController {
 
     @Override
     protected String menuSuffix() {
-        return config.displayLiteralCommand("addscript scriptName scriptCode") + " -- adds a new script preset!";
+        return config.system.displayLiteralCommand("addscript scriptName scriptCode") + " -- adds a new script preset!";
     }
 
     //***************************************************************//

@@ -69,7 +69,7 @@ public class Kernel implements Receivable1<IAPIWrapper> {
     }
 
     private void callStartupFunc() {
-        final String[] parsedM = config.startup.split(" ");
+        final String[] parsedM = config.system.startup.split(" ");
         final IAPIWrapper dummy = new DummyAPIWrapper();
         thread(dummy, parsedM);
     }
@@ -79,7 +79,7 @@ public class Kernel implements Receivable1<IAPIWrapper> {
     @Override
     public void receive(IAPIWrapper api) {
         String message = api.in();
-        if (message.charAt(0) == config.commandIndicator) {
+        if (message.charAt(0) == config.system.commandIndicator) {
             message = message.substring(1);
         } else if (api.access().value() < Access.PRIVATE.value()) return;
 

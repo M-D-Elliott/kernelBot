@@ -35,13 +35,13 @@ public class Run implements Runnable {
         final DiscordOutListener out = new DiscordOutListener(
                 Collections.singletonList(kernel));
 
-        JDABuilder.createDefault(config.token)
+        JDABuilder.createDefault(config.system.token)
                 .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
                 .enableCache(CacheFlag.ACTIVITY)
                 .setBulkDeleteSplittingEnabled(false)
                 .setCompression(Compression.NONE)
                 .setActivity(Activity.listening(
-                        String.format(SystemController.ACTIVITY_RAW, config.commandIndicator)))
+                        String.format(SystemController.ACTIVITY_RAW, config.system.commandIndicator)))
                 .enableIntents(GatewayIntent.GUILD_PRESENCES)
                 .addEventListeners(out)
                 .build();

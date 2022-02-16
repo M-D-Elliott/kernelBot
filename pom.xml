@@ -6,7 +6,7 @@
 
     <groupId>com.mk.tv</groupId>
     <artifactId>kernelBot</artifactId>
-    <version>1.1.5 --Terminate (term) now allows termination of scripts or non-press mixes. Still working on presses.--</version>
+    <version>1.1.6 --splash func (system) will now print a custom ascii image--</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

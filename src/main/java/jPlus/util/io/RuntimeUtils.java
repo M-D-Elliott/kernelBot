@@ -123,7 +123,7 @@ public class RuntimeUtils {
 
     public static String TASK_LIST_PREPEND = "SOMECUSTOMIDHERE";
 
-    public static String sep() {
+    private static String sep() {
         return System.lineSeparator();
     }
 }

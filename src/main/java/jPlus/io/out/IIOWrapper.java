@@ -9,6 +9,10 @@ public interface IIOWrapper {
 
     void println(String s);
 
+    void printUnf(String s);
+
+    void printLink(String url);
+
     void setStatus(String actString);
 
     Receivable1<String> out();

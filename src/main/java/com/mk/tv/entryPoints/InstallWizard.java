@@ -101,7 +101,7 @@ public class InstallWizard extends Install {
             final String token = request("--Click copy token and paste it here");
             final AuthConfig config = JacksonUtils.readAndUpdateBliss("config.txt",
                     AuthConfig.class, AuthConfig::newInstance);
-            config.token = token;
+            config.system.token = token;
             config.store();
             System.out.println("I have produced config.txt, edit as needed.");
         });
