@@ -1,4 +1,4 @@
-package jPlus.lang;
+package jPlus.util.lang;
 
 public class SystemUtils {
     public enum OS {

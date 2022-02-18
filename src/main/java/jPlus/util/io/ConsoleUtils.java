@@ -1,6 +1,6 @@
 package jPlus.util.io;
 
-import jPlus.lang.SystemUtils;
+import jPlus.util.lang.SystemUtils;
 import jPlus.lang.callback.Retrievable2;
 import jPlus.util.lang.StringUtils;
 

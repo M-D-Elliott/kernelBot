@@ -1,6 +1,6 @@
 package jPlus.util.io;
 
-import static jPlus.JPlus.sendError;
+import jPlus.util.lang.KlassUtils;
 
 public class ExceptionUtils {
     private static final String CALLER_FORMAT = "%s.%s() -- line %d";
@@ -8,7 +8,7 @@ public class ExceptionUtils {
     public static void catchAll(Runnable run) {
 
         final StackTraceElement prevStack = Thread.currentThread().getStackTrace()[2];
-        final String callingKlass = getKlass(prevStack.getClassName()).getSimpleName();
+        final String callingKlass = KlassUtils.getKlass(prevStack.getClassName()).getSimpleName();
         final String callingMethod = prevStack.getMethodName();
         final int callingLineNumber = prevStack.getLineNumber();
 
@@ -26,13 +26,4 @@ public class ExceptionUtils {
         }
     }
 
-    public static Class<?> getKlass(String classLoaderName) {
-        try {
-            return Class.forName(classLoaderName);
-        } catch (ClassNotFoundException ex) {
-            sendError("Cannot find " + classLoaderName, ex);
-        }
-
-        return Object.class;
-    }
 }
