@@ -15,7 +15,10 @@ import java.util.List;
 
 public class DiscordOutListener extends ListenerAdapter {
 
-    private List<Receivable1<IAPIWrapper>> recipients = new ArrayList<>();
+    private final List<Receivable1<IAPIWrapper>> recipients = new ArrayList<>();
+
+    public DiscordOutListener() {
+    }
 
     public DiscordOutListener(Collection<Receivable1<IAPIWrapper>> recipients) {
         this.recipients.addAll(recipients);

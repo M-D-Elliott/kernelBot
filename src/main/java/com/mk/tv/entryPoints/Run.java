@@ -1,7 +1,7 @@
 package com.mk.tv.entryPoints;
 
-import com.mk.tv.auth.AuthKernel;
 import com.mk.tv.auth.AuthConfig;
+import com.mk.tv.auth.AuthKernel;
 import com.mk.tv.kernel.system.SystemController;
 import jPlusLibs.discord.DiscordOutListener;
 import jPlusLibs.jackson.JacksonUtils;
@@ -33,7 +33,8 @@ public class Run implements Runnable {
         kernel.init();
 
         final DiscordOutListener out = new DiscordOutListener(
-                Collections.singletonList(kernel));
+                Collections.singletonList(kernel)
+        );
 
         JDABuilder.createDefault(config.system.token)
                 .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)

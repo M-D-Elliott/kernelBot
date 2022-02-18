@@ -8,20 +8,20 @@ import java.util.concurrent.TimeUnit;
  * https://en.wikipedia.org/wiki/Object_pool_pattern
  * Everyone loves a good object pool. This one isn't 10/10
  * but it's 7.3/10! :D This is Marcus btw.
- *
+ * <p>
  * So throw down that getInstance or releaseObject
  * method to get or destroy your object.
- *
+ * <p>
  * Prime lets you set up the base number of objects. Try out some prime
  * values and see what works for your situation!
- *
+ * <p>
  * Finally don't forget to purge when needed. This will clear the pool.
  * Watch that memory. 13k draggable swaths doesn't seem like much
  * but do that 10 times! :O
  */
 public abstract class ObjectPool<T> {
     protected long expirationTime;
-    private Hashtable<T, Long> lock, unlock;
+    private final Hashtable<T, Long> lock, unlock;
 
     private int primeAmt = 0;
 
@@ -31,8 +31,8 @@ public abstract class ObjectPool<T> {
 
     public ObjectPool(long millis) {
         expirationTime = millis;
-        lock = new Hashtable<T, Long>();
-        unlock = new Hashtable<T, Long>();
+        lock = new Hashtable<>();
+        unlock = new Hashtable<>();
     }
 
     protected abstract T createObject();
@@ -53,7 +53,6 @@ public abstract class ObjectPool<T> {
                 if (size() > primeAmt && (now - unlock.get(t)) > expirationTime) {
                     unlock.remove(t);
                     expiredObject(t);
-                    t = null;
                 } else {
                     if (validateObject(t)) {
                         unlock.remove(t);
@@ -62,7 +61,6 @@ public abstract class ObjectPool<T> {
                     } else {
                         unlock.remove(t);
                         expiredObject(t);
-                        t = null;
                     }
                 }
             }

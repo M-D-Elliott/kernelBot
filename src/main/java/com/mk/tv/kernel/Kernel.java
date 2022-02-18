@@ -52,9 +52,7 @@ public class Kernel implements Receivable1<IAPIWrapper> {
 
     protected void prepareFuncMap() {
         syncFunctions.put("help", this::menuResponse);
-        syncFunctions.put("term", (api, args) -> {
-            asyncThread.terminate();
-        });
+        syncFunctions.put("term", (api, args) -> asyncThread.terminate());
 
         for (IFuncController c : controllers)
             c.read(this.syncFunctions, this.asyncFunctions);
@@ -107,31 +105,31 @@ public class Kernel implements Receivable1<IAPIWrapper> {
     protected void thread(IAPIWrapper api, String[] parsedM) {
         final String funcName = parsedM[0];
         final Receivable2<IAPIWrapper, String[]> syncF = syncFunctions.get(funcName);
-        if (syncF != null) receiveFunc(api, parsedM, syncF);
+        if (syncF != null) funcReceive(api, parsedM, syncF);
 
         final Receivable2<IAPIWrapper, String[]> asyncF = asyncFunctions.get(funcName);
         if (asyncF != null) {
             if (asyncThread.isDormant()) {
                 asyncThread.busyMessage = String.format(busyMessageUnf(), funcName, api.username());
-                asyncThread.body = () -> receiveValidFunc(api, parsedM, asyncF);
+                asyncThread.body = () -> validFuncReceive(api, parsedM, asyncF);
             } else api.print(asyncThread.busyMessage);
             asyncThread.run();
         }
     }
 
-    protected void receiveFunc(IAPIWrapper api, String[] parsedM, Receivable2<IAPIWrapper, String[]> func) {
+    protected void funcReceive(IAPIWrapper api, String[] parsedM, Receivable2<IAPIWrapper, String[]> func) {
         if (func == null) {
             System.out.println(api.username() + " -- unknown");
-            noCommandFoundResponse(api);
-        } else receiveValidFunc(api, parsedM, func);
+            noFuncFoundResp(api);
+        } else validFuncReceive(api, parsedM, func);
     }
 
-    protected void receiveValidFunc(IAPIWrapper api, String[] parsedM, Receivable2<IAPIWrapper, String[]> func) {
+    protected void validFuncReceive(IAPIWrapper api, String[] parsedM, Receivable2<IAPIWrapper, String[]> func) {
         System.out.println(api.username() + " -- " + parsedM[0]);
         func.receive(api, parsedM);
     }
 
-    protected void noCommandFoundResponse(IAPIWrapper api) {
+    protected void noFuncFoundResp(IAPIWrapper api) {
         api.print("No command found...");
     }
 

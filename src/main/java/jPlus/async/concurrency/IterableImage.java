@@ -1,5 +1,7 @@
 package jPlus.async.concurrency;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -46,6 +48,7 @@ public abstract class IterableImage implements Iterable<Integer> {
     }
 
     @Override
+    @NotNull
     public Iterator<Integer> iterator() {
         return new Itr();
     }
