@@ -3,10 +3,12 @@ package jPlus.util.awt;
 import jPlus.util.lang.IntUtils;
 
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static jPlus.JPlus.sendError;
 import static java.awt.event.KeyEvent.*;
 
 public class KeyEvents {
@@ -15,7 +17,7 @@ public class KeyEvents {
         try {
             return parseGroup2D(s);
         } catch (ParseException ex) {
-            ex.printStackTrace();
+            sendError("Cannot parse " + s, ex);
         }
 
         return new int[0][];
@@ -45,7 +47,7 @@ public class KeyEvents {
         try {
             parseGroupC2D(split, collection);
         } catch (ParseException ex) {
-            ex.printStackTrace();
+            sendError("Error parsing " + Arrays.toString(split), ex);
         }
     }
 

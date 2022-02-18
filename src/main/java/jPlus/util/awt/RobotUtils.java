@@ -2,6 +2,8 @@ package jPlus.util.awt;
 
 import java.awt.*;
 
+import static jPlus.JPlus.sendError;
+
 public class RobotUtils {
     public static final int BETWEEN_ACTION_SLEEP = 100000;
     public static Robot robot;
@@ -10,7 +12,8 @@ public class RobotUtils {
         if (robot == null) {
             try {
                 robot = new Robot();
-            } catch (AWTException ignored) {
+            } catch (AWTException ex) {
+                sendError("RobotUtils: Error creating Robot.", ex);
             }
         }
     }
@@ -65,9 +68,7 @@ public class RobotUtils {
     public static void pressBliss(int[][] keyEventSets) {
         try {
             press(keyEventSets);
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-            System.out.println("Press interrupted.");
+        } catch (InterruptedException ignored) {
         }
     }
 }

@@ -1,5 +1,7 @@
 package jPlus.util.lang;
 
+import static jPlus.JPlus.sendError;
+
 /**
  * @author Marcus
  */
@@ -63,17 +65,19 @@ public final class IntUtils {
         try {
             Integer.parseInt(currentString);
             return true;
-        } catch (NumberFormatException exception) {
+        } catch (NumberFormatException ignored) {
             return false;
         }
     }
 
-    public static Integer parseInteger(String currentString) {
+    public static Integer parseIntBliss(String s) {
         try {
-            return Integer.parseInt(currentString);
-        } catch (NumberFormatException ignored) {
-            return null;
+            return Integer.parseInt(s);
+        } catch (NumberFormatException ex) {
+            sendError(ex);
         }
+
+        return 0;
     }
 
     public static int countDigits(int v) {

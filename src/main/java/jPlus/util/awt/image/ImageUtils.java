@@ -11,7 +11,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+
+import static jPlus.JPlus.sendError;
 
 public class ImageUtils {
 
@@ -27,8 +30,8 @@ public class ImageUtils {
     public static byte[] toByteArrayBliss(BufferedImage bi, String format) {
         try {
             return toByteArray(bi, format);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            sendError("Cannot convert " + bi.toString() + ", format: " + format + " to byte array.", ex);
         }
 
         return new byte[0];
@@ -36,37 +39,44 @@ public class ImageUtils {
 
     //***************************************************************//
 
+    public static File write(BufferedImage image, String path, String formatName) throws IOException {
+        final File file = new File(path);
+        ImageIO.write(image, formatName, file);
+        return file;
+    }
+
+    public static File[] write(BufferedImage[] images, String path, String formatName) throws IOException {
+        final File[] ret = new File[images.length];
+        for (int i = 0; i < images.length; i++)
+            ret[i] = write(images[i], path + File.separator + i + '.' + formatName, formatName);
+        return ret;
+    }
+
+
+    public static File writeBliss(BufferedImage image, String path, String formatName) {
+        try {
+            return write(image, path, formatName);
+        } catch (IOException ex) {
+            sendError("Cannot write " + image.toString() + " to path " + path + " with format " + formatName, ex);
+        }
+        return new File("");
+    }
+
     public static File writeBliss(BufferedImage image, String path) {
         return writeBliss(image, path, STD_FORMAT);
     }
 
-    public static File writeBliss(BufferedImage image, String path, String formatName) {
-        final File file = new File(path);
+    public static File[] writeBliss(BufferedImage[] images, String path, String formatName) {
         try {
-            ImageIO.write(image, formatName, file);
-        } catch (IOException e) {
-            e.printStackTrace();
+            return write(images, path, formatName);
+        } catch (IOException ex) {
+            sendError("Cannot write " + Arrays.toString(images) + " to path " + path + " with format " + formatName, ex);
         }
-        return file;
+        return new File[0];
     }
 
     public static File[] writeBliss(BufferedImage[] images, String path) {
         return writeBliss(images, path, STD_FORMAT);
-    }
-
-    public static File[] writeBliss(BufferedImage[] images, String path, String formatName) {
-        final File[] ret = new File[images.length];
-        try {
-            for (int i = 0; i < images.length; i++){
-                final File file = new File(path + File.separator + i + '.' + formatName);
-                ImageIO.write(images[i], formatName, file);
-                ret[i] = file;
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ret;
     }
 
     public static BufferedImage readBliss(File file) {
@@ -83,11 +93,11 @@ public class ImageUtils {
 
     //***************************************************************//
 
-    public static Image scale(BufferedImage bi, Point dim){
+    public static Image scale(BufferedImage bi, Point dim) {
         return bi.getScaledInstance(dim.x, dim.y, Image.SCALE_SMOOTH);
     }
 
-    public static BufferedImage scaleToBuffered(BufferedImage bi, Point dim){
+    public static BufferedImage scaleToBuffered(BufferedImage bi, Point dim) {
         return buffered((scale(bi, dim)));
     }
 
@@ -116,7 +126,7 @@ public class ImageUtils {
         return new Font(Font.MONOSPACED, Font.PLAIN, fontSize);
     }
 
-    public static BufferedImage marquee(String[] lines, Point dim, int fontSize, List<Tuple2<Image, Point>> drawImages){
+    public static BufferedImage marquee(String[] lines, Point dim, int fontSize, List<Tuple2<Image, Point>> drawImages) {
         return marquee(lines, dim, Color.WHITE, monospacedPlain(fontSize), Color.BLACK, drawImages);
     }
 
@@ -128,7 +138,7 @@ public class ImageUtils {
         setBackground(image, bgColor);
         final Graphics gfx = image.getGraphics();
 
-        for(Tuple2<Image, Point> iAndP : drawImages) draw(gfx, iAndP.a, iAndP.b);
+        for (Tuple2<Image, Point> iAndP : drawImages) draw(gfx, iAndP.a, iAndP.b);
 
         gfx.setFont(font);
         gfx.setColor(fontColor);

@@ -7,6 +7,8 @@ import jPlus.util.lang.StringUtils;
 import java.io.IOException;
 import java.util.Collection;
 
+import static jPlus.JPlus.sendError;
+
 public class ConsoleUtils {
 
     public static String sep() {
@@ -23,8 +25,8 @@ public class ConsoleUtils {
     public static void clsBliss() {
         try {
             cls();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+        } catch (IOException | InterruptedException ex) {
+            sendError("There was a problem clearing the console", ex);
         }
     }
 

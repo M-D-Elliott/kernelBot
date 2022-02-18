@@ -3,6 +3,8 @@ package jPlus.util.io;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import static jPlus.JPlus.sendError;
+
 public class TimeUtils {
     public static final String STD_DELIMITER = ":";
     public static final String hms = "%d:%d:%d";
@@ -10,33 +12,6 @@ public class TimeUtils {
     public static String basicDate() {
         return LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
     }
-
-    public static int parseSecondsFromHHmmss(String s) {
-        try {
-            final String[] split = s.split(STD_DELIMITER);
-            final int hours = Integer.parseInt(split[0]);
-            final int minutes = Integer.parseInt(split[1]);
-            final int seconds = Integer.parseInt(split[2]);
-            return hours * 3600 + minutes * 60 + seconds;
-        } catch (Exception ignored) {
-            System.err.println("Use date format HH:mm:ss");
-        }
-        return 0;
-    }
-
-//    public static int parseSecondsFromDDHHmmss(String s) {
-//        try {
-//            final String[] split = s.split(STD_DELIMITER);
-//            final int days = Integer.parseInt(split[0]);
-//            final int hours = Integer.parseInt(split[1]);
-//            final int minutes = Integer.parseInt(split[2]);
-//            final int seconds = Integer.parseInt(split[3]);
-//            return days * 24 + hours * 3600 + minutes * 60 + seconds;
-//        } catch (Exception ignored) {
-//            System.err.println("Use date format DD:HH:mm:ss");
-//        }
-//        return 0;
-//    }
 
     public static int parseSecondsFrom(String s) {
         final int[] multipliers = new int[]{60, 3600, 86400};
@@ -46,8 +21,8 @@ public class TimeUtils {
             for (int i = split.length - 2, j = 0; i >= 0 && j <= multipliers.length - 1; i--, j++)
                 ret += multipliers[j] * Integer.parseInt(split[i]);
             return ret;
-        } catch (Exception ignored) {
-            System.err.println("Use date format DD:HH:mm:ss");
+        } catch (Exception ex) {
+            sendError("Use date format HH:mm:ss", ex);
         }
         return 0;
     }

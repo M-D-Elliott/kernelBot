@@ -89,12 +89,12 @@ public class Kernel implements Receivable1<IAPIWrapper> {
     }
 
     protected String[] parse(String[] parsedM) {
-        Integer intIndicator = IntUtils.parseInteger(parsedM[0]);
+        Integer intIndicator = IntUtils.parseIntBliss(parsedM[0]);
         if (intIndicator != null) parsedM[0] = menu.get(boundsMin(intIndicator, 0));
 
         final List<String> menuList = indicatorMenuMap.get(parsedM[0].charAt(0));
         if (menuList != null) {
-            intIndicator = IntUtils.parseInteger(parsedM[0].substring(1));
+            intIndicator = IntUtils.parseIntBliss(parsedM[0].substring(1));
             if (intIndicator != null && intIndicator < menuList.size())
                 parsedM[0] = menuList.get(intIndicator);
         }

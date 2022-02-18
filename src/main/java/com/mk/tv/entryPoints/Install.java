@@ -1,6 +1,6 @@
 package com.mk.tv.entryPoints;
 
-import jPlus.io.ResourceUtils;
+import jPlusLibs.apache.io.commons.ApacheResourceUtils;
 
 import static jPlus.io.ResourceUtils.toFile;
 
@@ -14,7 +14,7 @@ public class Install implements Runnable {
     @Override
     public void run() {
         toFile((usingJRE) ? "startbotJ.bat" : "startbot.bat", "startbot.bat");
-        ResourceUtils.extractZipAsDir("myscripts");
-        ResourceUtils.extractZipAsDir("repos", (zE, f) -> !f.exists());
+        ApacheResourceUtils.extractZipAsDir("myscripts");
+        ApacheResourceUtils.extractZipAsDir("repos", (zE, f) -> !f.exists());
     }
 }

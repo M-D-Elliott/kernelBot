@@ -19,16 +19,14 @@ public class Threads {
     public static void sleepBliss(int millis, int nanos) {
         try {
             Thread.sleep(millis, nanos);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (InterruptedException ignored) {
         }
     }
 
     public static void sleepBliss(int millis) {
         try {
             Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (InterruptedException ignored) {
         }
     }
 

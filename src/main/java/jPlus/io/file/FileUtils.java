@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static jPlus.JPlus.log;
+import static jPlus.JPlus.sendError;
 
 public final class FileUtils {
 
@@ -21,8 +21,8 @@ public final class FileUtils {
                 while ((line = reader.readLine()) != null) {
                     lines.add(line);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ex) {
+                sendError("Cannot read file at " + path, ex);
             }
         }
 
@@ -43,8 +43,8 @@ public final class FileUtils {
                 PrintWriter printLine = new PrintWriter(write)
         ) {
             printLine.printf(lines);
-        } catch (IOException err) {
-            log(String.format("Error writing to path %s: %s", path, err));
+        } catch (IOException ex) {
+            sendError(String.format("Error writing to path %s.", path), ex);
         }
     }
 
@@ -92,22 +92,30 @@ public final class FileUtils {
         return windowsRegex;
     }
 
-    public static boolean isValidFilePath(String path) {
-        final File f = new File(path);
-        try {
-            return StringUtils.hasContent(f.getCanonicalPath());
-        } catch (IOException e) {
-            return false;
-        }
+    public static boolean isValidFilePath(String path) throws IOException {
+        return StringUtils.hasContent(new File(path).getCanonicalPath());
     }
 
-    public static boolean isValidFilePathAndExists(String path) {
-        final File f = new File(path);
+    public static boolean isValidFilePathBliss(String path) {
         try {
-            return StringUtils.hasContent(f.getCanonicalPath()) && f.exists();
-        } catch (IOException e) {
-            return false;
+            return isValidFilePath(path);
+        } catch (IOException ex) {
+            sendError("Cannot retrieve/validate file path " + path, ex);
         }
+        return false;
+    }
+
+    public static boolean isValidFilePathAndExists(String path) throws IOException {
+        return isValidFilePath(path) && new File(path).exists();
+    }
+
+    public static boolean isValidFilePathAndExistsBliss(String path) {
+        try {
+            return isValidFilePathAndExists(path);
+        } catch (IOException ex) {
+            sendError("Cannot retrieve/validate file path " + path, ex);
+        }
+        return false;
     }
 
     public static boolean validateRegex(final String text, final String regex, boolean positiveValidation) {

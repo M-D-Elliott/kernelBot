@@ -5,6 +5,9 @@ import jPlus.lang.callback.Receivable1;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 
 import java.io.IOException;
+import java.util.Arrays;
+
+import static jPlus.JPlus.sendError;
 
 public class RuntimeUtils {
     protected static boolean exec(String... body) throws IOException {
@@ -14,8 +17,8 @@ public class RuntimeUtils {
     public static boolean execBliss(String... body) {
         try {
             return exec(body);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            sendError("Error executing " + Arrays.toString(body), ex);
         }
 
         return false;
@@ -32,8 +35,8 @@ public class RuntimeUtils {
     public static void execWaitBliss(Receivable1<InterruptedException> onInterrupt, String... body) {
         try {
             execWait(body);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            sendError("Error executing " + Arrays.toString(body), ex);
         } catch (InterruptedException e) {
             onInterrupt.receive(e);
         }
@@ -66,8 +69,10 @@ public class RuntimeUtils {
     public static boolean killBliss(String path, String title) {
         try {
             return kill(path, title);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (IOException ex) {
+            sendError("Error killing " + title + " at path " + path, ex);
+        } catch (NotImplementedException ex) {
+            sendError(ex);
         }
         return false;
     }

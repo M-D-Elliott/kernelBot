@@ -59,7 +59,7 @@ public final class DoubleUtils {
         try {
             Double.parseDouble(newV);
             return true;
-        } catch (NumberFormatException ex) {
+        } catch (NumberFormatException ignored) {
             return false;
         }
     }

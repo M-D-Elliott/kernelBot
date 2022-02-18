@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static jPlus.JPlus.sendError;
+
 /**
  * @author P. Furey
  * Refactored from previous class by Marcus at some point?
@@ -26,9 +28,7 @@ public final class MapUtils {
 
     public static <K, V> HashMap<K, V> deepCopy(Map<K, V> original) {
         final HashMap<K, V> ret = new HashMap<>();
-
         for (Map.Entry<K, V> entry : original.entrySet()) ret.put(entry.getKey(), entry.getValue());
-
         return ret;
     }
 
@@ -54,8 +54,8 @@ public final class MapUtils {
                     ret.put(
                             StringUtils.lowerCaseFirstLetter(m.getName().replace("get", "")),
                             m.invoke(obj));
-        } catch (IllegalAccessException | InvocationTargetException ignored) {
-
+        } catch (IllegalAccessException | InvocationTargetException ex) {
+            sendError(ex);
         }
 
         return ret;

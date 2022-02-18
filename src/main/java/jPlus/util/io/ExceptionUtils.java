@@ -1,5 +1,7 @@
 package jPlus.util.io;
 
+import static jPlus.JPlus.sendError;
+
 public class ExceptionUtils {
     private static final String CALLER_FORMAT = "%s.%s() -- line %d";
 
@@ -16,7 +18,7 @@ public class ExceptionUtils {
 
         try {
             run.run();
-            System.out.println("You have successfully solved this error!");
+            System.out.println("You have successfully solved this sendError!");
             System.out.println("Please remove this catchAll, if desired.");
         } catch (Throwable thrown) {
             System.err.println("Stack Trace:");
@@ -27,8 +29,8 @@ public class ExceptionUtils {
     public static Class<?> getKlass(String classLoaderName) {
         try {
             return Class.forName(classLoaderName);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            sendError("Cannot find " + classLoaderName, ex);
         }
 
         return Object.class;
