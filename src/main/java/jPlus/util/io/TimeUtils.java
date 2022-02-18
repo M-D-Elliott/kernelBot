@@ -1,7 +1,10 @@
 package jPlus.util.io;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import static jPlus.JPlus.sendError;
 
@@ -11,6 +14,14 @@ public class TimeUtils {
 
     public static String basicDate() {
         return LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+    }
+
+    public static String basicDateTime() {
+        return LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
+    }
+
+    public static String fileDateTime() {
+        return new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());
     }
 
     public static int parseSecondsFrom(String s) {

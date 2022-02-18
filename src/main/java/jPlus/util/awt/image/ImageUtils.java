@@ -40,7 +40,7 @@ public class ImageUtils {
     //***************************************************************//
 
     public static File write(BufferedImage image, String path, String formatName) throws IOException {
-        final File file = new File(path);
+        final File file = new File(path + '.' + formatName);
         ImageIO.write(image, formatName, file);
         return file;
     }
@@ -48,7 +48,7 @@ public class ImageUtils {
     public static File[] write(BufferedImage[] images, String path, String formatName) throws IOException {
         final File[] ret = new File[images.length];
         for (int i = 0; i < images.length; i++)
-            ret[i] = write(images[i], path + File.separator + i + '.' + formatName, formatName);
+            ret[i] = write(images[i], path + File.separator + i, formatName);
         return ret;
     }
 

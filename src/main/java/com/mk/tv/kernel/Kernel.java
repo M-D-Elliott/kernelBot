@@ -5,6 +5,7 @@ import com.mk.tv.kernel.mixes.MixController;
 import com.mk.tv.kernel.presses.PressController;
 import com.mk.tv.kernel.scripts.ScriptController;
 import com.mk.tv.kernel.system.SystemController;
+import com.mk.tv.kernel.tools.ToolsController;
 import jPlus.io.out.DummyAPIWrapper;
 import jPlus.io.out.IAPIWrapper;
 import jPlus.io.security.Access;
@@ -40,6 +41,7 @@ public class Kernel implements Receivable1<IAPIWrapper> {
         controllers.add(new PressController(config));
         controllers.add(new ScriptController(config));
         controllers.add(new MixController(config));
+        controllers.add(new ToolsController(config));
 
         controllers.add(new SystemController(config));
     }
@@ -105,32 +107,37 @@ public class Kernel implements Receivable1<IAPIWrapper> {
     protected void thread(IAPIWrapper api, String[] parsedM) {
         final String funcName = parsedM[0];
         final Receivable2<IAPIWrapper, String[]> syncF = syncFunctions.get(funcName);
-        if (syncF != null) funcReceive(api, parsedM, syncF);
+        if (syncF != null) {
+            validFuncReceive(api, parsedM, syncF);
+            return;
+        }
 
         final Receivable2<IAPIWrapper, String[]> asyncF = asyncFunctions.get(funcName);
         if (asyncF != null) {
             if (asyncThread.isDormant()) {
                 asyncThread.busyMessage = String.format(busyMessageUnf(), funcName, api.username());
-                asyncThread.body = () -> validFuncReceive(api, parsedM, asyncF);
+                asyncThread.body = () -> asyncF.receive(api, parsedM);
+                logUserNameAndFunc(api, parsedM[0]);
             } else api.print(asyncThread.busyMessage);
             asyncThread.run();
+            return;
         }
-    }
 
-    protected void funcReceive(IAPIWrapper api, String[] parsedM, Receivable2<IAPIWrapper, String[]> func) {
-        if (func == null) {
-            System.out.println(api.username() + " -- unknown");
-            noFuncFoundResp(api);
-        } else validFuncReceive(api, parsedM, func);
+        System.out.println(api.username() + " -- unknown");
+        noFuncFoundResp(api);
     }
 
     protected void validFuncReceive(IAPIWrapper api, String[] parsedM, Receivable2<IAPIWrapper, String[]> func) {
-        System.out.println(api.username() + " -- " + parsedM[0]);
+        logUserNameAndFunc(api, parsedM[0]);
         func.receive(api, parsedM);
     }
 
+    private void logUserNameAndFunc(IAPIWrapper api, String name) {
+        System.out.println(api.username() + " -- " + name);
+    }
+
     protected void noFuncFoundResp(IAPIWrapper api) {
-        api.print("No command found...");
+        api.print("No func found...");
     }
 
     //***************************************************************//

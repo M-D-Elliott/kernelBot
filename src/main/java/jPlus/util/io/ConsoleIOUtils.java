@@ -18,6 +18,10 @@ public class ConsoleIOUtils {
 
     public static String request(String s) {
         System.out.println(s);
+        return request();
+    }
+
+    public static String request() {
         System.out.print(INDICATOR);
         return inScanner.nextLine();
     }

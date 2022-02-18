@@ -1,8 +1,8 @@
 package com.mk.tv.auth.botusers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import jPlusLibs.jackson.JacksonRepo;
 import jPlus.lang.callback.Retrievable;
+import jPlusLibs.jackson.JacksonRepo;
 
 import java.util.LinkedHashMap;
 
@@ -25,14 +25,17 @@ public class BotUserRepo extends JacksonRepo<BotUser> {
         }, newInstance);
     }
 
-    private static String path(){
+    private static String path() {
         return "repos/users.txt";
     }
 
     private static LinkedHashMap<String, BotUser> newMap() {
         final LinkedHashMap<String, BotUser> ret = new LinkedHashMap<>();
-        final String userName = "myDiscordUserName";
-        ret.put(userName, new BotUser(userName));
+        final String userName = "admin";
+        final BotUser user = new BotUser(userName);
+        user.password = "admin";
+        user.welcome = "Hey admin...";
+        ret.put(userName, user);
         return ret;
     }
 }

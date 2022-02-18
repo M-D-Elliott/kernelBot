@@ -7,6 +7,8 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.io.File;
+
 public class ChannelOutWrapper implements IAPIWrapper {
     private final MessageReceivedEvent e;
     private final Access access;
@@ -42,6 +44,11 @@ public class ChannelOutWrapper implements IAPIWrapper {
     @Override
     public void printLink(String url) {
         DiscordConsoleUtils.printLink(e, url);
+    }
+
+    @Override
+    public void sendFile(File f) {
+        DiscordIOUtils.sendFile(e, f);
     }
 
     @Override

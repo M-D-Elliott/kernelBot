@@ -81,7 +81,8 @@ public class BotUserService {
     }
 
     public String getWelcome(String username) {
-        return getBotUser(username).welcome;
+        final BotUser user = getBotUser(username);
+        return user == null ? null : user.welcome;
     }
 
     //***************************************************************//

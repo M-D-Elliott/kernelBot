@@ -3,6 +3,8 @@ package jPlus.io.out;
 import jPlus.io.security.Access;
 import jPlus.lang.callback.Receivable1;
 
+import java.io.File;
+
 public class DummyAPIWrapper implements IAPIWrapper {
     @Override
     public Access access() {
@@ -37,6 +39,10 @@ public class DummyAPIWrapper implements IAPIWrapper {
     @Override
     public void printLink(String url) {
         print(url);
+    }
+
+    @Override
+    public void sendFile(File f) {
     }
 
     @Override

@@ -1,11 +1,14 @@
 package jPlus.util.awt;
 
+import jPlus.util.awt.image.ImageUtils;
+
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 import static jPlus.JPlus.sendError;
 
 public class RobotUtils {
-    public static final int BETWEEN_ACTION_SLEEP = 100000;
     public static Robot robot;
 
     public static void start() {
@@ -70,5 +73,21 @@ public class RobotUtils {
             press(keyEventSets);
         } catch (InterruptedException ignored) {
         }
+    }
+
+    //***************************************************************//
+
+    public static File capture(String path, String format) {
+        return capture(new Point(0, 0), path, format);
+    }
+
+    public static File capture(Point p, String path, String format) {
+        return capture(p, Toolkit.getDefaultToolkit().getScreenSize(), path, format);
+    }
+
+    public static File capture(Point p, Dimension dim, String path, String format) {
+        start();
+        final BufferedImage image = robot.createScreenCapture(new Rectangle(p.x, p.y, dim.width, dim.height));
+        return ImageUtils.writeBliss(image, path, format);
     }
 }

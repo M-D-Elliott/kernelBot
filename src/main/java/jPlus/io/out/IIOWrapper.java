@@ -2,6 +2,8 @@ package jPlus.io.out;
 
 import jPlus.lang.callback.Receivable1;
 
+import java.io.File;
+
 public interface IIOWrapper {
     String in();
 
@@ -12,6 +14,8 @@ public interface IIOWrapper {
     void printUnf(String s);
 
     void printLink(String url);
+
+    void sendFile(File f);
 
     void setStatus(String actString);
 

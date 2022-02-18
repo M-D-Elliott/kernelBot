@@ -7,7 +7,7 @@ public class SystemConfig {
 
     public char addDelimiter = '+';
     public char nextDelimiter = '>';
-    public String startup = "";
+    public String startup = "splash";
 
     private static final String LITERAL_COMMAND = "'%c%s'";
 

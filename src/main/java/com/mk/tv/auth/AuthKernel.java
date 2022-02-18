@@ -22,7 +22,9 @@ public class AuthKernel extends Kernel {
 
     @Override
     protected void noFuncFoundResp(IAPIWrapper api) {
-        api.print(userController.service.getWelcome(api.username()));
+        final String welcome = userController.service.getWelcome(api.username());
+        if (welcome == null) super.noFuncFoundResp(api);
+        else api.println(welcome);
     }
 
     @Override

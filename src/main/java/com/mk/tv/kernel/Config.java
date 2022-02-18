@@ -5,6 +5,7 @@ import com.mk.tv.kernel.mixes.MixConfig;
 import com.mk.tv.kernel.presses.PressConfig;
 import com.mk.tv.kernel.scripts.ScriptConfig;
 import com.mk.tv.kernel.system.SystemConfig;
+import com.mk.tv.kernel.tools.ToolsConfig;
 import jPlusLibs.jackson.JacksonUtils;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -14,6 +15,7 @@ public class Config {
     public ScriptConfig script = new ScriptConfig();
     public PressConfig press = new PressConfig();
     public MixConfig mix = new MixConfig();
+    public ToolsConfig tools = new ToolsConfig();
 
     public Config() {
     }
