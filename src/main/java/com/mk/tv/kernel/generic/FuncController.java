@@ -35,16 +35,20 @@ public abstract class FuncController implements IFuncController {
     }
 
     protected void menuResponse(IAPIWrapper api, String[] args) {
-        final String format = " %c%d  " + config.system.getMenuBorder() + "        %s%s        ";
+        final String format = " %c%d  " + menuBorder() + "        %s%s        ";
         final String[] menuFormatted = new String[menu.size()];
         for (int i = 0; i < menuFormatted.length; i++) {
             final String item = menu.get(i);
             menuFormatted[i] = String.format(format, indicator(), i, item, funcDesc(item));
         }
-        final String body = ConsoleUtils.encaseInBanner(menuFormatted, config.system.getMenuBorder());
+        final String body = ConsoleUtils.encaseInBanner(menuFormatted, menuBorder());
 
         final String sep = sep();
         api.print(sep + menuPrefix() + sep + body + sep + menuSuffix());
+    }
+
+    protected String menuBorder() {
+        return config.system.getMenuBorder();
     }
 
     //***************************************************************//

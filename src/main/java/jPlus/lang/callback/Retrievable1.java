@@ -1,5 +1,5 @@
 package jPlus.lang.callback;
 
 public interface Retrievable1<RET, REC> {
-    RET retrieve(REC r1);
+    RET retrieve(REC rec1);
 }

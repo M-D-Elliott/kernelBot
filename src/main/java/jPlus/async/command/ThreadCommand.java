@@ -25,6 +25,7 @@ public abstract class ThreadCommand extends Command {
     @Override
     protected final void body() {
         thread = new Thread(this::threadEP);
+        thread.setDaemon(true);
         thread.start();
     }
 

@@ -8,6 +8,8 @@ public class SystemConfig {
     public char addDelimiter = '+';
     public char nextDelimiter = '>';
     public String startup = "splash";
+    public boolean listenToDiscord = true;
+    public boolean listenToConsole = false;
 
     private static final String LITERAL_COMMAND = "'%c%s'";
 

@@ -2,6 +2,7 @@ package com.mk.tv.entryPoints;
 
 import com.mk.tv.auth.AuthConfig;
 import com.mk.tv.auth.AuthKernel;
+import com.mk.tv.kernel.Config;
 import com.mk.tv.kernel.Kernel;
 import com.mk.tv.kernel.system.SystemController;
 import jPlus.io.out.PrintStreamWrapper;
@@ -19,55 +20,61 @@ import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
 
 public class Run implements Runnable {
-    private final AuthConfig config =
-            JacksonUtils.readAndUpdateBliss("config.txt",
-                    AuthConfig.class, AuthConfig::newInstance);
 
-    private final Kernel kernel = new AuthKernel(config);
-
+    @Override
     public void run() {
-        try {
-            start();
-        } catch (LoginException e) {
-            e.printStackTrace();
-        }
-    }
+        final AuthConfig config =
+                JacksonUtils.readAndUpdateBliss("config.txt",
+                        AuthConfig.class, AuthConfig::newInstance);
 
-    private void start() throws LoginException {
-
+        final Kernel kernel = new AuthKernel(config);
         kernel.init();
 
-        startConsoleThread(kernel);
+        if (config.system.listenToDiscord) {
+            startDiscordListener(kernel, config);
+            if (config.system.listenToConsole) startConsoleThread(kernel);
+        } else if (config.system.listenToConsole) startConsoleListener(kernel, new CountDownLatch(1));
+    }
 
+    private void startDiscordListener(Kernel kernel, Config config) {
         final DiscordOutListener out = new DiscordOutListener(
                 Collections.singletonList(kernel)
         );
 
-        JDABuilder.createDefault(config.system.token)
-                .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
-                .enableCache(CacheFlag.ACTIVITY)
-                .setBulkDeleteSplittingEnabled(false)
-                .setCompression(Compression.NONE)
-                .setActivity(Activity.listening(
-                        String.format(SystemController.ACTIVITY_RAW, config.system.commandIndicator)))
-                .enableIntents(GatewayIntent.GUILD_PRESENCES)
-                .addEventListeners(out)
-                .build();
+        try {
+            JDABuilder.createDefault(config.system.token)
+                    .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
+                    .enableCache(CacheFlag.ACTIVITY)
+                    .setBulkDeleteSplittingEnabled(false)
+                    .setCompression(Compression.NONE)
+                    .setActivity(Activity.listening(
+                            String.format(SystemController.ACTIVITY_RAW, config.system.commandIndicator)))
+                    .enableIntents(GatewayIntent.GUILD_PRESENCES)
+                    .addEventListeners(out)
+                    .build();
+        } catch (LoginException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    protected void startConsoleThread(Kernel kernel) {
-        final PrintStreamWrapper api = new PrintStreamWrapper(System.out);
+    private void startConsoleThread(Kernel kernel) {
 
         final CountDownLatch latch = new CountDownLatch(1);
 
-        new Thread(() -> {
-            while (latch.getCount() > 0) {
-                api.setIn(ConsoleIOUtils.request());
-                kernel.receive(api);
-            }
-        }).start();
+        final Thread th = new Thread(() -> startConsoleListener(kernel, latch));
+        th.setDaemon(true);
+        th.start();
 
         Runtime.getRuntime().addShutdownHook(new Thread(latch::countDown, "terminateConsoleOut"));
+    }
+
+    private void startConsoleListener(Kernel kernel, CountDownLatch latch) {
+        final PrintStreamWrapper api = new PrintStreamWrapper(System.out);
+        while (latch.getCount() > 0) {
+            api.setIn(ConsoleIOUtils.request());
+            kernel.receive(api);
+        }
+        System.out.println("shutdown yest");
     }
 }

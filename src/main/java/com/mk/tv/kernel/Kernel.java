@@ -118,7 +118,7 @@ public class Kernel implements Receivable1<IAPIWrapper> {
                 asyncThread.busyMessage = String.format(busyMessageUnf(), funcName, api.username());
                 asyncThread.body = () -> asyncF.receive(api, parsedM);
                 logUserNameAndFunc(api, parsedM[0]);
-            } else api.print(asyncThread.busyMessage);
+            } else busyResp(api);
             asyncThread.run();
             return;
         }
@@ -127,12 +127,18 @@ public class Kernel implements Receivable1<IAPIWrapper> {
         noFuncFoundResp(api);
     }
 
+    //***************************************************************//
+
+    protected void busyResp(IAPIWrapper api) {
+        api.print(asyncThread.busyMessage);
+    }
+
     protected void validFuncReceive(IAPIWrapper api, String[] parsedM, Receivable2<IAPIWrapper, String[]> func) {
         logUserNameAndFunc(api, parsedM[0]);
         func.receive(api, parsedM);
     }
 
-    private void logUserNameAndFunc(IAPIWrapper api, String name) {
+    protected void logUserNameAndFunc(IAPIWrapper api, String name) {
         System.out.println(api.username() + " -- " + name);
     }
 
@@ -145,17 +151,16 @@ public class Kernel implements Receivable1<IAPIWrapper> {
     protected void menuResponse(IAPIWrapper api, String[] args) {
         final String border = "?-";
         final String format = "  %d  " + border + "        %s        ";
+        final String sep = sep();
 
-        api.print(sep() + ConsoleUtils.encaseInBanner(
-                menu, border, (item, i) -> String.format(format, i, item)));
+        api.print(sep + ConsoleUtils.encaseInBanner(
+                menu, border, (item, i) -> String.format(format, i, item))
+                + sep);
     }
 
     //***************************************************************//
 
     protected static String busyMessageUnf() {
-        final String sep = sep();
-        return "I am performing %1$s for %2$s" + sep +
-                "Scripts, presses, or mixes are async. I can only run 1 async task at a time. " + sep +
-                "I can still perform synchronous tasks such as help or changepass!";
+        return "I am performing %1$s for %2$s";
     }
 }
