@@ -1,0 +1,11 @@
+#JSGF V1.0;
+
+/**
+ * JSGF Grammar
+ */
+
+grammar grammar;
+
+public <indicator>  = ( kernel );
+public <func>  = <indicator>{1} ( help | script | press | mix ){1};
+public <test>  = ( hi | robot | go | test | listen | here );

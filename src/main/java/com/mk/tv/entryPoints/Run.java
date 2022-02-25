@@ -5,9 +5,12 @@ import com.mk.tv.auth.AuthKernel;
 import com.mk.tv.kernel.Config;
 import com.mk.tv.kernel.Kernel;
 import com.mk.tv.kernel.system.SystemController;
+import jPlus.io.out.IAPIWrapper;
 import jPlus.io.out.PrintStreamWrapper;
+import jPlus.lang.callback.Receivable1;
 import jPlus.util.io.ConsoleIOUtils;
-import jPlusLibs.discord.DiscordOutListener;
+import jPlusLibs.discord.listener.DiscordUserMessageListener;
+import jPlusLibs.discord.listener.DiscordVoiceListener;
 import jPlusLibs.jackson.JacksonUtils;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -16,6 +19,7 @@ import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
 
@@ -37,9 +41,12 @@ public class Run implements Runnable {
     }
 
     private void startDiscordListener(Kernel kernel, Config config) {
-        final DiscordOutListener out = new DiscordOutListener(
-                Collections.singletonList(kernel)
-        );
+
+        final Collection<Receivable1<IAPIWrapper>> recipients = Collections.singletonList(kernel);
+
+        final DiscordUserMessageListener discordTextOut = new DiscordUserMessageListener(recipients);
+
+        final DiscordVoiceListener discordVoiceOut = new DiscordVoiceListener(recipients);
 
         try {
             JDABuilder.createDefault(config.system.token)
@@ -50,7 +57,8 @@ public class Run implements Runnable {
                     .setActivity(Activity.listening(
                             String.format(SystemController.ACTIVITY_RAW, config.system.commandIndicator)))
                     .enableIntents(GatewayIntent.GUILD_PRESENCES)
-                    .addEventListeners(out)
+                    .enableCache(CacheFlag.VOICE_STATE)
+                    .addEventListeners(discordTextOut, discordVoiceOut)
                     .build();
         } catch (LoginException e) {
             e.printStackTrace();

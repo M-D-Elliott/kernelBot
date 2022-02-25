@@ -64,7 +64,7 @@ public class Kernel implements Receivable1<IAPIWrapper> {
         menu.add("help");
         for (IFuncController c : controllers) {
             menu.add(c.menuName());
-            indicatorMenuMap.put(c.indicator(), c.menu());
+            indicatorMenuMap.put(c.indicator(), c.menu);
         }
     }
 

@@ -5,15 +5,12 @@ import jPlus.io.out.IAPIWrapper;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.ConsoleUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import static jPlus.util.io.ConsoleUtils.sep;
 
 
 public abstract class FuncController implements IFuncController {
-    protected final List<String> menu = new ArrayList<>();
     protected Config config;
 
     public FuncController(Config config) {
@@ -52,11 +49,6 @@ public abstract class FuncController implements IFuncController {
     }
 
     //***************************************************************//
-
-    @Override
-    public List<String> menu() {
-        return menu;
-    }
 
     protected abstract String menuPrefix();
 

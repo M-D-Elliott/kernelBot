@@ -1,8 +1,9 @@
-package jPlusLibs.discord;
+package jPlusLibs.discord.listener;
 
 import jPlus.async.command.ThreadCommand;
 import jPlus.io.out.IAPIWrapper;
 import jPlus.lang.callback.Receivable1;
+import jPlusLibs.discord.ChannelOutWrapper;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -13,15 +14,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class DiscordOutListener extends ListenerAdapter {
+public class DiscordUserMessageListener extends RecipientListener {
 
-    private final List<Receivable1<IAPIWrapper>> recipients = new ArrayList<>();
-
-    public DiscordOutListener() {
-    }
-
-    public DiscordOutListener(Collection<Receivable1<IAPIWrapper>> recipients) {
-        this.recipients.addAll(recipients);
+    public DiscordUserMessageListener(Collection<Receivable1<IAPIWrapper>> recipients) {
+        super(recipients);
     }
 
     @Override

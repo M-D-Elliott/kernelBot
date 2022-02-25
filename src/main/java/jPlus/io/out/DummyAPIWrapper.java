@@ -32,21 +32,16 @@ public class DummyAPIWrapper implements IAPIWrapper {
     }
 
     @Override
-    public void printUnf(String s) {
-        System.out.print(s);
-    }
-
-    @Override
     public void printLink(String url) {
         print(url);
     }
 
     @Override
-    public void sendFile(File f) {
+    public void send(File f) {
     }
 
     @Override
-    public void setStatus(String actString) {
+    public void setStatus(String status) {
     }
 
     @Override

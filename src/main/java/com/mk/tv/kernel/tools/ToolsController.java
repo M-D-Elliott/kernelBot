@@ -62,7 +62,7 @@ public class ToolsController extends FuncController {
 
     protected void cap(IAPIWrapper api, String[] strings) {
         final File img = RobotUtils.capture(capturePath() + TimeUtils.fileDateTime(), config.tools.captureFormat);
-        api.sendFile(img);
+        api.send(img);
     }
 
     private String capturePath() {

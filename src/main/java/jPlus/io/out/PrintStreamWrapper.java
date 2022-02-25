@@ -32,21 +32,16 @@ public class PrintStreamWrapper implements IAPIWrapper {
     }
 
     @Override
-    public void printUnf(String s) {
-        print(s);
-    }
-
-    @Override
     public void printLink(String url) {
         print(url);
     }
 
     @Override
-    public void sendFile(File f) {
+    public void send(File f) {
     }
 
     @Override
-    public void setStatus(String actString) {
+    public void setStatus(String status) {
 
     }
 
