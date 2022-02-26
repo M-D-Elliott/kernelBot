@@ -10,7 +10,7 @@ import jPlus.io.out.PrintStreamWrapper;
 import jPlus.lang.callback.Receivable1;
 import jPlus.util.io.ConsoleIOUtils;
 import jPlusLibs.discord.listener.DiscordUserMessageListener;
-import jPlusLibs.discord.listener.DiscordVoiceListener;
+import jPlusLibs.discord.listener.voice.DiscordVoiceListener;
 import jPlusLibs.jackson.JacksonUtils;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;

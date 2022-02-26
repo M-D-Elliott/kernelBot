@@ -1,4 +1,4 @@
-package jPlusLibs.discord.listener;
+package jPlusLibs.discord.listener.voice;
 
 import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.SpeechResult;
