@@ -6,4 +6,6 @@ public interface IAPIWrapper extends IIOWrapper {
     Access access();
 
     String username();
+
+    Object payload();
 }

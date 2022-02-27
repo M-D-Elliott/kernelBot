@@ -17,6 +17,11 @@ public class DummyAPIWrapper implements IAPIWrapper {
     }
 
     @Override
+    public Object payload() {
+        return null;
+    }
+
+    @Override
     public String in() {
         return "";
     }

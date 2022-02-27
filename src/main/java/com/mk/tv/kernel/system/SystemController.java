@@ -89,5 +89,5 @@ public class SystemController extends FuncController {
 
     public static final String ACTIVITY_RAW = "%sfunction [args]";
     public static final String CHANGE_INDICATOR_HELP = "to change indicator to ! type: '%sindicator !'";
-    private static final String INSTALL_URL = "https://github.com/M-D-Elliott/kernelBot/";
+    public static final String INSTALL_URL = "https://github.com/M-D-Elliott/kernelBot/";
 }

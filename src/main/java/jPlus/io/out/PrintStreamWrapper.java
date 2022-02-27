@@ -65,4 +65,9 @@ public class PrintStreamWrapper implements IAPIWrapper {
     public String username() {
         return "admin";
     }
+
+    @Override
+    public Object payload() {
+        return in;
+    }
 }

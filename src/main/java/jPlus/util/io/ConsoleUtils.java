@@ -5,7 +5,11 @@ import jPlus.lang.callback.Retrievable2;
 import jPlus.util.lang.StringUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static jPlus.JPlus.sendError;
 
@@ -115,5 +119,15 @@ public class ConsoleUtils {
         final String border = StringUtils.repeat(hor, borderCount).substring(0, Math.max(0, maxBorderLength));
 
         return String.format(BANNER_FORMAT, border, formattedLines.toString());
+    }
+
+    public static String breakUp(String s, int maxLineSize) {
+        List<String> matchList = new ArrayList();
+        Pattern regex = Pattern.compile("(.{1," + maxLineSize + "}(?:\\s|$))|(.{0,10})", Pattern.DOTALL);
+        Matcher regexMatcher = regex.matcher(s);
+        while (regexMatcher.find())
+            matchList.add(regexMatcher.group());
+
+        return String.join(System.lineSeparator(), matchList);
     }
 }

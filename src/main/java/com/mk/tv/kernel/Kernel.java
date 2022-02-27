@@ -19,7 +19,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static jPlus.util.io.ConsoleUtils.sep;
 import static jPlus.util.lang.IntUtils.boundsMin;
 
 public class Kernel implements Receivable1<IAPIWrapper> {
@@ -64,7 +63,7 @@ public class Kernel implements Receivable1<IAPIWrapper> {
         menu.add("help");
         for (IFuncController c : controllers) {
             menu.add(c.menuName());
-            indicatorMenuMap.put(c.indicator(), c.menu);
+            indicatorMenuMap.put(c.indicator(), c.menu());
         }
     }
 
@@ -79,9 +78,10 @@ public class Kernel implements Receivable1<IAPIWrapper> {
     @Override
     public void receive(IAPIWrapper api) {
         String message = api.in();
-        if (message.charAt(0) == config.system.commandIndicator) {
+        final int len = message.length();
+        if (len > 1 && message.charAt(0) == config.system.commandIndicator) {
             message = message.substring(1);
-        } else if (api.access().value() < Access.PRIVATE.value()) return;
+        } else if (api.access().value() < Access.PRIVATE.value() || len < 1) return;
 
         interpret(api, message.split(" "));
     }
@@ -151,7 +151,7 @@ public class Kernel implements Receivable1<IAPIWrapper> {
     protected void menuResponse(IAPIWrapper api, String[] args) {
         final String border = "?-";
         final String format = "  %d  " + border + "        %s        ";
-        final String sep = sep();
+        final String sep = System.lineSeparator();
 
         api.print(sep + ConsoleUtils.encaseInBanner(
                 menu, border, (item, i) -> String.format(format, i, item))
@@ -163,4 +163,19 @@ public class Kernel implements Receivable1<IAPIWrapper> {
     protected static String busyMessageUnf() {
         return "I am performing %1$s for %2$s";
     }
+
+    public Map<String, Receivable2<IAPIWrapper, String[]>> getSyncFunctions() {
+        return syncFunctions;
+    }
+
+    public Map<String, Receivable2<IAPIWrapper, String[]>> getAsyncFunctions() {
+        return asyncFunctions;
+    }
+
+    public <T extends IFuncController> T getController(Class<T> klazz) {
+        for (IFuncController c : controllers) if (klazz.isInstance(c)) return klazz.cast(c);
+        return null;
+    }
+
+
 }

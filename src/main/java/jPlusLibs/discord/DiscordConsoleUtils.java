@@ -1,6 +1,7 @@
 package jPlusLibs.discord;
 
 import jPlus.util.lang.StringUtils;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,20 +15,36 @@ public class DiscordConsoleUtils {
 
     //***************************************************************//
 
+    public static void printUnf(MessageChannel channel, String message) {
+        channel.sendMessage(message).queue();
+    }
+
+    public static void print(MessageChannel channel, String message) {
+        printUnf(channel, monospaced(message));
+    }
+
+    public static void println(MessageChannel channel, String message) {
+        print(channel, message + System.lineSeparator());
+    }
+
+    public static void printLink(MessageChannel channel, String url) {
+        printUnf(channel, "<" + url + ">");
+    }
+
     public static void printUnf(GenericMessageEvent e, String message) {
-        e.getChannel().sendMessage(message).queue();
+        printUnf(e.getChannel(), message);
     }
 
     public static void print(GenericMessageEvent e, String message) {
-        printUnf(e, monospaced(message));
+        print(e.getChannel(), message);
     }
 
     public static void println(GenericMessageEvent e, String message) {
-        print(e, message + System.lineSeparator());
+        println(e.getChannel(), message);
     }
 
     public static void printLink(GenericMessageEvent e, String url) {
-        printUnf(e, "<" + url + ">");
+        printLink(e.getChannel(), url);
     }
 
     //***************************************************************//

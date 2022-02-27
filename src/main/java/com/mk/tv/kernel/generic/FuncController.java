@@ -5,12 +5,15 @@ import jPlus.io.out.IAPIWrapper;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.ConsoleUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static jPlus.util.io.ConsoleUtils.sep;
 
 
 public abstract class FuncController implements IFuncController {
+    public final List<String> menu = new ArrayList<>();
     protected Config config;
 
     public FuncController(Config config) {
@@ -23,6 +26,11 @@ public abstract class FuncController implements IFuncController {
     public void read(Map<String, Receivable2<IAPIWrapper, String[]>> sync,
                      Map<String, Receivable2<IAPIWrapper, String[]>> async) {
         sync.put(menuName(), this::process);
+    }
+
+    @Override
+    public List<String> menu() {
+        return menu;
     }
 
     //***************************************************************//

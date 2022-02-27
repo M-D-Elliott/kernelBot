@@ -59,6 +59,6 @@ public class DirUtils {
     }
 
     public static String fromUserDir(String path) {
-        return System.getProperty("user.dir") + File.separator + path;
+        return System.getProperty("user.dir") + File.separatorChar + path;
     }
 }

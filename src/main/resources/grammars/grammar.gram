@@ -6,6 +6,16 @@
 
 grammar grammar;
 
-public <indicator>  = ( kernel );
-public <func>  = <indicator>{1} ( help | script | press | mix ){1};
-public <test>  = ( hi | robot | go | test | listen | here );
+
+public <indicator>  = (
+
+kay bee | kernel bot
+
+);
+
+
+public <func>  = <indicator>{1} (
+
+press | addpress | stream | voice | typeheart | script | addscript | kvlc | discord | bot | vlc | timeout | mix | addmix | live | cut | init | ilive | heart | heartbeat | typehearts | mixto | splashbeat | help | term | user | spill | changepass | setwelcome | register | tools | cap | system | indicator | version | splash
+
+){1};

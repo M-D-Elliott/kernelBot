@@ -2,19 +2,23 @@ package com.mk.tv.kernel.tools;
 
 import com.mk.tv.kernel.Config;
 import com.mk.tv.kernel.generic.FuncController;
+import com.mk.tv.kernel.system.SystemController;
 import jPlus.io.file.DirUtils;
 import jPlus.io.out.IAPIWrapper;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.awt.RobotUtils;
+import jPlus.util.awt.image.ImageUtils;
 import jPlus.util.io.TimeUtils;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Collections;
 import java.util.Map;
 
 public class ToolsController extends FuncController {
 
-    private String capturePath = null;
+    private final String capturePath = getCapturePath();
+    private final String watermarkText = getWaterMarkText();
 
     public ToolsController(Config config) {
         super(config);
@@ -29,6 +33,17 @@ public class ToolsController extends FuncController {
 
         sync.put("cap", this::cap);
         Collections.addAll(menu, "cap");
+    }
+
+    private String getCapturePath() {
+        final String captureFolderPath = DirUtils.fromUserDir("repos" + File.separatorChar + "captures");
+        final File captureDir = DirUtils.make(captureFolderPath, true);
+        return captureDir.getAbsolutePath() + File.separatorChar;
+    }
+
+    private String getWaterMarkText() {
+        final String[] urlSplit = SystemController.INSTALL_URL.split("/");
+        return urlSplit[urlSplit.length - 1];
     }
 
     //***************************************************************//
@@ -61,13 +76,10 @@ public class ToolsController extends FuncController {
     //***************************************************************//
 
     protected void cap(IAPIWrapper api, String[] strings) {
-        final File img = RobotUtils.capture(capturePath() + TimeUtils.fileDateTime(), config.tools.captureFormat);
-        api.send(img);
-    }
-
-    private String capturePath() {
-        if (capturePath == null)
-            capturePath = DirUtils.make(DirUtils.fromUserDir("repos" + File.separator + "captures"), true).getAbsolutePath() + File.separator;
-        return capturePath;
+        final BufferedImage img = RobotUtils.capture();
+        ImageUtils.caption(img, watermarkText);
+        final String captureFilePath = capturePath + TimeUtils.fileDateTime();
+        final File file = ImageUtils.writeBliss(img, captureFilePath, config.tools.captureFormat);
+        api.send(file);
     }
 }

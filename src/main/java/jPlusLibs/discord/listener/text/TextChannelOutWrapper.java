@@ -1,21 +1,23 @@
-package jPlusLibs.discord;
+package jPlusLibs.discord.listener.text;
 
 import jPlus.io.out.IAPIWrapper;
 import jPlus.io.security.Access;
 import jPlus.lang.callback.Receivable1;
+import jPlusLibs.discord.DiscordConsoleUtils;
+import jPlusLibs.discord.DiscordIOUtils;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.File;
 
-public class ChannelOutWrapper implements IAPIWrapper {
+public class TextChannelOutWrapper implements IAPIWrapper {
     private final MessageReceivedEvent e;
     private final Access access;
 
     private final Receivable1<String> out = this::print;
 
-    public ChannelOutWrapper(MessageReceivedEvent e) {
+    public TextChannelOutWrapper(MessageReceivedEvent e) {
         this.e = e;
         access = (e.getChannel() instanceof PrivateChannel)
                 ? Access.PRIVATE : Access.PUBLIC;
@@ -65,5 +67,10 @@ public class ChannelOutWrapper implements IAPIWrapper {
     @Override
     public String username() {
         return e.getAuthor().getName();
+    }
+
+    @Override
+    public Object payload() {
+        return e;
     }
 }

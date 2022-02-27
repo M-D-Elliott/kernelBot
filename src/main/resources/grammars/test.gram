@@ -1,0 +1,14 @@
+#JSGF V1.0;
+
+/**
+ * JSGF Grammar
+ */
+
+grammar grammar;
+
+public <indicator>  = ( k b | kernel bot );
+public <func>  = <indicator>{1} (
+
+help | script | press | mix | cap
+
+){1};

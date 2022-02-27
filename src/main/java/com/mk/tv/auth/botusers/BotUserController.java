@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.Map;
 
 import static jPlus.util.io.ConsoleIOUtils.validateString;
-import static jPlus.util.io.ConsoleUtils.sep;
 
 public class BotUserController extends FuncController {
 
@@ -104,7 +103,7 @@ public class BotUserController extends FuncController {
         }
 
         final StringBuilder building = new StringBuilder();
-        final String sep = sep();
+        final String sep = System.lineSeparator();
         FileUtils.read("repos/secrets.txt").forEach(item -> building.append(item).append(sep));
         api.print(building.toString());
     }
@@ -135,6 +134,6 @@ public class BotUserController extends FuncController {
 
     protected void warnPublicChannel(IAPIWrapper api) {
         if (api.access().value() < Access.PRIVATE.value())
-            api.print(sep() + ConsoleUtils.encaseInBanner(userConfig.publicChannelWarning, "#"));
+            api.print(System.lineSeparator() + ConsoleUtils.encaseInBanner(userConfig.publicChannelWarning, "#"));
     }
 }
