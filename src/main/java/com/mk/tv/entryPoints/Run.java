@@ -7,10 +7,14 @@ import com.mk.tv.kernel.Kernel;
 import com.mk.tv.kernel.KernelGrammar;
 import com.mk.tv.kernel.generic.IFuncController;
 import com.mk.tv.kernel.system.SystemController;
+import jPlus.async.command.ThreadCommand;
+import jPlus.io.file.DirUtils;
 import jPlus.io.out.IAPIWrapper;
 import jPlus.io.out.PrintStreamWrapper;
 import jPlus.lang.callback.Receivable1;
 import jPlus.util.io.ConsoleIOUtils;
+import jPlus.util.io.RuntimeUtils;
+import jPlusLibs.com.edu.sphinx.SphinxUtils;
 import jPlusLibs.discord.listener.text.DiscordTextListener;
 import jPlusLibs.discord.listener.voice.DiscordVoiceListener;
 import jPlusLibs.jackson.JacksonUtils;
@@ -21,7 +25,7 @@ import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
-import java.util.ArrayList;
+import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
@@ -37,8 +41,9 @@ public class Run implements Runnable {
         final Kernel kernel = new AuthKernel(config);
         kernel.init();
 
+        RuntimeUtils.addOnShutdown(this::onShutdown, "kernelBotShutdown");
+
         if (config.system.listenToDiscord) {
-            writeKernelFuncsToGrammar(kernel);
             if (config.system.listenToConsole) startConsoleThread(kernel);
             discordListener(kernel, config);
         } else if (config.system.listenToConsole)
@@ -69,8 +74,14 @@ public class Run implements Runnable {
     }
 
     private void discordVoiceListener(Kernel kernel, Collection<Receivable1<IAPIWrapper>> recipients) {
+        final String grammarPath = DirUtils.fromUserDir("repos" + File.separatorChar + "system");
+        System.out.println(grammarPath);
+        DirUtils.make(grammarPath);
+        KernelGrammar.write(kernel, grammarPath);
+        SphinxUtils.conf.setGrammarPath("file:" + grammarPath);
+
         final DiscordVoiceListener discordVoiceOut = new DiscordVoiceListener(recipients);
-        kernel.getSyncFunctions().put("listen", discordVoiceOut::startVoice);
+        kernel.getSyncFunctions().put("listen", discordVoiceOut::listenToVoiceChannel);
         final IFuncController systemController = kernel.getController(SystemController.class);
         if (systemController != null) systemController.menu().add("listen");
     }
@@ -91,10 +102,8 @@ public class Run implements Runnable {
         }
     }
 
-    private void writeKernelFuncsToGrammar(Kernel kernel) {
-        final Collection<String> functions = new ArrayList<>();
-        functions.addAll(kernel.getAsyncFunctions().keySet());
-        functions.addAll(kernel.getSyncFunctions().keySet());
-        KernelGrammar.write(new String[]{"kay bee", "kernel bot"}, functions.toArray(new String[0]));
+    private void onShutdown() {
+        System.out.println("Shutting down...");
+        ThreadCommand.terminateAllAndWait();
     }
 }

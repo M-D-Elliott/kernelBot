@@ -36,10 +36,4 @@ public class DiscordTextListener extends ListenerAdapter {
         final IAPIWrapper wrapper = new TextChannelOutWrapper(e);
         for (Receivable1<IAPIWrapper> recipient : recipients) recipient.receive(wrapper);
     }
-
-    @Override
-    public void onShutdown(@NotNull ShutdownEvent event) {
-        System.out.println("Shutting down...");
-        ThreadCommand.terminateAllAndWait();
-    }
 }

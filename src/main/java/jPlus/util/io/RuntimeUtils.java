@@ -1,7 +1,7 @@
 package jPlus.util.io;
 
-import jPlus.util.lang.SystemUtils;
 import jPlus.lang.callback.Receivable1;
+import jPlus.util.lang.SystemUtils;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 
 import java.io.IOException;
@@ -40,6 +40,10 @@ public class RuntimeUtils {
         } catch (InterruptedException e) {
             onInterrupt.receive(e);
         }
+    }
+
+    public static void addOnShutdown(Runnable runnable, String key) {
+        Runtime.getRuntime().addShutdownHook(new Thread(runnable, key));
     }
 
     //***************************************************************//

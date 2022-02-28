@@ -42,21 +42,26 @@ public class SphinxUtils {
         if (streamRecognizer == null) {
             conf.setAcousticModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us");
             conf.setDictionaryPath("resource:/edu/cmu/sphinx/models/en-us/cmudict-en-us.dict");
-            if (StringUtils.isNullWhiteSpaceOrEmpty(conf.getGrammarPath())) {
+            if (StringUtils.isNullWhiteSpaceOrEmpty(conf.getGrammarPath()))
                 conf.setGrammarPath("resource:/grammars");
-            }
+
             conf.setGrammarName("grammar");
             conf.setUseGrammar(true);
             streamRecognizer = new StreamSpeechRecognizer(conf);
         }
     }
 
-    /**
-     * Make sure to use file extension .wav.
-     *
-     * @param file
-     * @return
-     */
+    //wav only
+    public static String audioToTextBliss(StreamSpeechRecognizer rec, File file) {
+        try (final FileInputStream fs = new FileInputStream(file)) {
+            return audioToText(rec, fs);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return "ERROR";
+    }
+
     public static String audioToTextBliss(File file) {
         try (final FileInputStream fs = new FileInputStream(file)) {
             return audioToText(fs);
@@ -65,6 +70,18 @@ public class SphinxUtils {
         }
 
         return "ERROR";
+    }
+
+    public static String audioToTextBliss(StreamSpeechRecognizer rec,
+                                          byte[] bytes, AudioFormat audioFormat) {
+        try (final ByteArrayInputStream bStream = new ByteArrayInputStream(bytes);
+             final AudioInputStream aStream = new AudioInputStream(bStream, audioFormat, bytes.length)) {
+            return audioToText(rec, aStream);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return "Error";
     }
 
     public static String audioToTextBliss(byte[] bytes, AudioFormat audioFormat) {
@@ -78,13 +95,18 @@ public class SphinxUtils {
         return "Error";
     }
 
-    protected static String audioToText(InputStream stream) throws IOException {
-        initAudioToTextStream();
+    public static String audioToText(StreamSpeechRecognizer rec,
+                                     InputStream stream){
 
-        streamRecognizer.startRecognition(stream);
-        final SpeechResult result = streamRecognizer.getResult();
-        streamRecognizer.stopRecognition();
+        rec.startRecognition(stream);
+        final SpeechResult result = rec.getResult();
+        rec.stopRecognition();
 
         return result == null ? "NULL RESULT" : result.getHypothesis();
+    }
+
+    public static String audioToText(InputStream stream) throws IOException {
+        initAudioToTextStream();
+        return audioToText(streamRecognizer, stream);
     }
 }

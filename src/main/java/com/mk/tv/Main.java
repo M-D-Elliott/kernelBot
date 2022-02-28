@@ -9,14 +9,13 @@ import jPlus.util.io.ConsoleIOUtils;
 import jPlusLibs.com.edu.sphinx.SphinxUtils;
 
 import java.io.File;
-import java.nio.file.Paths;
 
 import static jPlusLibs.com.edu.sphinx.SphinxUtils.disableSphinxLogs;
 
 public class Main {
     public static void main(String[] args) {
-//        findEntry(args);
-        sphinxtest();
+        findEntry(args);
+//        sphinxtest();
     }
 
     protected static void findEntry(String[] args) {
@@ -47,9 +46,8 @@ public class Main {
     protected static void sphinxtest() {
         disableSphinxLogs();
         SphinxUtils.conf.setSampleRate(16000);
-//        final String uri = Paths.get(DirUtils.fromUserDir("grammar.gram")).toUri().toString();
-//        System.out.println(uri);
-//        SphinxUtils.conf.setGrammarPath(DirUtils.fromUserDir("grammar.gram"));
+        SphinxUtils.conf.setGrammarPath("file:" + DirUtils.fromUserDir("repos/system"));
+
         System.out.println(SphinxUtils.audioToTextBliss(new File(DirUtils.fromUserDir("repos/audiotests/kb.wav"))));
         System.out.println(SphinxUtils.audioToTextBliss(new File(DirUtils.fromUserDir("repos/audiotests/kbcap.wav"))));
         System.out.println(SphinxUtils.audioToTextBliss(new File(DirUtils.fromUserDir("repos/audiotests/kbhelp.wav"))));

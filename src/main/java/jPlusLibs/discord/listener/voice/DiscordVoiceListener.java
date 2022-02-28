@@ -24,7 +24,7 @@ public class DiscordVoiceListener {
 
     //***************************************************************//
 
-    public void startVoice(IAPIWrapper api, String[] args) {
+    public void listenToVoiceChannel(IAPIWrapper api, String[] args) {
         final Object payload = api.payload();
         if (payload instanceof MessageReceivedEvent) {
             final MessageReceivedEvent e = (MessageReceivedEvent) payload;
