@@ -2,7 +2,10 @@ package com.mk.tv.auth;
 
 import com.mk.tv.auth.botusers.BotUserController;
 import com.mk.tv.kernel.Kernel;
-import jPlus.io.out.IAPIWrapper;
+import jPlus.io.in.IAPIWrapper;
+import jPlus.io.in.Priority;
+import jPlus.io.out.DummyClientResponse;
+import jPlus.io.out.IClientResponse;
 import jPlus.util.io.ConsoleIOUtils;
 
 public class AuthKernel extends Kernel {
@@ -24,18 +27,18 @@ public class AuthKernel extends Kernel {
     protected void noFuncFoundResp(IAPIWrapper api) {
         final String welcome = userController.service.getWelcome(api.username());
         if (welcome == null) super.noFuncFoundResp(api);
-        else api.println(welcome);
+        else api.setPriority(Priority.LOW).println(welcome);
     }
 
     @Override
-    protected void interpret(IAPIWrapper api, String[] parsedM) {
+    protected IClientResponse interpret(IAPIWrapper api, String[] parsedM) {
         switch (authConfig.user.securityLevel) {
             case PUBLIC:
                 break;
             case PROTECTED:
                 if (!userController.authenticate(api)) {
                     api.print(authConfig.user.rejectUserMessage);
-                    return;
+                    return new DummyClientResponse();
                 }
                 break;
             case PRIVATE:
@@ -47,12 +50,13 @@ public class AuthKernel extends Kernel {
                         api.print("Sign in successful!");
                         break;
                     } else userController.wrongPass(api);
-                } else api.print("You are not signed in. " + config.system.commandIndicator + "signin mypass");
+                } else
+                    api.setPriority(Priority.LOW).print("You are not signed in. " + config.system.commandIndicator + "signin mypass");
             default:
-                return;
+                return new DummyClientResponse();
         }
 
-        super.interpret(api, parsedM);
+        return super.interpret(api, parsedM);
     }
 
     //***************************************************************//

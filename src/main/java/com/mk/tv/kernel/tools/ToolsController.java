@@ -1,10 +1,10 @@
 package com.mk.tv.kernel.tools;
 
-import com.mk.tv.kernel.Config;
+import com.mk.tv.kernel.generic.Config;
 import com.mk.tv.kernel.generic.FuncController;
 import com.mk.tv.kernel.system.SystemController;
 import jPlus.io.file.DirUtils;
-import jPlus.io.out.IAPIWrapper;
+import jPlus.io.in.IAPIWrapper;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.awt.RobotUtils;
 import jPlus.util.awt.image.ImageUtils;

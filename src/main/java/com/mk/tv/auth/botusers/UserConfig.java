@@ -1,6 +1,6 @@
 package com.mk.tv.auth.botusers;
 
-import jPlus.io.security.Access;
+import jPlus.io.out.Access;
 import jPlus.util.io.TimeUtils;
 
 public class UserConfig {

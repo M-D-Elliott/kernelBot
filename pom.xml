@@ -6,7 +6,7 @@
 
     <groupId>com.mk.tv</groupId>
     <artifactId>kernelBot</artifactId>
-    <version>1.2.2 --KernelGrammar, better functionalization, sphinx testing, No jar--</version>
+    <version>1.2.3 --Whispers, spill whispers, functionalization, and failed Sphinx Live Stream handler--</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -46,6 +46,8 @@
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         </manifest>
                     </archive>
+                    <finalName>kernelBot</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
@@ -57,26 +59,6 @@
                         <goals>
                             <goal>single</goal>
                         </goals>
-                    </execution>
-                    <execution>
-                        <id>exe</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <finalName>kernelbot</finalName>
-                            <attach>false</attach>
-                            <appendAssemblyId>false</appendAssemblyId>
-                            <descriptors>
-                                <descriptor>assembly.xml</descriptor>
-                            </descriptors>
-                            <archive>
-                                <manifest>
-                                    <mainClass>com.mk.tv.Main</mainClass>
-                                </manifest>
-                            </archive>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

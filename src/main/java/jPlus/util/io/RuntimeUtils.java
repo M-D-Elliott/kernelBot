@@ -60,11 +60,11 @@ public class RuntimeUtils {
             case WINDOWS:
                 return exec(killWin(path, title));
             case LINUX:
-                throw new NotImplementedException("end linux task");
+                throw new NotImplementedException("result linux task");
             case MAC:
-                throw new NotImplementedException("end mac task");
+                throw new NotImplementedException("result mac task");
             case SOLARIS:
-                throw new NotImplementedException("end solaris task");
+                throw new NotImplementedException("result solaris task");
             default:
                 return false;
         }

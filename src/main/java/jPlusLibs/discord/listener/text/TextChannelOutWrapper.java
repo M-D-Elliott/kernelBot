@@ -1,12 +1,15 @@
 package jPlusLibs.discord.listener.text;
 
-import jPlus.io.out.IAPIWrapper;
-import jPlus.io.security.Access;
+import jPlus.io.in.IAPIWrapper;
+import jPlus.io.in.IIOWrapper;
+import jPlus.io.in.Priority;
+import jPlus.io.out.Access;
 import jPlus.lang.callback.Receivable1;
 import jPlusLibs.discord.DiscordConsoleUtils;
 import jPlusLibs.discord.DiscordIOUtils;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.PrivateChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.File;
@@ -49,6 +52,11 @@ public class TextChannelOutWrapper implements IAPIWrapper {
     }
 
     @Override
+    public IIOWrapper setPriority(Priority priority) {
+        return this;
+    }
+
+    @Override
     public void setStatus(String status) {
         final Activity activity = Activity.listening(status);
         e.getJDA().getPresence().setActivity(activity);
@@ -72,5 +80,10 @@ public class TextChannelOutWrapper implements IAPIWrapper {
     @Override
     public Object payload() {
         return e;
+    }
+
+    @Override
+    public void send(String endpoint, String message) {
+        DiscordIOUtils.whisper(e, endpoint, message);
     }
 }

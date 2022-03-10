@@ -3,8 +3,8 @@ package com.mk.tv.auth.botusers;
 import com.mk.tv.auth.AuthConfig;
 import com.mk.tv.kernel.generic.FuncController;
 import jPlus.io.file.FileUtils;
-import jPlus.io.out.IAPIWrapper;
-import jPlus.io.security.Access;
+import jPlus.io.in.IAPIWrapper;
+import jPlus.io.out.Access;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.ConsoleUtils;
 
@@ -32,11 +32,12 @@ public class BotUserController extends FuncController {
         super.read(sync, async);
 
         sync.put("spill", this::spill);
+        sync.put("whisper", this::whisper);
         sync.put("changepass", this::changePassword);
         sync.put("setwelcome", this::setWelcome);
         sync.put("register", this::register);
 
-        Collections.addAll(menu, "spill", "changepass", "setwelcome", "register");
+        Collections.addAll(menu, "spill", "whisper", "changepass", "setwelcome", "register");
     }
 
     //***************************************************************//
@@ -68,6 +69,12 @@ public class BotUserController extends FuncController {
 
     //***************************************************************//
 
+    private void whisper(IAPIWrapper api, String[] args) {
+        if (validateString(args, 2)) {
+            api.send(args[1], String.join(" ", Arrays.copyOfRange(args, 2, args.length)));
+        }
+    }
+
     protected void register(IAPIWrapper api, String[] args) {
         if (checkPassword(api, args)) {
             if (!(validateString(args, 4) && service.register(args[2], args[3], args[4], api.out())))
@@ -92,20 +99,9 @@ public class BotUserController extends FuncController {
     }
 
     protected void spill(IAPIWrapper api, String[] args) {
-        if (api.access() == Access.PRIVATE) {
-            if (userConfig.securityLevel == Access.PROTECTED && !checkPassword(api, args)) {
-                wrongPass(api);
-                return;
-            }
-        } else {
-            api.print(userConfig.onlySecureChannelWarning);
-            return;
-        }
-
-        final StringBuilder building = new StringBuilder();
-        final String sep = System.lineSeparator();
-        FileUtils.read("repos/secrets.txt").forEach(item -> building.append(item).append(sep));
-        api.print(building.toString());
+        final String secrets = String.join(System.lineSeparator(), FileUtils.read("repos/secrets.txt"));
+        if (validateString(args, 1)) api.send(args[1], secrets);
+        else api.send(api.username(), secrets);
     }
 
     //***************************************************************//

@@ -1,7 +1,6 @@
 package com.mk.tv.kernel.generic;
 
-import com.mk.tv.kernel.Config;
-import jPlus.io.out.IAPIWrapper;
+import jPlus.io.in.IAPIWrapper;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.ConsoleUtils;
 

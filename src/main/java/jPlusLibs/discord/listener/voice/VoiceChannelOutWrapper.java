@@ -1,7 +1,9 @@
 package jPlusLibs.discord.listener.voice;
 
-import jPlus.io.out.IAPIWrapper;
-import jPlus.io.security.Access;
+import jPlus.io.in.IAPIWrapper;
+import jPlus.io.in.IIOWrapper;
+import jPlus.io.in.Priority;
+import jPlus.io.out.Access;
 import jPlus.lang.callback.Receivable1;
 import jPlusLibs.discord.DiscordConsoleUtils;
 import jPlusLibs.discord.DiscordIOUtils;
@@ -15,6 +17,8 @@ public class VoiceChannelOutWrapper implements IAPIWrapper {
     private final User user;
     private final MessageChannel reportingChannel;
     private final String voiceCommand;
+
+    private Priority priority = Priority.HIGH;
 
     public VoiceChannelOutWrapper(User user,
                                   String voiceCommand) {
@@ -39,6 +43,11 @@ public class VoiceChannelOutWrapper implements IAPIWrapper {
     }
 
     @Override
+    public void send(String endpoint, String message) {
+
+    }
+
+    @Override
     public String in() {
         return voiceCommand;
     }
@@ -50,12 +59,14 @@ public class VoiceChannelOutWrapper implements IAPIWrapper {
 
     @Override
     public void print(String s) {
-        DiscordConsoleUtils.print(reportingChannel, s);
+        if (priority.value() >= Priority.MEDIUM.value())
+            DiscordConsoleUtils.print(reportingChannel, s);
     }
 
     @Override
     public void println(String s) {
-        DiscordConsoleUtils.println(reportingChannel, s);
+        if (priority.value() >= Priority.MEDIUM.value())
+            DiscordConsoleUtils.println(reportingChannel, s);
     }
 
     @Override
@@ -66,6 +77,12 @@ public class VoiceChannelOutWrapper implements IAPIWrapper {
     @Override
     public void send(File f) {
         DiscordIOUtils.sendFile(reportingChannel, f);
+    }
+
+    @Override
+    public IIOWrapper setPriority(Priority priority) {
+        this.priority = priority;
+        return this;
     }
 
     @Override

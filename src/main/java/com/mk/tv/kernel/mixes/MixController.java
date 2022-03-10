@@ -1,10 +1,10 @@
 package com.mk.tv.kernel.mixes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.mk.tv.kernel.Config;
+import com.mk.tv.kernel.generic.Config;
 import com.mk.tv.kernel.generic.FuncController;
 import com.mk.tv.kernel.generic.FuncService;
-import jPlus.io.out.IAPIWrapper;
+import jPlus.io.in.IAPIWrapper;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.lang.IntUtils;
 import jPlus.util.map.MapUtils;

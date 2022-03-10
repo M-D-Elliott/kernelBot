@@ -1,7 +1,9 @@
 package jPlusLibs.discord.listener.voice;
 
-import jPlus.io.out.IAPIWrapper;
+import jPlus.io.in.IAPIWrapper;
+import jPlus.io.out.IClientResponse;
 import jPlus.lang.callback.Receivable1;
+import jPlus.lang.callback.Retrievable1;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -17,9 +19,9 @@ public class DiscordVoiceListener {
 
     private final DiscordVoiceStreamHandler handler;
 
-    public DiscordVoiceListener(Collection<Receivable1<IAPIWrapper>> recipients) {
+    public DiscordVoiceListener(Retrievable1<IClientResponse, IAPIWrapper> recipient) {
         disableSphinxLogs();
-        handler = new DiscordVoiceStreamHandler(recipients);
+        handler = new DiscordVoiceStreamHandler(recipient);
     }
 
     //***************************************************************//

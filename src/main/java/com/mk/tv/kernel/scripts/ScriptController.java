@@ -1,10 +1,10 @@
 package com.mk.tv.kernel.scripts;
 
-import com.mk.tv.kernel.Config;
+import com.mk.tv.kernel.generic.Config;
 import com.mk.tv.kernel.generic.FuncController;
 import com.mk.tv.kernel.generic.FuncService;
 import jPlus.io.file.FileUtils;
-import jPlus.io.out.IAPIWrapper;
+import jPlus.io.in.IAPIWrapper;
 import jPlus.lang.callback.Receivable1;
 import jPlus.lang.callback.Receivable2;
 import jPlusLibs.apache.io.commons.ApacheFileUtils;

@@ -2,15 +2,15 @@ package com.mk.tv.entryPoints;
 
 import com.mk.tv.auth.AuthConfig;
 import com.mk.tv.auth.AuthKernel;
-import com.mk.tv.kernel.Config;
 import com.mk.tv.kernel.Kernel;
-import com.mk.tv.kernel.KernelGrammar;
+import com.mk.tv.kernel.generic.Config;
 import com.mk.tv.kernel.generic.IFuncController;
+import com.mk.tv.kernel.generic.KernelGrammar;
 import com.mk.tv.kernel.system.SystemController;
 import jPlus.async.command.ThreadCommand;
 import jPlus.io.file.DirUtils;
-import jPlus.io.out.IAPIWrapper;
-import jPlus.io.out.PrintStreamWrapper;
+import jPlus.io.in.IAPIWrapper;
+import jPlus.io.in.PrintStreamWrapper;
 import jPlus.lang.callback.Receivable1;
 import jPlus.util.io.ConsoleIOUtils;
 import jPlus.util.io.RuntimeUtils;
@@ -27,7 +27,6 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
 
 public class Run implements Runnable {
@@ -52,9 +51,7 @@ public class Run implements Runnable {
 
     private void discordListener(Kernel kernel, Config config) {
 
-        final Collection<Receivable1<IAPIWrapper>> recipients = Collections.singletonList(kernel);
-
-        discordVoiceListener(kernel, recipients);
+        discordVoiceListener(kernel);
 
         try {
             JDABuilder.createDefault(config.system.token)
@@ -65,23 +62,25 @@ public class Run implements Runnable {
                     .setActivity(Activity.listening(
                             String.format(SystemController.ACTIVITY_RAW, config.system.commandIndicator)))
                     .enableIntents(GatewayIntent.GUILD_PRESENCES)
+                    .enableIntents(GatewayIntent.GUILD_MEMBERS)
                     .enableCache(CacheFlag.VOICE_STATE)
-                    .addEventListeners(new DiscordTextListener(recipients))
+                    .addEventListeners(new DiscordTextListener(kernel))
                     .build();
         } catch (LoginException e) {
             e.printStackTrace();
         }
     }
 
-    private void discordVoiceListener(Kernel kernel, Collection<Receivable1<IAPIWrapper>> recipients) {
+    private void discordVoiceListener(Kernel kernel) {
         final String grammarPath = DirUtils.fromUserDir("repos" + File.separatorChar + "system");
         System.out.println(grammarPath);
         DirUtils.make(grammarPath);
         KernelGrammar.write(kernel, grammarPath);
         SphinxUtils.conf.setGrammarPath("file:" + grammarPath);
 
-        final DiscordVoiceListener discordVoiceOut = new DiscordVoiceListener(recipients);
-        kernel.getSyncFunctions().put("listen", discordVoiceOut::listenToVoiceChannel);
+//        final DiscordVoiceListener discordVoiceOut = new DiscordVoiceListener(kernel);
+//        kernel.getSyncFunctions().put("listen", discordVoiceOut::listenToVoiceChannel);
+        kernel.getSyncFunctions().put("listen", (api, args) -> api.println("Sorry, this feature is not yet working quite right..."));
         final IFuncController systemController = kernel.getController(SystemController.class);
         if (systemController != null) systemController.menu().add("listen");
     }
@@ -98,7 +97,7 @@ public class Run implements Runnable {
         final PrintStreamWrapper api = new PrintStreamWrapper(System.out);
         while (latch.getCount() > 0) {
             api.setIn(ConsoleIOUtils.request());
-            kernel.receive(api);
+            kernel.retrieve(api);
         }
     }
 
