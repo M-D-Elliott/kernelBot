@@ -124,6 +124,9 @@ public class Kernel implements Retrievable1<IClientResponse, IAPIWrapper> {
                 asyncThread.busyMessage = String.format(busyMessageUnf(), funcName, api.username());
                 asyncThread.body = () -> asyncF.receive(api, parsedM);
                 logUserNameAndFunc(api, parsedM[0]);
+                asyncThread.setOnEnd(() ->{
+                    api.println("Async func complete.");
+                });
             } else busyResp(api);
             asyncThread.run();
             return DummyClientResponse.success();

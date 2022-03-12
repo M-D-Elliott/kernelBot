@@ -3,12 +3,17 @@ package jPlus.util.awt.image;
 import jPlus.lang.Tuple2;
 import jPlus.util.collections.PointUtils;
 
+import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Arrays;
 
 import static jPlus.JPlus.sendError;
@@ -35,6 +40,17 @@ public class ImageUtils {
     }
 
     //***************************************************************//
+
+    @Nullable
+    public static BufferedImage readResource(String path) {
+        try {
+            final InputStream in = ImageUtils.class.getResourceAsStream(path);
+            return ImageIO.read(in);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
 
     public static File write(BufferedImage image, String path, String formatName) throws IOException {
         final File file = new File(path + '.' + formatName);
@@ -142,9 +158,14 @@ public class ImageUtils {
 
     //***************************************************************//
 
-    public static void caption(BufferedImage image, String text) {
+    public static void caption(BufferedImage image, String caption) {
         final Graphics gfx = image.getGraphics();
-        gfx.drawString(text, image.getWidth() / 2, image.getHeight() / 2);
+        gfx.drawString(caption, image.getWidth() / 2, image.getHeight() / 2);
+    }
+
+    public static void caption(BufferedImage image, BufferedImage caption) {
+        final Graphics2D gfx = image.createGraphics();
+        gfx.drawImage(caption, 0, image.getHeight() - caption.getHeight(), null);
     }
 }
 

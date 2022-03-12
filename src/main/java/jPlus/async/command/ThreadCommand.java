@@ -54,7 +54,7 @@ public abstract class ThreadCommand extends Command {
     protected final void close() {
         thread = null;
         ACTIVE_THREAD_COMMANDS.remove(this);
-        onEnd();
+        onEnd.run();
     }
 
 

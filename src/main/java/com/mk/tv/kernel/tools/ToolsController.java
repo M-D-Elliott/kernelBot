@@ -2,7 +2,6 @@ package com.mk.tv.kernel.tools;
 
 import com.mk.tv.kernel.generic.Config;
 import com.mk.tv.kernel.generic.FuncController;
-import com.mk.tv.kernel.system.SystemController;
 import jPlus.io.file.DirUtils;
 import jPlus.io.in.IAPIWrapper;
 import jPlus.lang.callback.Receivable2;
@@ -18,7 +17,6 @@ import java.util.Map;
 public class ToolsController extends FuncController {
 
     private final String capturePath = getCapturePath();
-    private final String watermarkText = getWaterMarkText();
 
     public ToolsController(Config config) {
         super(config);
@@ -39,11 +37,6 @@ public class ToolsController extends FuncController {
         final String captureFolderPath = DirUtils.fromUserDir("repos/system" + File.separatorChar + "captures");
         final File captureDir = DirUtils.make(captureFolderPath, true);
         return captureDir.getAbsolutePath() + File.separatorChar;
-    }
-
-    private String getWaterMarkText() {
-        final String[] urlSplit = SystemController.INSTALL_URL.split("/");
-        return urlSplit[urlSplit.length - 1];
     }
 
     //***************************************************************//
@@ -77,7 +70,7 @@ public class ToolsController extends FuncController {
 
     protected void cap(IAPIWrapper api, String[] strings) {
         final BufferedImage img = RobotUtils.capture();
-        ImageUtils.caption(img, watermarkText);
+        ImageUtils.caption(img, ImageUtils.readResource("/images/kB.png"));
         final String captureFilePath = capturePath + TimeUtils.fileDateTime();
         final File file = ImageUtils.writeBliss(img, captureFilePath, config.tools.captureFormat);
         api.send(file);

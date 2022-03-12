@@ -1,6 +1,11 @@
 package jPlus.async.command;
 
+import jPlus.lang.Runnables;
+
 public abstract class Command implements ICommand {
+
+    protected Runnable onEnd = () -> {};
+
     @Override
     public void terminate() {
         onTerminate();
@@ -22,7 +27,7 @@ public abstract class Command implements ICommand {
     protected abstract void body();
 
     protected void end() {
-        onEnd();
+        onEnd.run();
     }
 
     //***************************************************************//
@@ -36,6 +41,7 @@ public abstract class Command implements ICommand {
     protected void initialize() {
     }
 
-    protected void onEnd() {
+    public void setOnEnd(Runnable onEnd) {
+        this.onEnd = onEnd;
     }
 }
