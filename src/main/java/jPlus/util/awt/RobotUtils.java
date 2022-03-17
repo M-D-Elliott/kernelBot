@@ -1,6 +1,7 @@
 package jPlus.util.awt;
 
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 
 import static jPlus.JPlus.sendError;
@@ -70,6 +71,14 @@ public class RobotUtils {
             press(keyEventSets);
         } catch (InterruptedException ignored) {
         }
+    }
+
+    //***************************************************************//
+
+    public static void click(){
+        start();
+        robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+        robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
     }
 
     //***************************************************************//

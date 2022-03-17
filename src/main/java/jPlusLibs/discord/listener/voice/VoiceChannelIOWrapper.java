@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.io.File;
 
-public class VoiceChannelOutWrapper implements IAPIWrapper {
+public class VoiceChannelIOWrapper implements IAPIWrapper {
 
     private final User user;
     private final MessageChannel reportingChannel;
@@ -20,8 +20,8 @@ public class VoiceChannelOutWrapper implements IAPIWrapper {
 
     private Priority priority = Priority.HIGH;
 
-    public VoiceChannelOutWrapper(User user,
-                                  String voiceCommand) {
+    public VoiceChannelIOWrapper(User user,
+                                 String voiceCommand) {
         this.user = user;
         this.reportingChannel = user.openPrivateChannel().complete();
         this.voiceCommand = voiceCommand;

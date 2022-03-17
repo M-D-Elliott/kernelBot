@@ -44,7 +44,7 @@ public class DiscordVoiceStreamHandler implements AudioReceiveHandler {
         if (session.check()) {
             final String voiceCommand = session.result();
             System.out.println(voiceCommand);
-            final IAPIWrapper api = new VoiceChannelOutWrapper(user, voiceCommand);
+            final IAPIWrapper api = new VoiceChannelIOWrapper(user, voiceCommand);
             final IClientResponse response = recipient.retrieve(api);
 
             if (response.resolution() == Resolution.SUCCESS || session.isFull()) {

@@ -13,15 +13,18 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.File;
+import java.nio.channels.Channel;
 
-public class TextChannelOutWrapper implements IAPIWrapper {
+public class TextChannelIOWrapper implements IAPIWrapper {
     private final MessageReceivedEvent e;
+    private final PrivateChannel responseChannel;
     private final Access access;
 
     private final Receivable1<String> out = this::print;
 
-    public TextChannelOutWrapper(MessageReceivedEvent e) {
+    public TextChannelIOWrapper(MessageReceivedEvent e) {
         this.e = e;
+        responseChannel = e.getAuthor().openPrivateChannel().complete();
         access = (e.getChannel() instanceof PrivateChannel)
                 ? Access.PRIVATE : Access.PUBLIC;
     }
@@ -33,17 +36,17 @@ public class TextChannelOutWrapper implements IAPIWrapper {
 
     @Override
     public void print(String s) {
-        DiscordConsoleUtils.print(e, s);
+        DiscordConsoleUtils.print(responseChannel, s);
     }
 
     @Override
     public void println(String s) {
-        DiscordConsoleUtils.println(e, s);
+        DiscordConsoleUtils.println(responseChannel, s);
     }
 
     @Override
     public void printLink(String url) {
-        DiscordConsoleUtils.printLink(e, url);
+        DiscordConsoleUtils.printLink(responseChannel, url);
     }
 
     @Override

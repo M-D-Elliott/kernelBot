@@ -34,7 +34,6 @@ public class Kernel implements Retrievable1<IClientResponse, IAPIWrapper> {
     protected final Map<Character, List<String>> indicatorMenuMap = new LinkedHashMap<>();
 
     protected final Map<String, Receivable2<IAPIWrapper, String[]>> syncFunctions = new LinkedHashMap<>();
-    final List<String> test = new ArrayList<>();
     protected final Map<String, Receivable2<IAPIWrapper, String[]>> asyncFunctions = new LinkedHashMap<>();
     protected final BusyCommand asyncThread = new BusyCommand();
 
@@ -82,7 +81,7 @@ public class Kernel implements Retrievable1<IClientResponse, IAPIWrapper> {
     //***************************************************************//
 
     @Override
-    public IClientResponse retrieve(IAPIWrapper api) {
+    public final IClientResponse retrieve(IAPIWrapper api) {
         String message = api.in();
         final int len = message.length();
         if (len > 1 && message.charAt(0) == config.system.commandIndicator) {
@@ -100,11 +99,13 @@ public class Kernel implements Retrievable1<IClientResponse, IAPIWrapper> {
         Integer intIndicator = IntUtils.parseIntBliss(parsedM[0]);
         if (intIndicator != null) parsedM[0] = menu.get(boundsMin(intIndicator, 0));
 
-        final List<String> menuList = indicatorMenuMap.get(parsedM[0].charAt(0));
-        if (menuList != null) {
-            intIndicator = IntUtils.parseIntBliss(parsedM[0].substring(1));
-            if (intIndicator != null && intIndicator < menuList.size())
-                parsedM[0] = menuList.get(intIndicator);
+        if(parsedM[0].length() > 0){
+            final List<String> menuList = indicatorMenuMap.get(parsedM[0].charAt(0));
+            if (menuList != null) {
+                intIndicator = IntUtils.parseIntBliss(parsedM[0].substring(1));
+                if (intIndicator != null && intIndicator < menuList.size())
+                    parsedM[0] = menuList.get(intIndicator);
+            }
         }
 
         return parsedM;
@@ -186,6 +187,4 @@ public class Kernel implements Retrievable1<IClientResponse, IAPIWrapper> {
         for (IFuncController c : controllers) if (klazz.isInstance(c)) return klazz.cast(c);
         return null;
     }
-
-
 }

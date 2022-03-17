@@ -1,9 +1,7 @@
 package jPlusLibs.discord.listener.text;
 
 import jPlus.io.in.IAPIWrapper;
-import jPlus.io.out.DummyClientResponse;
 import jPlus.io.out.IClientResponse;
-import jPlus.lang.callback.Receivable1;
 import jPlus.lang.callback.Retrievable1;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -30,7 +28,7 @@ public class DiscordTextListener extends ListenerAdapter {
     }
 
     public void onUserMessageReceived(MessageReceivedEvent e) {
-        final IAPIWrapper wrapper = new TextChannelOutWrapper(e);
+        final IAPIWrapper wrapper = new TextChannelIOWrapper(e);
         recipient.retrieve(wrapper);
     }
 }

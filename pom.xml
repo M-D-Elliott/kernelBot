@@ -6,7 +6,7 @@
 
     <groupId>com.mk.tv</groupId>
     <artifactId>kernelBot</artifactId>
-    <version>1.2.4 --Better Watermarks--</version>
+    <version>1.2.5 --DiscordTextChannelIO now whispers all responses except captures--</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

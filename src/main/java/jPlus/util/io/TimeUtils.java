@@ -10,7 +10,7 @@ import static jPlus.JPlus.sendError;
 
 public class TimeUtils {
     public static final String STD_DELIMITER = ":";
-    public static final String hms = "%d:%d:%d";
+    public static final String hms = "%d:%d:%d:%d";
 
     public static String basicDate() {
         return LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
@@ -21,7 +21,7 @@ public class TimeUtils {
     }
 
     public static String fileDateTime() {
-        return new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());
+        return new SimpleDateFormat("yyyy-MM-dd HH;mm;ss").format(new Date());
     }
 
     public static int parseSecondsFrom(String s) {
@@ -33,17 +33,18 @@ public class TimeUtils {
                 ret += multipliers[j] * Integer.parseInt(split[i]);
             return ret;
         } catch (Exception ex) {
-            sendError("Use date format HH:mm:ss", ex);
+            sendError("Use time format DD:HH:mm:ss", ex);
         }
         return 0;
     }
 
     public static String presentSeconds(int s) {
+        int d = s / 86400;
         int h = s / 3600;
         s %= 3600;
         int m = s / 60;
         s %= 60;
-        return String.format(hms, h, m, s);
+        return String.format(hms, d, h, m, s);
     }
 
     public static long SW_CHECKPOINT = 0;

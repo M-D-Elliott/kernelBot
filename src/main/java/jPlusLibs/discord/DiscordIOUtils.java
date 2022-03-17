@@ -25,6 +25,10 @@ public class DiscordIOUtils {
         else printUnf(channel, "File does not exist...");
     }
 
+    public static void whisper(MessageReceivedEvent e, String meesage) {
+        whisper(e.getAuthor(), meesage);
+    }
+
     public static void whisper(User user, String message) {
         final MessageChannel channel = user.openPrivateChannel().complete();
         DiscordConsoleUtils.print(channel, message);

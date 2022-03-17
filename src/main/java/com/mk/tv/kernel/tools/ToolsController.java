@@ -30,7 +30,8 @@ public class ToolsController extends FuncController {
         super.read(sync, async);
 
         sync.put("cap", this::cap);
-        Collections.addAll(menu, "cap");
+        async.put("click", this::click);
+        Collections.addAll(menu, "cap", "click");
     }
 
     private String getCapturePath() {
@@ -74,5 +75,9 @@ public class ToolsController extends FuncController {
         final String captureFilePath = capturePath + TimeUtils.fileDateTime();
         final File file = ImageUtils.writeBliss(img, captureFilePath, config.tools.captureFormat);
         api.send(file);
+    }
+
+    protected void click(IAPIWrapper api, String[] args){
+        RobotUtils.click();
     }
 }
