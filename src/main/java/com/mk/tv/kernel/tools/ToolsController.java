@@ -35,7 +35,7 @@ public class ToolsController extends FuncController {
     }
 
     private String getCapturePath() {
-        final String captureFolderPath = DirUtils.fromUserDir("repos/system" + File.separatorChar + "captures");
+        final String captureFolderPath = DirUtils.fromUserDir("repo" + File.separatorChar + "system" + File.separatorChar + "captures");
         final File captureDir = DirUtils.make(captureFolderPath, true);
         return captureDir.getAbsolutePath() + File.separatorChar;
     }
@@ -70,8 +70,9 @@ public class ToolsController extends FuncController {
     //***************************************************************//
 
     protected void cap(IAPIWrapper api, String[] strings) {
-        final BufferedImage img = RobotUtils.capture();
-        ImageUtils.caption(img, ImageUtils.readResource("/images/kB.png"));
+        final BufferedImage img = RobotUtils.screenCap();
+        final BufferedImage watermark = ImageUtils.readResource("/images/watermark.png");
+        ImageUtils.caption(img, watermark);
         final String captureFilePath = capturePath + TimeUtils.fileDateTime();
         final File file = ImageUtils.writeBliss(img, captureFilePath, config.tools.captureFormat);
         api.send(file);

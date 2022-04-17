@@ -83,15 +83,15 @@ public class RobotUtils {
 
     //***************************************************************//
 
-    public static BufferedImage capture() {
-        return capture(new Point(0, 0));
+    public static BufferedImage screenCap() {
+        return screenCap(new Point(0, 0));
     }
 
-    public static BufferedImage capture(Point p) {
-        return capture(p, Toolkit.getDefaultToolkit().getScreenSize());
+    public static BufferedImage screenCap(Point p) {
+        return screenCap(p, Toolkit.getDefaultToolkit().getScreenSize());
     }
 
-    public static BufferedImage capture(Point p, Dimension dim) {
+    public static BufferedImage screenCap(Point p, Dimension dim) {
         start();
         return robot.createScreenCapture(new Rectangle(p.x, p.y, dim.width, dim.height));
     }
