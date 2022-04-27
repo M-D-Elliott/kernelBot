@@ -16,11 +16,11 @@ public interface IIOWrapper {
 
     void printLink(String url);
 
-    void send(File f);
+    default void send(File f){}
 
     default IIOWrapper setPriority(Priority priority){
         return this;
     }
 
-    void setStatus(String status);
+    default IIOWrapper setStatus(String status){ return this; }
 }

@@ -1,6 +1,7 @@
 package com.mk.tv.io.discord.text;
 
 import com.mk.tv.io.generic.IAPIWrapper;
+import com.mk.tv.io.generic.IIOWrapper;
 import jPlus.io.Access;
 import jPlus.lang.callback.Receivable1;
 import jPlusLibs.discord.DiscordConsoleUtils;
@@ -51,9 +52,10 @@ public class DiscordTextIOWrapper implements IAPIWrapper {
     }
 
     @Override
-    public void setStatus(String status) {
+    public IIOWrapper setStatus(String status) {
         final Activity activity = Activity.listening(status);
         e.getJDA().getPresence().setActivity(activity);
+        return this;
     }
 
     @Override

@@ -84,9 +84,4 @@ public class DiscordVoiceIOWrapper implements IAPIWrapper {
         this.priority = priority;
         return this;
     }
-
-    @Override
-    public void setStatus(String status) {
-
-    }
 }

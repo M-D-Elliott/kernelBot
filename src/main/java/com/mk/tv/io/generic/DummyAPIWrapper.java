@@ -51,10 +51,6 @@ public class DummyAPIWrapper implements IAPIWrapper {
     }
 
     @Override
-    public void setStatus(String status) {
-    }
-
-    @Override
     public Receivable1<String> out() {
         return System.out::println;
     }

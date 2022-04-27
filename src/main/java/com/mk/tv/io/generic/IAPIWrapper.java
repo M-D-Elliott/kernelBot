@@ -11,5 +11,5 @@ public interface IAPIWrapper extends IIOWrapper {
         return "";
     }
 
-    void send(String endpoint, String message);
+    default void send(String endpoint, String message){}
 }
