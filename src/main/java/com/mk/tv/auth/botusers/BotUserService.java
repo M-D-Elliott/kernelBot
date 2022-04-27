@@ -1,6 +1,6 @@
 package com.mk.tv.auth.botusers;
 
-import jPlusLibs.jackson.JacksonRepo;
+import jPlusLibs.com.fasterxml.jackson.JacksonRepo;
 import jPlus.lang.callback.Receivable1;
 
 public class BotUserService {

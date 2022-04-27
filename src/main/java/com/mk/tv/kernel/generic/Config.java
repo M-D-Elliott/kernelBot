@@ -6,7 +6,7 @@ import com.mk.tv.kernel.presses.PressConfig;
 import com.mk.tv.kernel.scripts.ScriptConfig;
 import com.mk.tv.kernel.system.SystemConfig;
 import com.mk.tv.kernel.tools.ToolsConfig;
-import jPlusLibs.jackson.JacksonUtils;
+import jPlusLibs.com.fasterxml.jackson.JacksonUtils;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Config {

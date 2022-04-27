@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>kernelBot</title>
+</head>
+<body>
+<script>
+    function kbInp(){
+        return document.getElementById("kbInp");
+    }
+
+    function clearInp() {
+        kbInp().value = "";
+    }
+    function send() {
+        const inp = kbInp();
+
+        console.log(inp.value);
+
+        fetch('/kb/', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: inp.value
+            })
+            .then(resp => resp.json())
+            .then(resp => {
+                console.log(resp);
+            });
+    }
+
+</script>
+    <textarea id="kbInp" name="kbInp" rows="4" cols="50" placeholder="type a message to kernelBot!"></textarea>
+    <br/>
+    <button onclick="javascript:send();">Send</button>
+    <button onclick="javascript:clearInp();">Clear</button>
+</body>
+</html>

@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import static jPlusLibs.com.edu.sphinx.SphinxUtils.audioToTextBliss;
 
-public class VoiceSession {
+public class DiscordVoiceSession {
 
     protected final byte[] building = new byte[MAX_SEGMENTS * BYTES_PER_SEGMENT];
     protected final User user;
@@ -16,7 +16,7 @@ public class VoiceSession {
     protected long expiration = System.currentTimeMillis();
     protected int segmentIndex = 0;
 
-    public VoiceSession(User user) {
+    public DiscordVoiceSession(User user) {
         this.user = user;
     }
 

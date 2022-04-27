@@ -2,7 +2,7 @@ package com.mk.tv.auth.botusers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import jPlus.lang.callback.Retrievable;
-import jPlusLibs.jackson.JacksonRepo;
+import jPlusLibs.com.fasterxml.jackson.JacksonRepo;
 
 import java.util.LinkedHashMap;
 

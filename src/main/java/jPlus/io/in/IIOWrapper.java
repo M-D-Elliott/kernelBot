@@ -17,7 +17,9 @@ public interface IIOWrapper {
 
     void send(File f);
 
-    IIOWrapper setPriority(Priority priority);
+    default IIOWrapper setPriority(Priority priority){
+        return this;
+    }
 
     void setStatus(String status);
 }

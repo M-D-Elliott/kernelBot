@@ -9,7 +9,7 @@ import jPlus.lang.callback.Receivable2;
 import jPlus.util.lang.IntUtils;
 import jPlus.util.map.MapUtils;
 import jPlusLibs.generic.IRepo;
-import jPlusLibs.jackson.JacksonRepo;
+import jPlusLibs.com.fasterxml.jackson.JacksonRepo;
 
 import java.util.Map;
 

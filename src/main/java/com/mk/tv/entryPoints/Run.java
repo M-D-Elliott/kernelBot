@@ -7,26 +7,25 @@ import com.mk.tv.kernel.generic.Config;
 import com.mk.tv.kernel.generic.IFuncController;
 import com.mk.tv.kernel.generic.KernelGrammar;
 import com.mk.tv.kernel.system.SystemController;
+import com.mk.tv.spring.IOController;
+import com.mk.tv.spring.SpringApp;
 import jPlus.async.command.ThreadCommand;
 import jPlus.io.file.DirUtils;
-import jPlus.io.in.IAPIWrapper;
 import jPlus.io.in.PrintStreamWrapper;
-import jPlus.lang.callback.Receivable1;
 import jPlus.util.io.ConsoleIOUtils;
 import jPlus.util.io.RuntimeUtils;
 import jPlusLibs.com.edu.sphinx.SphinxUtils;
+import jPlusLibs.com.fasterxml.jackson.JacksonUtils;
 import jPlusLibs.discord.listener.text.DiscordTextListener;
-import jPlusLibs.discord.listener.voice.DiscordVoiceListener;
-import jPlusLibs.jackson.JacksonUtils;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import org.springframework.boot.SpringApplication;
 
 import javax.security.auth.login.LoginException;
 import java.io.File;
-import java.util.Collection;
 import java.util.concurrent.CountDownLatch;
 
 public class Run implements Runnable {
@@ -47,6 +46,12 @@ public class Run implements Runnable {
             discordListener(kernel, config);
         } else if (config.system.listenToConsole)
             consoleListener(kernel, new CountDownLatch(1));
+
+        final File hostsFile = new File(DirUtils.fromUserDir(".hosts"));
+        if (hostsFile.exists()) {
+            SpringApplication.run(SpringApp.class);
+            IOController.instance.setRecipient(kernel);
+        }
     }
 
     private void discordListener(Kernel kernel, Config config) {

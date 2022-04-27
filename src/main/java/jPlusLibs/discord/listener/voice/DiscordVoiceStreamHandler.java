@@ -18,7 +18,7 @@ import java.util.Map;
 public class DiscordVoiceStreamHandler implements AudioReceiveHandler {
 
     protected final Retrievable1<IClientResponse, IAPIWrapper> recipient;
-    protected final Map<String, VoiceSession> voiceSessions = new HashMap<>();
+    protected final Map<String, DiscordVoiceSession> voiceSessions = new HashMap<>();
 
     public DiscordVoiceStreamHandler(Retrievable1<IClientResponse, IAPIWrapper> recipient) {
         this.recipient = recipient;
@@ -37,14 +37,14 @@ public class DiscordVoiceStreamHandler implements AudioReceiveHandler {
         final User user = userAudio.getUser();
         final String userName = user.getName();
 
-        final VoiceSession session = getVoiceSession(user, userName);
+        final DiscordVoiceSession session = getVoiceSession(user, userName);
 
         session.store(userAudio.getAudioData(1.0f));
 
         if (session.check()) {
             final String voiceCommand = session.result();
             System.out.println(voiceCommand);
-            final IAPIWrapper api = new VoiceChannelIOWrapper(user, voiceCommand);
+            final IAPIWrapper api = new DiscordVoiceIOWrapper(user, voiceCommand);
             final IClientResponse response = recipient.retrieve(api);
 
             if (response.resolution() == Resolution.SUCCESS || session.isFull()) {
@@ -55,10 +55,10 @@ public class DiscordVoiceStreamHandler implements AudioReceiveHandler {
     }
 
     @NotNull
-    protected VoiceSession getVoiceSession(User user, String userName) {
-        VoiceSession ret = voiceSessions.get(userName);
+    protected DiscordVoiceSession getVoiceSession(User user, String userName) {
+        DiscordVoiceSession ret = voiceSessions.get(userName);
         if (ret == null) {
-            ret = new VoiceSession(user);
+            ret = new DiscordVoiceSession(user);
             voiceSessions.put(userName, ret);
         }
         return ret;
@@ -74,7 +74,7 @@ public class DiscordVoiceStreamHandler implements AudioReceiveHandler {
             @Override
             protected void loopBody() {
                 long nextExpr = 100;
-                for (VoiceSession session : voiceSessions.values()) {
+                for (DiscordVoiceSession session : voiceSessions.values()) {
                     if (session.isActive()) {
                         final long expiresIn = session.expiration - System.currentTimeMillis();
                         if (expiresIn <= 0) {

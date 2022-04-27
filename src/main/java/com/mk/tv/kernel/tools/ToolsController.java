@@ -35,7 +35,7 @@ public class ToolsController extends FuncController {
     }
 
     private String getCapturePath() {
-        final String captureFolderPath = DirUtils.fromUserDir("repo" + File.separatorChar + "system" + File.separatorChar + "captures");
+        final String captureFolderPath = DirUtils.fromUserDir("repos" + File.separatorChar + "system" + File.separatorChar + "captures");
         final File captureDir = DirUtils.make(captureFolderPath, true);
         return captureDir.getAbsolutePath() + File.separatorChar;
     }

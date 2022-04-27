@@ -8,7 +8,7 @@ import jPlus.util.io.ConsoleUtils;
 import jPlus.util.io.JarUtils;
 import jPlus.util.io.RuntimeUtils;
 import jPlus.util.map.MapUtils;
-import jPlusLibs.jackson.JacksonUtils;
+import jPlusLibs.com.fasterxml.jackson.JacksonUtils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.io.File;
 
-public class VoiceChannelIOWrapper implements IAPIWrapper {
+public class DiscordVoiceIOWrapper implements IAPIWrapper {
 
     private final User user;
     private final MessageChannel reportingChannel;
@@ -20,7 +20,7 @@ public class VoiceChannelIOWrapper implements IAPIWrapper {
 
     private Priority priority = Priority.HIGH;
 
-    public VoiceChannelIOWrapper(User user,
+    public DiscordVoiceIOWrapper(User user,
                                  String voiceCommand) {
         this.user = user;
         this.reportingChannel = user.openPrivateChannel().complete();

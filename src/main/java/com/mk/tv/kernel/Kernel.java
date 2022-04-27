@@ -19,10 +19,7 @@ import jPlus.lang.callback.Retrievable1;
 import jPlus.util.io.ConsoleUtils;
 import jPlus.util.lang.IntUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static jPlus.util.lang.IntUtils.boundsMin;
 
@@ -42,12 +39,12 @@ public class Kernel implements Retrievable1<IClientResponse, IAPIWrapper> {
     public Kernel(Config config) {
         this.config = config;
 
-        controllers.add(new PressController(config));
-        controllers.add(new ScriptController(config));
-        controllers.add(new MixController(config));
-        controllers.add(new ToolsController(config));
-
-        controllers.add(new SystemController(config));
+        Collections.addAll(controllers,
+                new PressController(config),
+                new ScriptController(config),
+                new MixController(config),
+                new ToolsController(config),
+                new SystemController(config));
     }
 
     public void init() {
@@ -83,6 +80,7 @@ public class Kernel implements Retrievable1<IClientResponse, IAPIWrapper> {
     @Override
     public final IClientResponse retrieve(IAPIWrapper api) {
         String message = api.in();
+        System.out.println(api.in());
         final int len = message.length();
         if (len > 1 && message.charAt(0) == config.system.commandIndicator) {
             message = message.substring(1);
@@ -99,7 +97,7 @@ public class Kernel implements Retrievable1<IClientResponse, IAPIWrapper> {
         Integer intIndicator = IntUtils.parseIntBliss(parsedM[0]);
         if (intIndicator != null) parsedM[0] = menu.get(boundsMin(intIndicator, 0));
 
-        if(parsedM[0].length() > 0){
+        if (parsedM[0].length() > 0) {
             final List<String> menuList = indicatorMenuMap.get(parsedM[0].charAt(0));
             if (menuList != null) {
                 intIndicator = IntUtils.parseIntBliss(parsedM[0].substring(1));
@@ -125,7 +123,7 @@ public class Kernel implements Retrievable1<IClientResponse, IAPIWrapper> {
                 asyncThread.busyMessage = String.format(busyMessageUnf(), funcName, api.username());
                 asyncThread.body = () -> asyncF.receive(api, parsedM);
                 logUserNameAndFunc(api, parsedM[0]);
-                asyncThread.setOnEnd(() ->{
+                asyncThread.setOnEnd(() -> {
                     api.println("Async func complete.");
                 });
             } else busyResp(api);
@@ -164,9 +162,9 @@ public class Kernel implements Retrievable1<IClientResponse, IAPIWrapper> {
         final String format = "  %d  " + border + "        %s        ";
         final String sep = System.lineSeparator();
 
-        api.print(sep + ConsoleUtils.encaseInBanner(
-                menu, border, (item, i) -> String.format(format, i, item))
-                + sep);
+        api.print(sep +
+                ConsoleUtils.encaseInBanner(menu, border, (item, i) -> String.format(format, i, item)) +
+                sep);
     }
 
     //***************************************************************//

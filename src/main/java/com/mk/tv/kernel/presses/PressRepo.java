@@ -1,7 +1,7 @@
 package com.mk.tv.kernel.presses;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import jPlusLibs.jackson.JacksonRepo;
+import jPlusLibs.com.fasterxml.jackson.JacksonRepo;
 
 import java.util.LinkedHashMap;
 

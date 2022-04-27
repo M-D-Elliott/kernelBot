@@ -28,7 +28,7 @@ public class DiscordTextListener extends ListenerAdapter {
     }
 
     public void onUserMessageReceived(MessageReceivedEvent e) {
-        final IAPIWrapper wrapper = new TextChannelIOWrapper(e);
+        final IAPIWrapper wrapper = new DiscordTextIOWrapper(e);
         recipient.retrieve(wrapper);
     }
 }

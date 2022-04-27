@@ -15,14 +15,14 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import java.io.File;
 import java.nio.channels.Channel;
 
-public class TextChannelIOWrapper implements IAPIWrapper {
+public class DiscordTextIOWrapper implements IAPIWrapper {
     private final MessageReceivedEvent e;
     private final PrivateChannel responseChannel;
     private final Access access;
 
     private final Receivable1<String> out = this::print;
 
-    public TextChannelIOWrapper(MessageReceivedEvent e) {
+    public DiscordTextIOWrapper(MessageReceivedEvent e) {
         this.e = e;
         responseChannel = e.getAuthor().openPrivateChannel().complete();
         access = (e.getChannel() instanceof PrivateChannel)
@@ -52,11 +52,6 @@ public class TextChannelIOWrapper implements IAPIWrapper {
     @Override
     public void send(File f) {
         DiscordIOUtils.sendFile(e, f);
-    }
-
-    @Override
-    public IIOWrapper setPriority(Priority priority) {
-        return this;
     }
 
     @Override

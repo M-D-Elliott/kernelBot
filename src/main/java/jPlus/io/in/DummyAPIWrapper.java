@@ -17,13 +17,7 @@ public class DummyAPIWrapper implements IAPIWrapper {
     }
 
     @Override
-    public Object payload() {
-        return null;
-    }
-
-    @Override
     public void send(String endpoint, String message) {
-
     }
 
     @Override

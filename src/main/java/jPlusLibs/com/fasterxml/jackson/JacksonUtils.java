@@ -1,4 +1,4 @@
-package jPlusLibs.jackson;
+package jPlusLibs.com.fasterxml.jackson;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

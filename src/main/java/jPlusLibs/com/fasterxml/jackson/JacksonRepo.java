@@ -1,4 +1,4 @@
-package jPlusLibs.jackson;
+package jPlusLibs.com.fasterxml.jackson;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import jPlus.lang.callback.Retrievable;
@@ -7,7 +7,7 @@ import jPlusLibs.generic.MapRepo;
 
 import java.util.LinkedHashMap;
 
-import static jPlusLibs.jackson.JacksonUtils.readAndUpdateBliss;
+import static jPlusLibs.com.fasterxml.jackson.JacksonUtils.readAndUpdateBliss;
 
 public class JacksonRepo<DATA_TYPE> extends MapRepo<DATA_TYPE> {
     protected final String path;
