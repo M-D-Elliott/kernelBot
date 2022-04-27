@@ -1,10 +1,10 @@
 package com.mk.tv.auth.botusers;
 
 import com.mk.tv.auth.AuthConfig;
-import com.mk.tv.kernel.generic.FuncController;
+import com.mk.tv.kernel.controllers.FuncController;
 import jPlus.io.file.FileUtils;
-import jPlus.io.in.IAPIWrapper;
-import jPlus.io.out.Access;
+import com.mk.tv.io.generic.IAPIWrapper;
+import jPlus.io.Access;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.ConsoleUtils;
 

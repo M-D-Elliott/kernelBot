@@ -2,10 +2,10 @@ package com.mk.tv.auth;
 
 import com.mk.tv.auth.botusers.BotUserController;
 import com.mk.tv.kernel.Kernel;
-import jPlus.io.in.IAPIWrapper;
-import jPlus.io.in.Priority;
-import jPlus.io.out.DummyClientResponse;
-import jPlus.io.out.IClientResponse;
+import com.mk.tv.io.generic.IAPIWrapper;
+import jPlus.io.Priority;
+import com.mk.tv.io.generic.DummyClientResponse;
+import com.mk.tv.io.generic.IClientResponse;
 import jPlus.util.io.ConsoleIOUtils;
 
 public class AuthKernel extends Kernel {

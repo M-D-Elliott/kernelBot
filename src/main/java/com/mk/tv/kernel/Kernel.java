@@ -2,18 +2,18 @@ package com.mk.tv.kernel;
 
 import com.mk.tv.kernel.generic.BusyCommand;
 import com.mk.tv.kernel.generic.Config;
-import com.mk.tv.kernel.generic.IFuncController;
-import com.mk.tv.kernel.mixes.MixController;
-import com.mk.tv.kernel.presses.PressController;
-import com.mk.tv.kernel.scripts.ScriptController;
-import com.mk.tv.kernel.system.SystemController;
-import com.mk.tv.kernel.tools.ToolsController;
-import jPlus.io.in.DummyAPIWrapper;
-import jPlus.io.in.IAPIWrapper;
-import jPlus.io.in.Priority;
-import jPlus.io.out.Access;
-import jPlus.io.out.DummyClientResponse;
-import jPlus.io.out.IClientResponse;
+import com.mk.tv.kernel.controllers.IFuncController;
+import com.mk.tv.kernel.controllers.mixes.MixController;
+import com.mk.tv.kernel.controllers.presses.PressController;
+import com.mk.tv.kernel.controllers.scripts.ScriptController;
+import com.mk.tv.kernel.controllers.system.SystemController;
+import com.mk.tv.kernel.controllers.tools.ToolsController;
+import com.mk.tv.io.generic.DummyAPIWrapper;
+import com.mk.tv.io.generic.IAPIWrapper;
+import jPlus.io.Priority;
+import jPlus.io.Access;
+import com.mk.tv.io.generic.DummyClientResponse;
+import com.mk.tv.io.generic.IClientResponse;
 import jPlus.lang.callback.Receivable2;
 import jPlus.lang.callback.Retrievable1;
 import jPlus.util.io.ConsoleUtils;
@@ -80,7 +80,6 @@ public class Kernel implements Retrievable1<IClientResponse, IAPIWrapper> {
     @Override
     public final IClientResponse retrieve(IAPIWrapper api) {
         String message = api.in();
-        System.out.println(api.in());
         final int len = message.length();
         if (len > 1 && message.charAt(0) == config.system.commandIndicator) {
             message = message.substring(1);
