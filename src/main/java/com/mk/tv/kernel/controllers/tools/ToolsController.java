@@ -71,7 +71,7 @@ public class ToolsController extends FuncController {
 
     protected void cap(IAPIWrapper api, String[] strings) {
         final BufferedImage img = RobotUtils.screenCap();
-        final BufferedImage watermark = ImageUtils.readResource("/images/watermark.png");
+        final BufferedImage watermark = ImageUtils.readResource("/static/images/watermark.png");
         ImageUtils.caption(img, watermark);
         final String captureFilePath = capturePath + TimeUtils.fileDateTime();
         final File file = ImageUtils.writeBliss(img, captureFilePath, config.tools.captureFormat);

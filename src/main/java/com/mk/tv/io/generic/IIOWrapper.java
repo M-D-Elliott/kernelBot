@@ -8,7 +8,9 @@ import java.io.File;
 public interface IIOWrapper {
     String in();
 
-    Receivable1<String> out();
+    default Receivable1<String> out() {
+        return this::print;
+    }
 
     void print(String s);
 
@@ -16,11 +18,16 @@ public interface IIOWrapper {
 
     void printLink(String url);
 
-    default void send(File f){}
+    default void send(File f) {
+    }
 
-    default IIOWrapper setPriority(Priority priority){
+    default void onFinish() {}
+
+    default IIOWrapper setPriority(Priority priority) {
         return this;
     }
 
-    default IIOWrapper setStatus(String status){ return this; }
+    default IIOWrapper setStatus(String status) {
+        return this;
+    }
 }

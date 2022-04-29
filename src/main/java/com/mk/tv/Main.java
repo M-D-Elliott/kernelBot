@@ -7,11 +7,13 @@ import com.mk.tv.entryPoints.Run;
 import jPlus.io.file.DirUtils;
 import jPlus.util.io.ConsoleIOUtils;
 import jPlusLibs.com.edu.sphinx.SphinxUtils;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.File;
 
 import static jPlusLibs.com.edu.sphinx.SphinxUtils.disableSphinxLogs;
 
+@SpringBootApplication
 public class Main {
     public static void main(String[] args) {
         findEntry(args);

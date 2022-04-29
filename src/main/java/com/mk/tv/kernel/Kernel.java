@@ -1,19 +1,19 @@
 package com.mk.tv.kernel;
 
-import com.mk.tv.kernel.generic.BusyCommand;
-import com.mk.tv.kernel.generic.Config;
+import com.mk.tv.io.generic.DummyAPIWrapper;
+import com.mk.tv.io.generic.DummyClientResponse;
+import com.mk.tv.io.generic.IAPIWrapper;
+import com.mk.tv.io.generic.IClientResponse;
 import com.mk.tv.kernel.controllers.IFuncController;
 import com.mk.tv.kernel.controllers.mixes.MixController;
 import com.mk.tv.kernel.controllers.presses.PressController;
 import com.mk.tv.kernel.controllers.scripts.ScriptController;
 import com.mk.tv.kernel.controllers.system.SystemController;
 import com.mk.tv.kernel.controllers.tools.ToolsController;
-import com.mk.tv.io.generic.DummyAPIWrapper;
-import com.mk.tv.io.generic.IAPIWrapper;
-import jPlus.io.Priority;
+import com.mk.tv.kernel.generic.BusyCommand;
+import com.mk.tv.kernel.generic.Config;
 import jPlus.io.Access;
-import com.mk.tv.io.generic.DummyClientResponse;
-import com.mk.tv.io.generic.IClientResponse;
+import jPlus.io.Priority;
 import jPlus.lang.callback.Receivable2;
 import jPlus.lang.callback.Retrievable1;
 import jPlus.util.io.ConsoleUtils;
@@ -118,21 +118,25 @@ public class Kernel implements Retrievable1<IClientResponse, IAPIWrapper> {
 
         final Receivable2<IAPIWrapper, String[]> asyncF = asyncFunctions.get(funcName);
         if (asyncF != null) {
-            if (asyncThread.isDormant()) {
-                asyncThread.busyMessage = String.format(busyMessageUnf(), funcName, api.username());
-                asyncThread.body = () -> asyncF.receive(api, parsedM);
-                logUserNameAndFunc(api, parsedM[0]);
-                asyncThread.setOnEnd(() -> {
-                    api.println("Async func complete.");
-                });
-            } else busyResp(api);
-            asyncThread.run();
+            validAsyncFuncReceive(api, parsedM, funcName, asyncF);
             return DummyClientResponse.success();
         }
 
-        System.out.println(api.username() + " -- unknown");
-        noFuncFoundResp(api);
+        invalidFuncReceive(api);
         return new DummyClientResponse();
+    }
+
+    private void validAsyncFuncReceive(IAPIWrapper api, String[] parsedM, String funcName, Receivable2<IAPIWrapper, String[]> asyncF) {
+        if (asyncThread.isDormant()) {
+            asyncThread.busyMessage = String.format(busyMessageUnf(), funcName, api.username());
+            asyncThread.body = () -> asyncF.receive(api, parsedM);
+            logUserNameAndFunc(api, parsedM[0]);
+            asyncThread.setOnEnd(() -> {
+                api.println("Async func complete.");
+                api.onFinish();
+            });
+        } else busyResp(api);
+        asyncThread.run();
     }
 
     //***************************************************************//
@@ -144,14 +148,17 @@ public class Kernel implements Retrievable1<IClientResponse, IAPIWrapper> {
     protected void validFuncReceive(IAPIWrapper api, String[] parsedM, Receivable2<IAPIWrapper, String[]> func) {
         logUserNameAndFunc(api, parsedM[0]);
         func.receive(api, parsedM);
+        api.onFinish();
     }
 
     protected void logUserNameAndFunc(IAPIWrapper api, String name) {
         System.out.println(api.username() + " -- " + name);
     }
 
-    protected void noFuncFoundResp(IAPIWrapper api) {
+    protected void invalidFuncReceive(IAPIWrapper api) {
+        System.out.println(api.username() + " -- unknown");
         api.setPriority(Priority.LOW).print("No func found...");
+        api.onFinish();
     }
 
     //***************************************************************//
@@ -183,5 +190,14 @@ public class Kernel implements Retrievable1<IClientResponse, IAPIWrapper> {
     public <T extends IFuncController> T getController(Class<T> klazz) {
         for (IFuncController c : controllers) if (klazz.isInstance(c)) return klazz.cast(c);
         return null;
+    }
+
+    public Map<String, List<String>> functionNamesByController() {
+        final Map<String, List<String>> ret = new LinkedHashMap<>();
+        for (IFuncController controller : controllers) {
+            ret.put(controller.menuName(), controller.menu());
+        }
+
+        return ret;
     }
 }

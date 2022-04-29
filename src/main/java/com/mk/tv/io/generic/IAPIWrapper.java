@@ -7,9 +7,10 @@ public interface IAPIWrapper extends IIOWrapper {
 
     String username();
 
-    default Object payload(){
+    default Object payload() {
         return "";
     }
 
-    default void send(String endpoint, String message){}
+    default void send(String endpoint, String message) {
+    }
 }

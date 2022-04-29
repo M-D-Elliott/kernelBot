@@ -1,5 +1,6 @@
 package com.mk.tv.entryPoints;
 
+import com.mk.tv.Main;
 import com.mk.tv.auth.AuthConfig;
 import com.mk.tv.auth.AuthKernel;
 import com.mk.tv.kernel.Kernel;
@@ -8,7 +9,6 @@ import com.mk.tv.kernel.controllers.IFuncController;
 import com.mk.tv.kernel.generic.KernelGrammar;
 import com.mk.tv.kernel.controllers.system.SystemController;
 import com.mk.tv.io.spring.IOController;
-import com.mk.tv.io.spring.SpringApp;
 import jPlus.async.command.ThreadCommand;
 import jPlus.io.file.DirUtils;
 import com.mk.tv.io.console.PrintStreamWrapper;
@@ -22,7 +22,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import org.springframework.boot.SpringApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 
 import javax.security.auth.login.LoginException;
 import java.io.File;
@@ -47,10 +47,15 @@ public class Run implements Runnable {
         } else if (config.system.listenToConsole)
             consoleListener(kernel, new CountDownLatch(1));
 
-        final File hostsFile = new File(DirUtils.fromUserDir(".hosts"));
+        final File hostsFile = new File(DirUtils.fromUserDir("repos/.hosts"));
         if (hostsFile.exists()) {
-            SpringApplication.run(SpringApp.class);
+
+            SpringApplicationBuilder builder = new SpringApplicationBuilder(Main.class);
+            builder.headless(false);
+            builder.run();
+
             IOController.instance.setRecipient(kernel);
+            IOController.instance.setFunctionNames(kernel.functionNamesByController());
         }
     }
 

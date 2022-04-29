@@ -23,9 +23,9 @@ public class AuthKernel extends Kernel {
     //***************************************************************//
 
     @Override
-    protected void noFuncFoundResp(IAPIWrapper api) {
+    protected void invalidFuncReceive(IAPIWrapper api) {
         final String welcome = userController.service.getWelcome(api.username());
-        if (welcome == null) super.noFuncFoundResp(api);
+        if (welcome == null) super.invalidFuncReceive(api);
         else api.setPriority(Priority.LOW).println(welcome);
     }
 

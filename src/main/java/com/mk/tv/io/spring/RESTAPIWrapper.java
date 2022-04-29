@@ -2,27 +2,35 @@ package com.mk.tv.io.spring;
 
 import com.mk.tv.io.generic.IAPIWrapper;
 import jPlus.io.Access;
-import jPlus.lang.callback.Receivable1;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class RESTAPIWrapper implements IAPIWrapper {
 
-    public final String in;
-    public String out = "";
+    private final String in;
+    private final List<String> out = new ArrayList<>();
+    private final Runnable onFinish;
 
     public RESTAPIWrapper(String in) {
+        this(in, () -> {
+        });
+    }
+
+    public RESTAPIWrapper(String in, Runnable onFinish) {
         this.in = in;
+        this.onFinish = onFinish;
     }
 
     @Override
     public Access access() {
-        return null;
+        return Access.PRIVATE;
     }
 
     @Override
     public String username() {
-        return null;
+        return "admin";
     }
 
     @Override
@@ -31,22 +39,27 @@ public class RESTAPIWrapper implements IAPIWrapper {
     }
 
     @Override
-    public Receivable1<String> out() {
-        return null;
+    public void print(String s) {
+        final String[] split = s.split(System.lineSeparator());
+        Collections.addAll(out, split);
     }
 
     @Override
-    public void print(String s) {
-
+    public void onFinish() {
+        if (onFinish != null) this.onFinish.run();
     }
 
     @Override
     public void println(String s) {
-
+        print(s);
     }
 
     @Override
     public void printLink(String url) {
+        println("<a href=\"" + url + "\" target=\"_blank\">" + url + "</a>");
+    }
 
+    public String[] getOut() {
+        return out.toArray(new String[0]);
     }
 }

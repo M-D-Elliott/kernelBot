@@ -1,0 +1,13 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="disp" class="my-2">
+    <div id="kb-display" class="col-12p"></div>
+</div>
+
+<div th:fragment="inp" class="my-2 d-flex flex-row flex-wrap">
+    <textarea id="kb-inp" name="kb-inp" rows="4" class="col-12" placeholder="type a message to kernelBot!"></textarea>
+    <div class="col-12 justify-content-end">
+        <button class="btn btn-outline-secondary" onClick="sendInp();">Send</button>
+        <button class="btn btn-outline-secondary" onClick="clearInp();">Clear</button>
+    </div>
+</div>
