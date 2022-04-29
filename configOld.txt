@@ -1,0 +1,31 @@
+{
+  "system" : {
+    "token" : "OTM0MTY0MDQyNTg1NjIwNjIy.YesGDw.9t0WHGyyQ6iIL0Xb_vLSaYDEoUw",
+    "commandIndicator" : "$",
+    "menuBorder" : "%%",
+    "addDelimiter" : "+",
+    "nextDelimiter" : ">",
+    "startup" : "splash",
+    "listenToDiscord" : true,
+    "listenToConsole" : true
+  },
+  "script" : {
+    "formats" : [ "bat" ]
+  },
+  "press" : {
+    "allowFreePress" : false
+  },
+  "mix" : {
+    "allowFreeMix" : true
+  },
+  "tools" : {
+    "captureFormat" : "png"
+  },
+  "user" : {
+    "securityLevel" : "PRIVATE",
+    "userSessionDuration" : "07:00:00:00",
+    "rejectUserMessage" : "You aren't Chris...",
+    "onlySecureChannelWarning" : "I won't do that for just anybody...",
+    "publicChannelWarning" : "This is a public channel... "
+  }
+}

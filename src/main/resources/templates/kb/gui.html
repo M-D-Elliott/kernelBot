@@ -1,17 +1,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<div th:fragment="gui" class="my-2 d-flex flex-row flex-wrap">
+<div th:fragment="gui" class="my-2 d-flex flex-row flex-wrap h-100">
+
+    <div id="recentCommands" class="my-1 col-12 row mx-auto flex-grow-4"></div>
+
     <div class="btn-group my-2 flex-grow-1 col-4" th:each="entry, stat : ${functionNames}">
         <button th:Text="${entry.key}" type="button" class="btn btn-outline-primary dropdown-toggle w-100" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
         </button>
         <div class="dropdown-menu">
             <button class="dropdown-item" th:each="str, iterStat : ${entry.value}" th:text="${str}"
-                    onClick="setInp(this.innerText); send(this.innerText); cloneButton(this);">
+                    onClick="setInp(this.innerText); send(this.innerText); cloneButtonEl(this);">
                 Action
             </button>
         </div>
     </div>
-
-    <div id="recent-commands" class="my-1 col-12"></div>
 </div>

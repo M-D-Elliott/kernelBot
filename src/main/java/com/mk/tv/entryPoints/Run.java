@@ -3,20 +3,21 @@ package com.mk.tv.entryPoints;
 import com.mk.tv.Main;
 import com.mk.tv.auth.AuthConfig;
 import com.mk.tv.auth.AuthKernel;
-import com.mk.tv.kernel.Kernel;
-import com.mk.tv.kernel.generic.Config;
-import com.mk.tv.kernel.controllers.IFuncController;
-import com.mk.tv.kernel.generic.KernelGrammar;
-import com.mk.tv.kernel.controllers.system.SystemController;
+import com.mk.tv.io.console.PrintStreamWrapper;
+import com.mk.tv.io.discord.text.DiscordTextListener;
 import com.mk.tv.io.spring.IOController;
+import com.mk.tv.kernel.Kernel;
+import com.mk.tv.kernel.controllers.IFuncController;
+import com.mk.tv.kernel.controllers.system.IOConfig;
+import com.mk.tv.kernel.controllers.system.SystemController;
+import com.mk.tv.kernel.generic.Config;
+import com.mk.tv.kernel.generic.KernelGrammar;
 import jPlus.async.command.ThreadCommand;
 import jPlus.io.file.DirUtils;
-import com.mk.tv.io.console.PrintStreamWrapper;
 import jPlus.util.io.ConsoleIOUtils;
 import jPlus.util.io.RuntimeUtils;
 import jPlusLibs.com.edu.sphinx.SphinxUtils;
 import jPlusLibs.com.fasterxml.jackson.JacksonUtils;
-import com.mk.tv.io.discord.text.DiscordTextListener;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -41,10 +42,13 @@ public class Run implements Runnable {
 
         RuntimeUtils.addOnShutdown(this::onShutdown, "kernelBotShutdown");
 
-        if (config.system.listenToDiscord) {
-            if (config.system.listenToConsole) startConsoleThread(kernel);
-            discordListener(kernel, config);
-        } else if (config.system.listenToConsole)
+        final IOConfig discordIOConfig = config.system.ioConfigs.get(Config.DISCORD_IO_CONFIG_NAME);
+        final IOConfig consoleIOConfig = config.system.ioConfigs.get(Config.CONSOLE_IO_CONFIG_NAME);
+
+        if (discordIOConfig.isActive) {
+            if (consoleIOConfig.isActive) startConsoleThread(kernel);
+            discordListener(kernel, config.system.commandIndicator, discordIOConfig.key);
+        } else if (consoleIOConfig.isActive)
             consoleListener(kernel, new CountDownLatch(1));
 
         final File hostsFile = new File(DirUtils.fromUserDir("repos/.hosts"));
@@ -59,18 +63,18 @@ public class Run implements Runnable {
         }
     }
 
-    private void discordListener(Kernel kernel, Config config) {
+    private void discordListener(Kernel kernel, char indicator, String token) {
 
         discordVoiceListener(kernel);
 
         try {
-            JDABuilder.createDefault(config.system.token)
+            JDABuilder.createDefault(token)
                     .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
                     .enableCache(CacheFlag.ACTIVITY)
                     .setBulkDeleteSplittingEnabled(false)
                     .setCompression(Compression.NONE)
                     .setActivity(Activity.listening(
-                            String.format(SystemController.ACTIVITY_RAW, config.system.commandIndicator)))
+                            String.format(SystemController.ACTIVITY_RAW, indicator)))
                     .enableIntents(GatewayIntent.GUILD_PRESENCES)
                     .enableIntents(GatewayIntent.GUILD_MEMBERS)
                     .enableCache(CacheFlag.VOICE_STATE)

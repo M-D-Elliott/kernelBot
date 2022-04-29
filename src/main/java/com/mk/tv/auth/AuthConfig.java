@@ -13,6 +13,8 @@ public class AuthConfig extends Config {
     }
 
     public static AuthConfig newInstance() {
-        return new AuthConfig();
+        final AuthConfig config = new AuthConfig();
+        config.system.ioConfigs = defaultIOConfigs();
+        return config;
     }
 }

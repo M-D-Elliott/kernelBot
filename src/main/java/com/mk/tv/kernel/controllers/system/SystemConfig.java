@@ -1,15 +1,17 @@
 package com.mk.tv.kernel.controllers.system;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SystemConfig {
-    public String token = "paste token here...";
     public char commandIndicator = '?';
     private String menuBorder = "+";
 
     public char addDelimiter = '+';
     public char nextDelimiter = '>';
     public String startup = "splash";
-    public boolean listenToDiscord = true;
-    public boolean listenToConsole = false;
+
+    public Map<String, IOConfig> ioConfigs = new HashMap<>();
 
     private static final String LITERAL_COMMAND = "'%c%s'";
 
