@@ -5,7 +5,7 @@ function clearHTML(el){
 }
 
 function kbInp(){
-    return document.getElementById("kb-inp");
+    return document.getElementById("kbInp");
 }
 
 function setInp(str){
@@ -17,7 +17,7 @@ function clearInp() {
 }
 
 function kbDisplay(){
-    return document.getElementById("kb-display");
+    return document.getElementById("kbDisplay");
 }
 
 function sendInp(){
@@ -67,7 +67,7 @@ function cloneButtonEl(el){
 
     recentCommandsPar.prepend(btn);
 
-    if(recentCommandsPar.childElementCount >= 7){
+    if(recentCommandsPar.childElementCount >= 13){
         recentCommandsPar.removeChild(recentCommandsPar.lastChild);
     }
 
@@ -83,10 +83,10 @@ function cloneButton(text){
         setInp(btn.innerText);
         send(btn.innerText);
     };
-    btn.classList.add('btn', 'btn-primary', 'w-100', 'h-100', 'px-1');
+    btn.classList.add('btn', 'btn-primary', 'w-100', 'h-100');
 
     const btnWrapper = document.createElement('div');
-    btnWrapper.classList.add('col-2');
+    btnWrapper.classList.add('col-md-2', 'col-6', 'p-1');
     btnWrapper.appendChild(btn);
 
     return btnWrapper;

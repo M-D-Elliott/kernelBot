@@ -34,7 +34,7 @@ public class Run implements Runnable {
     @Override
     public void run() {
         final AuthConfig config =
-                JacksonUtils.readAndUpdateBliss("config.txt",
+                JacksonUtils.readAndUpdateBliss(DirUtils.fromUserDir(Config.CONFIG_PATH),
                         AuthConfig.class, AuthConfig::newInstance);
 
         final Kernel kernel = new AuthKernel(config);
@@ -58,8 +58,7 @@ public class Run implements Runnable {
             builder.headless(false);
             builder.run();
 
-            IOController.instance.setRecipient(kernel);
-            IOController.instance.setFunctionNames(kernel.functionNamesByController());
+            IOController.instance.setKernel(kernel);
         }
     }
 
@@ -87,7 +86,6 @@ public class Run implements Runnable {
 
     private void discordVoiceListener(Kernel kernel) {
         final String grammarPath = DirUtils.fromUserDir("repos" + File.separatorChar + "system");
-        System.out.println(grammarPath);
         DirUtils.make(grammarPath);
         KernelGrammar.write(kernel, grammarPath);
         SphinxUtils.conf.setGrammarPath("file:" + grammarPath);

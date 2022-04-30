@@ -200,4 +200,8 @@ public class Kernel implements Retrievable1<IClientResponse, IAPIWrapper> {
 
         return ret;
     }
+
+    public Map<String, String> links() {
+        return config.system.links;
+    }
 }

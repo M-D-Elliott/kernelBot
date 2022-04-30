@@ -4,6 +4,7 @@ import com.mk.tv.auth.AuthConfig;
 import com.mk.tv.auth.botusers.BotUser;
 import com.mk.tv.auth.botusers.BotUserRepo;
 import com.mk.tv.kernel.generic.Config;
+import jPlus.io.file.DirUtils;
 import jPlus.lang.Runnables;
 import jPlus.util.io.ConsoleUtils;
 import jPlus.util.io.JarUtils;
@@ -100,7 +101,7 @@ public class InstallWizard extends Install {
         taskConfirm("Enter your token into Kernel Bot", () -> {
             System.out.println("***DO NOT SHARE TOKEN PUBLICLY***" + sep());
             final String token = request("--Click copy token and paste it here");
-            final AuthConfig config = JacksonUtils.readAndUpdateBliss("config.txt",
+            final AuthConfig config = JacksonUtils.readAndUpdateBliss(DirUtils.fromUserDir(Config.CONFIG_PATH),
                     AuthConfig.class, AuthConfig::newInstance);
             config.system.ioConfigs.get(Config.DISCORD_IO_CONFIG_NAME).key = token;
             config.store();

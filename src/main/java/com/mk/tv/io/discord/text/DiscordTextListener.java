@@ -17,12 +17,6 @@ public class DiscordTextListener extends ListenerAdapter {
     }
 
     @Override
-    public void onReady(@NotNull ReadyEvent e) {
-        super.onReady(e);
-        System.out.println(e.getJDA().getSelfUser().getName() + " bot online.");
-    }
-
-    @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent e) {
         if (!e.getAuthor().isBot()) onUserMessageReceived(e);
     }

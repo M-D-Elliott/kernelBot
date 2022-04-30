@@ -1,10 +1,10 @@
 package com.mk.tv.kernel.controllers.system;
 
-import com.mk.tv.kernel.generic.Config;
+import com.mk.tv.io.generic.IAPIWrapper;
 import com.mk.tv.kernel.controllers.FuncController;
+import com.mk.tv.kernel.generic.Config;
 import jPlus.io.file.DirUtils;
 import jPlus.io.file.FileUtils;
-import com.mk.tv.io.generic.IAPIWrapper;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.JarUtils;
 
@@ -82,12 +82,13 @@ public class SystemController extends FuncController {
         final String sep = sep();
         final String splash = String.join(sep, FileUtils.read(DirUtils.fromUserDir("repos/splash.txt")));
         api.println(sep + splash);
-        api.printLink(INSTALL_URL);
+        config.system.links.forEach((key, value) -> {
+            api.printLink(value);
+        });
     }
 
     //***************************************************************//
 
     public static final String ACTIVITY_RAW = "%sfunction [args]";
     public static final String CHANGE_INDICATOR_HELP = "to change indicator to ! type: '%sindicator !'";
-    public static final String INSTALL_URL = "https://github.com/M-D-Elliott/kernelBot/";
 }

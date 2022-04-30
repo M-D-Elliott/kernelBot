@@ -19,6 +19,36 @@ div.btn-group.show div.dropdown-menu.show button.dropdown-item:focus {
     color: white;
 }
 
+#kbInp{
+    background: transparent;
+    color: white;
+}
+
+#kbDisplay > pre {
+  font-family: "Lucida Console", "Courier New", monospace;
+  margin: 0;
+}
+
+.dropdown-menu {
+ /**   min-height: 100vh;**/
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.btn{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/**
+.nav-tabs{
+	float: left;
+  	margin-right: 20px;
+  	border: 1px solid #ccc;
+}
+**/
+
 /**********
 * HELPERS *
 ***********/

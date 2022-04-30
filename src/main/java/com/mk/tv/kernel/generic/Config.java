@@ -30,6 +30,7 @@ public class Config {
 
     //***************************************************************//
 
+    public static final String CONFIG_PATH = "repos/config.txt";
     public static final String DISCORD_IO_CONFIG_NAME = "discord";
     public static final String CONSOLE_IO_CONFIG_NAME = "console";
 

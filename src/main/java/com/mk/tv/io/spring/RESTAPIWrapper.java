@@ -50,6 +50,11 @@ public class RESTAPIWrapper implements IAPIWrapper {
     }
 
     @Override
+    public void send(String endpoint, String message){
+        println(message);
+    }
+
+    @Override
     public void println(String s) {
         print(s);
     }

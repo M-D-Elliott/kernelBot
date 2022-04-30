@@ -36,7 +36,7 @@ public class PrintStreamWrapper implements IAPIWrapper {
 
     @Override
     public void printLink(String url) {
-        print(url);
+        println(url);
     }
 
     @Override

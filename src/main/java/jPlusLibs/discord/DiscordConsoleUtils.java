@@ -28,7 +28,7 @@ public class DiscordConsoleUtils {
     }
 
     public static void printLink(MessageChannel channel, String url) {
-        printUnf(channel, "<" + url + ">");
+        printUnf(channel, "<" + url + ">" + System.lineSeparator());
     }
 
     public static void printUnf(GenericMessageEvent e, String message) {

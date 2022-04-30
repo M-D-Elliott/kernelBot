@@ -1,6 +1,8 @@
 package com.mk.tv.kernel.controllers.system;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SystemConfig {
@@ -12,8 +14,7 @@ public class SystemConfig {
     public String startup = "splash";
 
     public Map<String, IOConfig> ioConfigs = new HashMap<>();
-
-    private static final String LITERAL_COMMAND = "'%c%s'";
+    public Map<String, String> links = new LinkedHashMap<>(Collections.singletonMap("GH", "https://github.com/M-D-Elliott/kernelBot/"));
 
     public String displayLiteralCommand(String s) {
         return String.format(LITERAL_COMMAND, commandIndicator, s);
@@ -34,4 +35,8 @@ public class SystemConfig {
     public void setMenuBorder(String menuBorder) {
         this.menuBorder = menuBorder.equals("%") ? "%%" : menuBorder;
     }
+
+    //***************************************************************//
+
+    private static final String LITERAL_COMMAND = "'%c%s'";
 }

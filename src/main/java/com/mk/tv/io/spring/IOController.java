@@ -2,6 +2,7 @@ package com.mk.tv.io.spring;
 
 import com.mk.tv.io.generic.IAPIWrapper;
 import com.mk.tv.io.generic.IClientResponse;
+import com.mk.tv.kernel.Kernel;
 import jPlus.lang.callback.Retrievable1;
 import jPlusLibs.spring.HTTPUtils;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,7 @@ public class IOController {
 
     public static IOController instance;
 
-    protected Retrievable1<IClientResponse, IAPIWrapper> recipient;
-    protected Map<String, List<String>> functionNames;
+    protected Kernel kernel;
 
     public IOController() {
         instance = this;
@@ -38,7 +38,8 @@ public class IOController {
 
         final Map<String, Object> model = modelAndView.getModel();
 
-        model.put("functionNames",  functionNames);
+        model.put("functionNames",  kernel.functionNamesByController());
+        model.put("links", kernel.links());
 
         return modelAndView;
     }
@@ -53,7 +54,7 @@ public class IOController {
         final RESTAPIWrapper api = new RESTAPIWrapper(commandString, () -> {
             gate.set(false);
         });
-        final IClientResponse resp = recipient.retrieve(api);
+        final IClientResponse resp = kernel.retrieve(api);
 
         final Map<String, Object> ret = new HashMap<>();
 
@@ -76,11 +77,7 @@ public class IOController {
         return HTTPUtils.jsonCreate(ret);
     }
 
-    public void setRecipient(Retrievable1<IClientResponse, IAPIWrapper> recipient) {
-        this.recipient = recipient;
-    }
-
-    public void setFunctionNames(Map<String, List<String>> functionNames) {
-        this.functionNames = functionNames;
+    public void setKernel(Kernel kernel) {
+        this.kernel = kernel;
     }
 }
