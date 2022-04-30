@@ -2,16 +2,22 @@
 
 <div th:fragment="gui" id="kbGUI" class="d-flex flex-wrap h-100">
 
-    <div id="recentCommands" class="col-12 row mx-auto"></div>
+    <div id="recentCommands"
+         class="row col-12 mx-auto"></div>
 
-    <div id="commandBank" class="row col-12 mt-4">
-        <div class="btn-group col-md-4 col-lg-6 col-12 mb-1" th:each="entry, stat : ${functionNames}">
-            <button th:Text="${entry.key}" type="button" class="btn btn-outline-primary dropdown-toggle w-100" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
+    <div id="commandBank"
+         class="row col-12 mx-auto mt-4">
+        <div class="btn-group col-md-4 col-lg-6 col-12 mb-1"
+             th:each="entry, stat : ${functionNames}">
+            <button type="button" class="btn btn-outline-primary dropdown-toggle w-100" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false"
+                    th:text="${entry.key}">
             </button>
             <div class="dropdown-menu">
-                <button class="dropdown-item" th:each="str, iterStat : ${entry.value}" th:text="${str}"
-                        onClick="setInp(this.innerText); send(this.innerText); cloneButtonEl(this);">
+                <button class="dropdown-item"
+                        onClick="setInp(this.innerText); kBUtils.send(this.innerText, fillDisplay); cloneButtonEl(this);"
+                        th:each="str, iterStat : ${entry.value}"
+                        th:text="${str}">
                     Action
                 </button>
             </div>

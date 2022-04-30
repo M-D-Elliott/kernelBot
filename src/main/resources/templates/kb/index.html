@@ -4,14 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no" />
     <title>kernelBot</title>
-    <link rel="icon" th:href="@{/images/kb-black.png}" type="image/icon type">
-    <link th:href="@{/styles/css/kb.css}" rel="stylesheet"/>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <link rel="icon" th:href="@{/images/kb-black.png}" type="image/icon type">
+    <link th:href="@{/styles/css/kb.css}" rel="stylesheet"/>
+
+    <script th:src="@{/js/jsPlus/APIs.js}"></script>
     <script th:src="@{/js/jsPlus/Storage.js}"></script>
-    <script th:src="@{/js/kb.js}"></script>
+    <script th:src="@{/js/kB/kBUtils.js}"></script>
+
+    <script th:src="@{/js/kB/globals.js}"></script>
+    <script th:src="@{/js/kB/io.js}"></script>
+    <script th:src="@{/js/kB/gui.js}"></script>
 </head>
 <body>
     <div id="rootContainer" class="p-3 h-100">
@@ -34,15 +42,15 @@
                  th:insert="kb/gui :: gui">
             </div>
             <div class="tab-pane fade h-100" id="ioInput" role="tabpanel" aria-labelledby="IOInput"
-                 th:insert="kb/IO :: inp">
+                 th:insert="kb/io :: inp">
             </div>
             <div class="tab-pane fade h-100" id="ioOutput" role="tabpanel" aria-labelledby="IOOutput"
-                 th:insert="kb/IO :: disp">
+                 th:insert="kb/io :: disp">
             </div>
         </div>
     </div>
     <script>
-        init();
+        guiInit();
     </script>
 </body>
 </html>

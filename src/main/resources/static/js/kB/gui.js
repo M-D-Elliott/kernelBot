@@ -1,55 +1,3 @@
-const PREFIX = 'kbcookie__';
-
-function clearHTML(el){
-    el.innerHTML = "";
-}
-
-function kbInp(){
-    return document.getElementById("kbInp");
-}
-
-function setInp(str){
-    kbInp().value = str;
-}
-
-function clearInp() {
-    kbInp().value = "";
-}
-
-function kbDisplay(){
-    return document.getElementById("kbDisplay");
-}
-
-function sendInp(){
-    send(kbInp().value);
-}
-
-function send(commandString) {
-    fetch('/', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: commandString
-        })
-        .then(resp => resp.json())
-        .then(resp => {
-            fillDisplay(resp.resp);
-        });
-}
-
-function fillDisplay(items){
-    const display = kbDisplay();
-    clearHTML(display);
-    items.forEach(item =>{
-        const pItem = document.createElement('pre');
-        pItem.innerHTML = item;
-        pItem.classList.add('text-white');
-        display.append(pItem);
-    });
-}
-
 function childrenInnerText(el){
     const ret = [];
     const children = el.childNodes;
@@ -81,7 +29,7 @@ function cloneButton(text){
 
     btn.onclick = function(){
         setInp(btn.innerText);
-        send(btn.innerText);
+        kBUtils.send(btn.innerText, fillDisplay);
     };
     btn.classList.add('btn', 'btn-primary', 'w-100', 'h-100');
 
@@ -92,7 +40,7 @@ function cloneButton(text){
     return btnWrapper;
 }
 
-function init(){
+function guiInit(){
     const arr = Storage.getParse(PREFIX + 'recent-commands');
     const recentCommandsPar = document.getElementById("recentCommands");
     if(arr != null){
