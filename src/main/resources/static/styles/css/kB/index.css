@@ -1,0 +1,52 @@
+body {
+    height: 100vh;
+    width: 100vw;
+    background: var(--bg-gradient);
+}
+
+#rootContainer {
+    border: 4px solid var(--text-color);
+    max-height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+#kbInp {
+    background: transparent;
+    color: var(--text-color);
+}
+
+#kbDisplay>pre {
+    font-family: "Lucida Console", "Courier New", monospace;
+    margin: 0;
+    color: var(--text-color);
+}
+
+/************
+* BOOTSTRAP *
+*************/
+
+div.btn-group.show div.dropdown-menu {
+    background: var(--bg-gradient);
+    max-height: 50vh;
+    overflow-y: auto;
+    border: 1px solid var(--text-color);
+}
+
+div.btn-group.show div.dropdown-menu.show button.dropdown-item {
+    color: var(--text-color);
+}
+
+div.btn-group.show div.dropdown-menu.show button.dropdown-item:hover,
+div.btn-group.show div.dropdown-menu.show button.dropdown-item:focus {
+    background: var(--prim);
+}
+
+/**********
+* HELPERS *
+***********/
+
+.overflow-auto {
+    overflow: auto;
+}
