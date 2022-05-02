@@ -81,7 +81,7 @@ public class SystemController extends FuncController {
     public void printSplash(IAPIWrapper api, String[] args) {
         final String sep = sep();
         final String splash = String.join(sep, FileUtils.read(DirUtils.fromUserDir("repos/splash.txt")));
-        api.println(sep + splash);
+        api.println(splash);
         config.system.links.forEach((key, value) -> {
             api.printLink(value);
         });

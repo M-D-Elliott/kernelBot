@@ -26,9 +26,8 @@ function fillDisplay(json){
     const display = kbDisplay();
     clearHTML(display);
     json.resp.forEach(item =>{
-        const pItem = document.createElement('pre');
+        const pItem = document.createElement(item ? 'pre' : 'br');
         pItem.innerHTML = item;
-        pItem.classList.add('text-white');
         display.append(pItem);
     });
 }

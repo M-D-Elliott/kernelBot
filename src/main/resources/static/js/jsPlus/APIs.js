@@ -1,13 +1,22 @@
 class APIs{
-    static ping(url){
+    static ping(url, successCb, errorCb, timeout){
+        let headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
         fetch(url, {
-            type: 'HEAD',
-            headers: {"Access-Control-Allow-Origin": url}
+            mode: 'no-cors',
+            credentials: 'include',
+            method: 'HEAD',
+            headers: {},
+            timeout: timeout
         })
-        .then(() => {
-            console.log("ok");
-        }).catch(() =>{
-            console.log("error");
+        .then(resp => {
+            if(successCb != null) successCb(resp);
+        })
+        .catch(error => {
+            if(errorCb != null) errorCb(error);
         });
     }
 }
