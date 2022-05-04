@@ -3,6 +3,7 @@ package com.mk.tv.entryPoints;
 import com.mk.tv.auth.AuthConfig;
 import com.mk.tv.auth.botusers.BotUser;
 import com.mk.tv.auth.botusers.BotUserRepo;
+import com.mk.tv.kernel.controllers.system.IOConfig;
 import com.mk.tv.kernel.generic.Config;
 import jPlus.io.file.DirUtils;
 import jPlus.lang.Runnables;
@@ -103,7 +104,9 @@ public class InstallWizard extends Install {
             final String token = request("--Click copy token and paste it here");
             final AuthConfig config = JacksonUtils.readAndUpdateBliss(DirUtils.fromUserDir(Config.CONFIG_PATH),
                     AuthConfig.class, AuthConfig::newInstance);
-            config.system.ioConfigs.get(Config.DISCORD_IO_CONFIG_NAME).key = token;
+            final IOConfig discordConf = config.system.ioConfigs.get(Config.DISCORD_IO_CONFIG_NAME);
+            discordConf.key = token;
+            discordConf.isActive = true;
             config.store();
             System.out.println("I have produced config.txt, edit as needed.");
         });

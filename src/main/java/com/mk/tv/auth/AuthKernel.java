@@ -1,11 +1,12 @@
 package com.mk.tv.auth;
 
 import com.mk.tv.auth.botusers.BotUserController;
-import com.mk.tv.kernel.Kernel;
-import com.mk.tv.io.generic.IAPIWrapper;
-import jPlus.io.Priority;
 import com.mk.tv.io.generic.DummyClientResponse;
+import com.mk.tv.io.generic.IAPIWrapper;
 import com.mk.tv.io.generic.IClientResponse;
+import com.mk.tv.kernel.Kernel;
+import com.mk.tv.kernel.controllers.IFuncController;
+import jPlus.io.Priority;
 import jPlus.util.io.ConsoleIOUtils;
 
 public class AuthKernel extends Kernel {
@@ -56,5 +57,16 @@ public class AuthKernel extends Kernel {
         }
 
         return super.interpret(api, parsedM);
+    }
+
+    public BotUserController getBotUserController() {
+        BotUserController ret = null;
+        for (IFuncController controller : controllers) {
+            if (controller instanceof BotUserController) {
+                ret = (BotUserController) controller;
+                break;
+            }
+        }
+        return ret;
     }
 }

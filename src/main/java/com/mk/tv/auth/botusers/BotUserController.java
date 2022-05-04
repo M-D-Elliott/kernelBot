@@ -1,10 +1,10 @@
 package com.mk.tv.auth.botusers;
 
 import com.mk.tv.auth.AuthConfig;
-import com.mk.tv.kernel.controllers.FuncController;
-import jPlus.io.file.FileUtils;
 import com.mk.tv.io.generic.IAPIWrapper;
+import com.mk.tv.kernel.controllers.FuncController;
 import jPlus.io.Access;
+import jPlus.io.file.FileUtils;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.io.ConsoleUtils;
 
@@ -101,7 +101,10 @@ public class BotUserController extends FuncController {
     protected void spill(IAPIWrapper api, String[] args) {
         final String secrets = String.join(System.lineSeparator(), FileUtils.read("repos/secrets.txt"));
         if (validateString(args, 1)) api.send(args[1], secrets);
-        else api.send(api.username(), secrets);
+        else api.send(api.username(),
+                secrets + System.lineSeparator() +
+                        String.join(System.lineSeparator(), config.system.links.values())
+        );
     }
 
     //***************************************************************//
@@ -115,7 +118,11 @@ public class BotUserController extends FuncController {
     }
 
     public boolean initiateSession(IAPIWrapper api, String pass) {
-        return service.initiateSession(api.username(), pass, userConfig.sessionDurationS());
+        return this.initiateSession(api.username(), pass);
+    }
+
+    public boolean initiateSession(String username, String pass) {
+        return service.initiateSession(username, pass, userConfig.sessionDurationS());
     }
 
     public boolean checkPassword(IAPIWrapper api, String[] args) {

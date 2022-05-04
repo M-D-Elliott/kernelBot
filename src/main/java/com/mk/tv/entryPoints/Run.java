@@ -3,8 +3,10 @@ package com.mk.tv.entryPoints;
 import com.mk.tv.Main;
 import com.mk.tv.auth.AuthConfig;
 import com.mk.tv.auth.AuthKernel;
+import com.mk.tv.auth.botusers.BotUserController;
 import com.mk.tv.io.console.PrintStreamWrapper;
 import com.mk.tv.io.discord.text.DiscordTextListener;
+import com.mk.tv.io.spring.CustomIPAuth;
 import com.mk.tv.io.spring.IOController;
 import com.mk.tv.kernel.Kernel;
 import com.mk.tv.kernel.controllers.IFuncController;
@@ -14,6 +16,7 @@ import com.mk.tv.kernel.generic.Config;
 import com.mk.tv.kernel.generic.KernelGrammar;
 import jPlus.async.command.ThreadCommand;
 import jPlus.io.file.DirUtils;
+import jPlus.io.file.FileUtils;
 import jPlus.util.io.ConsoleIOUtils;
 import jPlus.util.io.RuntimeUtils;
 import jPlusLibs.com.edu.sphinx.SphinxUtils;
@@ -37,7 +40,7 @@ public class Run implements Runnable {
                 JacksonUtils.readAndUpdateBliss(DirUtils.fromUserDir(Config.CONFIG_PATH),
                         AuthConfig.class, AuthConfig::newInstance);
 
-        final Kernel kernel = new AuthKernel(config);
+        final AuthKernel kernel = new AuthKernel(config);
         kernel.init();
 
         RuntimeUtils.addOnShutdown(this::onShutdown, "kernelBotShutdown");
@@ -52,15 +55,25 @@ public class Run implements Runnable {
             consoleListener(kernel, new CountDownLatch(1));
 
         final File hostsFile = new File(DirUtils.fromUserDir("repos/.hosts"));
-        if (hostsFile.exists()) {
+        if (hostsFile.exists()) webListener(kernel, hostsFile);
+    }
 
-            SpringApplicationBuilder builder = new SpringApplicationBuilder(Main.class);
-            builder.headless(false);
-            builder.run();
+    //***************************************************************//
 
-            IOController.instance.setKernel(kernel);
+    protected void webListener(AuthKernel kernel, File hostsFile) {
+        SpringApplicationBuilder builder = new SpringApplicationBuilder(Main.class);
+        builder.headless(false);
+        builder.run();
+
+        IOController.instance.setKernel(kernel);
+        CustomIPAuth.instance.whiteList().addAll(FileUtils.read(hostsFile));
+        final BotUserController userController = kernel.getBotUserController();
+        if(userController != null){
+            CustomIPAuth.instance.setAuthenticator(userController::initiateSession);
         }
     }
+
+    //***************************************************************//
 
     private void discordListener(Kernel kernel, char indicator, String token) {
 
@@ -97,6 +110,8 @@ public class Run implements Runnable {
         if (systemController != null) systemController.menu().add("listen");
     }
 
+    //***************************************************************//
+
     private void startConsoleThread(Kernel kernel) {
         final Thread th =
                 new Thread(() -> consoleListener(kernel, new CountDownLatch(1)));
@@ -112,6 +127,8 @@ public class Run implements Runnable {
             kernel.retrieve(api);
         }
     }
+
+    //***************************************************************//
 
     private void onShutdown() {
         System.out.println("Shutting down...");

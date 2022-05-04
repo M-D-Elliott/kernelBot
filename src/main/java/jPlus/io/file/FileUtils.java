@@ -13,8 +13,12 @@ import static jPlus.JPlus.sendError;
 public final class FileUtils {
 
     public static List<String> read(String path) {
+        return read(new File(path));
+    }
+
+    public static List<String> read(File file) {
         List<String> lines = new ArrayList<>();
-        final File file = new File(path);
+
         if (file.exists()) {
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 String line;
@@ -22,7 +26,7 @@ public final class FileUtils {
                     lines.add(line);
                 }
             } catch (IOException ex) {
-                sendError("Cannot read file at " + path, ex);
+                sendError("Cannot read file at " + file.getAbsolutePath(), ex);
             }
         }
 

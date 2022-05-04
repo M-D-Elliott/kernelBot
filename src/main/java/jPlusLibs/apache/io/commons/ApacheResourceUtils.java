@@ -21,7 +21,10 @@ public class ApacheResourceUtils {
             ZipEntry entry;
             while ((entry = zis.getNextEntry()) != null) {
                 final File outFile = new File(outDir, entry.getName());
-                if (validator.retrieve(entry, outFile) && outFile.createNewFile()) {
+
+                if(entry.isDirectory()){
+                    DirUtils.make(outFile.getAbsolutePath());
+                } else if (validator.retrieve(entry, outFile) && outFile.createNewFile()) {
                     try (FileOutputStream fis = new FileOutputStream(outFile)) {
                         IOUtils.copy(zis, fis);
                     } catch (IOException e) {

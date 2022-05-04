@@ -1,22 +1,22 @@
-class APIs{
-    static ping(url, successCb, errorCb, timeout){
+class APIs {
+    static ping(url, successCb, errorCb, timeout) {
         let headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
         }
 
         fetch(url, {
             mode: 'no-cors',
             credentials: 'include',
             method: 'HEAD',
-            headers: {},
+            headers: headers,
             timeout: timeout
         })
-        .then(resp => {
-            if(successCb != null) successCb(resp);
-        })
-        .catch(error => {
-            if(errorCb != null) errorCb(error);
-        });
+            .then(() => {
+                if (successCb != null) successCb();
+            })
+            .catch(() => {
+                if (errorCb != null) errorCb();
+            });
     }
 }

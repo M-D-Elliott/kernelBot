@@ -7,7 +7,7 @@
     <title>kernelBot</title>
     <link rel="icon" th:href="@{/images/kb-black.png}" type="image/icon type">
 
-    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -20,15 +20,7 @@
         crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script> -->
-
-    <link th:href="@{/styles/css/aLibs/bootstrap.min.css}" rel="stylesheet" />
-    <script th:src="@{/js/aLibs/jquery.min.js}"></script>
-    <script type="module" th:src="@{/js/aLibs/popper.min.js}"></script>
-    <script th:src="@{/js/aLibs/bootstrap.min.js}"></script>
-
-    <link th:href="@{/styles/css/aLibs/all.min.css}" rel="stylesheet" />
-    <script th:src="@{/js/aLibs/all.min.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
 
     <link th:href="@{/styles/css/kB/genThemeBS.css}" rel="stylesheet" />
     <link th:href="@{/styles/css/kB/index.css}" rel="stylesheet" />
@@ -39,10 +31,10 @@
 
     <script th:src="@{/js/kB/index.js}"></script>
     <script th:src="@{/js/kB/io.js}"></script>
-    <script type="module" th:src="@{/js/kB/gui.js}"></script>
+    <script th:src="@{/js/kB/gui.js}"></script>
 
-    <!-- <link th:href="@{/all.min.css}" rel="stylesheet" />
-    <script type=module th:src="@{/all.min.js}"></script> -->
+    <!-- <link th:href="@{/kB.min.css}" rel="stylesheet" />
+    <script th:src="@{/kB.min.js}"></script> -->
 </head>
 
 <body>
@@ -91,7 +83,7 @@
     </div>
     <script>
         guiInit();
-        // init();
+        init();
         kBUtils.send("splash", fillDisplay);
     </script>
 </body>

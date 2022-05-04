@@ -1,13 +1,12 @@
 package com.mk.tv.io.spring;
 
-import com.mk.tv.io.generic.IAPIWrapper;
 import com.mk.tv.io.generic.IClientResponse;
 import com.mk.tv.kernel.Kernel;
-import jPlus.lang.callback.Retrievable1;
 import jPlusLibs.spring.HTTPUtils;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -38,7 +36,7 @@ public class IOController {
 
         final Map<String, Object> model = modelAndView.getModel();
 
-        model.put("functionNames",  kernel.functionNamesByController());
+        model.put("functionNames", kernel.functionNamesByController());
         model.put("links", kernel.links());
 
         return modelAndView;
@@ -49,11 +47,13 @@ public class IOController {
             headers = "Accept=application/json")
     public ResponseEntity<Map<String, Object>> postKBIO(@RequestBody String commandString) {
 
-        final AtomicBoolean gate = new AtomicBoolean(true);
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        final RESTAPIWrapper api = new RESTAPIWrapper(commandString, () -> {
-            gate.set(false);
-        });
+        final AtomicBoolean gate = new AtomicBoolean(true);
+        final RESTAPIWrapper api = new RESTAPIWrapper(commandString, auth.getPrincipal().toString(),
+                () -> {
+                    gate.set(false);
+                });
         final IClientResponse resp = kernel.retrieve(api);
 
         final Map<String, Object> ret = new HashMap<>();

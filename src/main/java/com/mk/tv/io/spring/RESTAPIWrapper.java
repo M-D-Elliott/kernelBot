@@ -12,6 +12,7 @@ public class RESTAPIWrapper implements IAPIWrapper {
     private final String in;
     private final List<String> out = new ArrayList<>();
     private final Runnable onFinish;
+    private final String userName;
 
     public RESTAPIWrapper(String in) {
         this(in, () -> {
@@ -19,7 +20,12 @@ public class RESTAPIWrapper implements IAPIWrapper {
     }
 
     public RESTAPIWrapper(String in, Runnable onFinish) {
+        this(in, null, onFinish);
+    }
+
+    public RESTAPIWrapper(String in, String userName, Runnable onFinish) {
         this.in = in;
+        this.userName = userName == null ? "admin" : userName;
         this.onFinish = onFinish;
     }
 
@@ -30,7 +36,7 @@ public class RESTAPIWrapper implements IAPIWrapper {
 
     @Override
     public String username() {
-        return "admin";
+        return this.userName;
     }
 
     @Override
