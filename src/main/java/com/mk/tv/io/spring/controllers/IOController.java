@@ -1,10 +1,10 @@
-package com.mk.tv.io.spring;
+package com.mk.tv.io.spring.controllers;
 
 import com.mk.tv.io.generic.IClientResponse;
 import com.mk.tv.kernel.Kernel;
+import com.mk.tv.kernel.generic.Config;
 import jPlusLibs.spring.HTTPUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -37,7 +37,9 @@ public class IOController {
         final Map<String, Object> model = modelAndView.getModel();
 
         model.put("functionNames", kernel.functionNamesByController());
-        model.put("links", kernel.links());
+        final Config config = kernel.config();
+        model.put("links", config.system.links);
+        model.put("projectName", config.system.projectName);
 
         return modelAndView;
     }
@@ -47,34 +49,30 @@ public class IOController {
             headers = "Accept=application/json")
     public ResponseEntity<Map<String, Object>> postKBIO(@RequestBody String commandString) {
 
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        final String userName = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 
-        final AtomicBoolean gate = new AtomicBoolean(true);
-        final RESTAPIWrapper api = new RESTAPIWrapper(commandString, auth.getPrincipal().toString(),
-                () -> {
-                    gate.set(false);
-                });
-        final IClientResponse resp = kernel.retrieve(api);
+        final AtomicBoolean kernelFunctionIsActive = new AtomicBoolean(true);
+        final RESTAPIWrapper api = new RESTAPIWrapper(commandString, userName, () -> {
+            kernelFunctionIsActive.set(false);
+        });
+        final IClientResponse kernelResp = kernel.retrieve(api);
 
-        final Map<String, Object> ret = new HashMap<>();
-
-        ret.put("resp", "test");
-        ret.put("status", "test");
+        final Map<String, Object> json = new HashMap<>();
 
         try {
-            while (gate.get()) {
+            while (kernelFunctionIsActive.get()) {
                 Thread.sleep(100);
             }
 
-//        System.out.println("out: "+ api.getOut());
-            ret.put("resp", api.getOut());
-            ret.put("status", resp.resolution().name());
+            json.put("resp", api.getOut());
+            json.put("status", kernelResp.resolution().name());
+            json.put("images", api.getEncodedImages());
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        return HTTPUtils.jsonCreate(ret);
+        return HTTPUtils.jsonCreate(json);
     }
 
     public void setKernel(Kernel kernel) {

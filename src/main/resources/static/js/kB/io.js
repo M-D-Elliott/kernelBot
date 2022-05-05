@@ -1,12 +1,12 @@
-function clearHTML(el){
+function clearHTML(el) {
     el.innerHTML = "";
 }
 
-function kbInp(){
+function kbInp() {
     return document.getElementById("kbInp");
 }
 
-function setInp(str){
+function setInp(str) {
     kbInp().value = str;
 }
 
@@ -14,20 +14,28 @@ function clearInp() {
     kbInp().value = "";
 }
 
-function kbDisplay(){
+function kbDisplay() {
     return document.getElementById("kbDisplay");
 }
 
-function sendInp(){
+function sendInp() {
     kBUtils.send(kbInp().value, fillDisplay);
 }
 
-function fillDisplay(json){
+function fillDisplay(json) {
     const display = kbDisplay();
     clearHTML(display);
-    json.resp.forEach(item =>{
-        const pItem = document.createElement(item ? 'pre' : 'br');
-        pItem.innerHTML = item;
-        display.append(pItem);
+
+    const images = json.images;
+    if (images != null && images.length > 0) {
+        const imgEl = new Image();
+        imgEl.src = 'data:image/png;base64, ' + images[0];
+        display.append(imgEl);
+    }
+
+    json.resp.forEach(item => {
+        const pEl = document.createElement(item ? 'pre' : 'br');
+        pEl.innerHTML = item;
+        display.append(pEl);
     });
 }

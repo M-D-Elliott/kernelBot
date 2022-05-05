@@ -33,6 +33,8 @@ public class Config {
     public static final String CONFIG_PATH = "repos/config.txt";
     public static final String DISCORD_IO_CONFIG_NAME = "discord";
     public static final String CONSOLE_IO_CONFIG_NAME = "console";
+    public static final String WEB_IO_CONFIG_NAME = "web";
+
 
     protected static Map<String, IOConfig> defaultIOConfigs() {
         final Map<String, IOConfig> ret = new HashMap<>();

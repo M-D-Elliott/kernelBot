@@ -6,6 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SystemConfig {
+    public String projectName = "kernelBot";
+
     public char commandIndicator = '?';
     private String menuBorder = "+";
 

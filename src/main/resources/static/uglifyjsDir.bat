@@ -1,7 +1,7 @@
 @ECHO OFF
 SETLOCAL enableextensions enabledelayedexpansion
 
-SET endFileName=all.min.js
+SET endFileName=kB.min.js
 DEL !endFileName!
 
 SET i=0

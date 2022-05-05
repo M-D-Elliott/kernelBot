@@ -1,7 +1,7 @@
 @ECHO OFF
 SETLOCAL enableextensions enabledelayedexpansion
 
-SET endFileName=all.min.css
+SET endFileName=kB.min.css
 DEL !endFileName!
 
 SET i=0

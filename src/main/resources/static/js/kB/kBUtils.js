@@ -1,4 +1,4 @@
-class kBUtils{
+class kBUtils {
     static send(commandString, receiverFunc) {
         fetch('/', {
             method: 'POST',
@@ -8,9 +8,9 @@ class kBUtils{
             },
             body: commandString
         })
-        .then(resp => resp.json())
-        .then(json => {
-            receiverFunc(json);
-        });
+            .then(resp => resp.json())
+            .then(json => {
+                receiverFunc(json);
+            });
     }
 }
