@@ -1,9 +1,9 @@
 package com.mk.tv.kernel.controllers.presses;
 
-import com.mk.tv.kernel.generic.Config;
+import com.mk.tv.io.generic.IAPIWrapper;
 import com.mk.tv.kernel.controllers.FuncController;
 import com.mk.tv.kernel.controllers.FuncService;
-import com.mk.tv.io.generic.IAPIWrapper;
+import com.mk.tv.kernel.generic.Config;
 import jPlus.lang.callback.Receivable2;
 import jPlus.util.awt.KeyEvents;
 import jPlus.util.awt.RobotPressCommand;

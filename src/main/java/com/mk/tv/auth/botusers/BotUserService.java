@@ -1,7 +1,7 @@
 package com.mk.tv.auth.botusers;
 
-import jPlusLibs.com.fasterxml.jackson.JacksonRepo;
 import jPlus.lang.callback.Receivable1;
+import jPlusLibs.com.fasterxml.jackson.JacksonRepo;
 
 public class BotUserService {
     protected final JacksonRepo<BotUser> repo = new BotUserRepo();

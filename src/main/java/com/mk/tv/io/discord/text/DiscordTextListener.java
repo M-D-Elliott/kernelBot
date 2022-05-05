@@ -3,7 +3,6 @@ package com.mk.tv.io.discord.text;
 import com.mk.tv.io.generic.IAPIWrapper;
 import com.mk.tv.io.generic.IClientResponse;
 import jPlus.lang.callback.Retrievable1;
-import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;

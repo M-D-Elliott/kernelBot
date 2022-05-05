@@ -1,9 +1,5 @@
 package com.mk.tv.auth.botusers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
-import java.util.LinkedHashMap;
-
 public class BotUser {
     public String username;
     public String password = "password";

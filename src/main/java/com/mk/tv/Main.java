@@ -2,17 +2,11 @@ package com.mk.tv;
 
 import com.mk.tv.entryPoints.Install;
 import com.mk.tv.entryPoints.InstallWizard;
-import com.mk.tv.entryPoints.PreInstall;
 import com.mk.tv.entryPoints.KBMain;
-import jPlus.io.file.DirUtils;
+import com.mk.tv.entryPoints.PreInstall;
 import jPlus.util.io.ConsoleIOUtils;
-import jPlusLibs.com.edu.sphinx.SphinxUtils;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.File;
 import java.util.Arrays;
-
-import static jPlusLibs.com.edu.sphinx.SphinxUtils.disableSphinxLogs;
 
 public class Main {
     public static void main(String[] args) {

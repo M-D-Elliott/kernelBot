@@ -2,8 +2,8 @@ package com.mk.tv.io.discord.voice;
 
 import com.mk.tv.io.generic.IAPIWrapper;
 import com.mk.tv.io.generic.IIOWrapper;
-import jPlus.io.Priority;
 import jPlus.io.Access;
+import jPlus.io.Priority;
 import jPlus.lang.callback.Receivable1;
 import jPlusLibs.discord.DiscordConsoleUtils;
 import jPlusLibs.discord.DiscordIOUtils;

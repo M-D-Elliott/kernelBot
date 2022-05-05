@@ -1,7 +1,5 @@
 package jPlus.async.command;
 
-import jPlus.lang.Runnables;
-
 public abstract class Command implements ICommand {
 
     protected Runnable onEnd = () -> {};

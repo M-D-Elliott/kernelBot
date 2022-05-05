@@ -2,7 +2,6 @@ package jPlus.util.lang;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.text.DecimalFormat;
 
 public final class FloatUtils {
     public static float[] multiply(float multiplicand, float... values) {

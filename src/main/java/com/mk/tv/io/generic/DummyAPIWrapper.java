@@ -1,7 +1,7 @@
 package com.mk.tv.io.generic;
 
-import jPlus.io.Priority;
 import jPlus.io.Access;
+import jPlus.io.Priority;
 import jPlus.lang.callback.Receivable1;
 
 import java.io.File;

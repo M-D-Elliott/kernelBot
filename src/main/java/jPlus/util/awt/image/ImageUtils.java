@@ -5,15 +5,12 @@ import jPlus.util.collections.PointUtils;
 
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Arrays;
 
 import static jPlus.JPlus.sendError;

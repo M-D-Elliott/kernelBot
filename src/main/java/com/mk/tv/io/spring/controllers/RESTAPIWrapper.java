@@ -17,7 +17,7 @@ public class RESTAPIWrapper implements IAPIWrapper {
     private final List<String> out = new ArrayList<>();
     private final Runnable onFinish;
     private final String userName;
-    //    private final List<byte[]> images = new ArrayList<>();
+
     private final List<String> encodedImages = new ArrayList<>();
 
     public RESTAPIWrapper(String in) {
@@ -94,10 +94,6 @@ public class RESTAPIWrapper implements IAPIWrapper {
     public String[] getOut() {
         return out.toArray(new String[0]);
     }
-
-    //    public List<byte[]> getImages() {
-//        return images;
-//    }
 
     public List<String> getEncodedImages() {
         return encodedImages;
