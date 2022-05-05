@@ -1,7 +1,3 @@
-function clearHTML(el) {
-    el.innerHTML = "";
-}
-
 function kbInp() {
     return document.getElementById("kbInp");
 }
@@ -24,13 +20,16 @@ function sendInp() {
 
 function fillDisplay(json) {
     const display = kbDisplay();
-    clearHTML(display);
+    display.innerHtml = "";
+
 
     const images = json.images;
     if (images != null && images.length > 0) {
-        const imgEl = new Image();
-        imgEl.src = 'data:image/png;base64, ' + images[0];
-        display.append(imgEl);
+        const imgSrc = 'data:image/png;base64, ' + images[0];
+        const thumbnail = `<img src='${imgSrc}' alt=""
+                            style="width: 7rem;max-width: 100%;height: auto;vertical-align: 
+                            middle;border-style: none;">`
+        display.innerHTML = thumbnail;
     }
 
     json.resp.forEach(item => {
