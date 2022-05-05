@@ -20,8 +20,7 @@ function sendInp() {
 
 function fillDisplay(json) {
     const display = kbDisplay();
-    display.innerHtml = "";
-
+    display.innerHTML = "";
 
     const images = json.images;
     if (images != null && images.length > 0) {
