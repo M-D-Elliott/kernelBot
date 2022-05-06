@@ -9,20 +9,22 @@ class BootstrapUtils {
 
         return ret;
     }
-    static textMemoryQueue(el, par, key) {
-        BootstrapUtils.queue(el, par);
+    static textMemoryQueue(el, par, key, maxItems) {
+        BootstrapUtils.queue(el, par, maxItems);
         const innerTextAsJson = BootstrapUtils.childrenInnerText(par);
         Storage.setParse(PREFIX + key, innerTextAsJson);
     }
 
-    static queue(el, par) {
-        par.prepend(BootstrapUtils.queueWrapper(el));
-        if (par.childElementCount >= 13) par.removeChild(par.lastChild);
+    static queue(el, par, maxItems = 12) {
+        par.prepend(BootstrapUtils.queueWrapper(el, maxItems));
+        if (par.childElementCount >= maxItems + 1) par.removeChild(par.lastChild);
     }
 
-    static queueWrapper(el) {
+    static queueWrapper(el, maxItems = 12) {
+        const rows = 2;
+        const itemsPerRow = maxItems / rows;
         const wrapper = document.createElement('div');
-        wrapper.classList.add('col-md-2', 'col-6', 'p-1');
+        wrapper.classList.add(`col-md-${12 / itemsPerRow}`, 'col-6', 'p-1');
 
         el.classList.add('w-100', 'h-100');
         wrapper.appendChild(el);

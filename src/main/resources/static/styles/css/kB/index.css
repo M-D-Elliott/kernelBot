@@ -5,7 +5,7 @@ body {
 }
 
 #rootContainer {
-    border: 4px solid var(--text-color);
+    border: 4px solid var(--tc);
     max-height: 100%;
     box-sizing: border-box;
     display: flex;
@@ -14,34 +14,50 @@ body {
 
 #kbInp {
     background: transparent;
-    color: var(--text-color);
+    color: var(--tc);
+    resize: none;
 }
 
-#kbDisplay>pre {
+#textDisplay>pre {
     font-family: "Lucida Console", "Courier New", monospace;
     margin: 0;
-    color: var(--text-color);
+    color: var(--tc);
     overflow: revert;
+}
+
+#imagesDisplay>div:hover {
+    border: 1px solid var(--success-light);
+    border-radius: 2.2%;
 }
 
 /************
 * BOOTSTRAP *
 *************/
 
+.btn {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.btn:active {
+    background: var(--success-gradient-light) !important;
+}
+
 div.btn-group.show div.dropdown-menu {
     background: var(--bg-gradient);
     max-height: 50vh;
     overflow-y: auto;
-    border: 1px solid var(--text-color);
+    border: 1px solid var(--tc);
 }
 
 div.btn-group.show div.dropdown-menu.show button.dropdown-item {
-    color: var(--text-color);
+    color: var(--tc);
 }
 
 div.btn-group.show div.dropdown-menu.show button.dropdown-item:hover,
 div.btn-group.show div.dropdown-menu.show button.dropdown-item:focus {
-    background: var(--prim);
+    background: var(--primary);
 }
 
 /**********

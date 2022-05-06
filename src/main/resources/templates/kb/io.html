@@ -1,6 +1,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<div th:fragment="disp" id="kbDisplay" class="col-12 h-100"></div>
+<div class="d-flex align-items-center" style="min-height:100%" th:fragment="displays">
+    <div>
+        <div id="textDisplay" class="col-12"></div>
+        <div id="imagesDisplay" class="row col-12 mx-auto"></div>
+    </div>
+</div>
 
 <div th:fragment="inp" class="d-flex flex-row flex-wrap h-100">
     <textarea id="kbInp" name="kb-inp" rows="4" class="col-12 mb-3"
