@@ -26,8 +26,11 @@ body {
 }
 
 #imagesDisplay>div:hover {
-    border: 1px solid var(--success-light);
-    border-radius: 2.2%;
+    background: var(--info-gradient-light);
+}
+
+#imagesDisplay>div:hover>img {
+    opacity: 50%;
 }
 
 /************

@@ -36,9 +36,11 @@ public class CustomIPAuth implements AuthenticationProvider, Serializable {
 
     @Override
     public Authentication authenticate(Authentication auth) throws AuthenticationException {
-        WebAuthenticationDetails details = (WebAuthenticationDetails) auth.getDetails();
-        String userIp = details.getRemoteAddress();
-        System.out.println(details.getRemoteAddress() + " -- web login");
+
+        final WebAuthenticationDetails details = (WebAuthenticationDetails) auth.getDetails();
+        final String userIp = details.getRemoteAddress();
+        System.out.println(userIp + " -- web login");
+
         if (!whitelist.contains(userIp)) {
             System.out.println(ConsoleUtils.encaseInBanner("UNKNOWN IP"));
             throw new BadCredentialsException("Invalid IP Address");
@@ -50,10 +52,9 @@ public class CustomIPAuth implements AuthenticationProvider, Serializable {
         if (authenticator.retrieve(name, password)) {
             List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority("ADMIN"));
+
             return new UsernamePasswordAuthenticationToken(name, password, authorities);
-        } else {
-            throw new BadCredentialsException("Invalid username or password");
-        }
+        } else throw new BadCredentialsException("Invalid username or password");
     }
 
     @Override

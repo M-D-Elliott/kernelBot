@@ -27,6 +27,9 @@ public class KBMain {
         final IOConfig consoleIOConfig = config.system.ioConfigs.get(Config.CONSOLE_IO_CONFIG_NAME);
         final IOConfig webIOConfig = config.system.ioConfigs.get(Config.WEB_IO_CONFIG_NAME);
 
+        if (webIOConfig != null && webIOConfig.isActive)
+            SpringEP.main(kernel, webIOConfig.key);
+
         if (discordIOConfig != null && discordIOConfig.isActive) {
             if (consoleIOConfig != null && consoleIOConfig.isActive)
                 new ConsoleMain(kernel).startConsoleThread();
@@ -34,9 +37,6 @@ public class KBMain {
             DiscordEP.main(kernel, config.system.commandIndicator, discordIOConfig.key);
         } else if (consoleIOConfig != null && consoleIOConfig.isActive)
             new ConsoleMain(kernel).consoleListener();
-
-        if (webIOConfig != null && webIOConfig.isActive)
-            SpringEP.main(kernel, webIOConfig.key);
     }
 
     //***************************************************************//
