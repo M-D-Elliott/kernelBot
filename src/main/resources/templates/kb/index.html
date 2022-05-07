@@ -27,6 +27,7 @@
 
     <script th:src="@{/js/jsPlus/APIs.js}"></script>
     <script th:src="@{/js/jsPlus/BootstrapUtils.js}"></script>
+    <script th:src="@{/js/jsPlus/ColorUtils.js}"></script>
     <script th:src="@{/js/jsPlus/HTMLUtils.js}"></script>
     <script th:src="@{/js/jsPlus/Storage.js}"></script>
 
@@ -34,6 +35,7 @@
     <script th:src="@{/js/kB/index.js}"></script>
     <script th:src="@{/js/kB/io.js}"></script>
     <script th:src="@{/js/kB/gui.js}"></script>
+    <script th:src="@{/js/kB/settings.js}"></script>
 
     <!-- <link th:href="@{/kB.min.css}" rel="stylesheet" />
     <script th:src="@{/kB.min.js}"></script> -->
@@ -60,6 +62,12 @@
                     <i class="fa-solid fa-arrow-trend-down"></i>
                 </a>
             </li>
+            <li class="nav-item" onClick="settingsGUIInit(); this.removeAttribute('onclick');">
+                <a class="nav-link" id="ioOut" data-toggle="tab" href="#settings" role="tab" aria-controls="contact"
+                    aria-selected="false">
+                    <i class="fa-solid fa-gear"></i>
+                </a>
+            </li>
             <div class="d-flex flex-row flex-grow-1">
                 <div class="flex-grow-1"></div>
                 <li class="nav-item kb-links" th:each="entry, stat : ${links}">
@@ -78,11 +86,15 @@
             <div class="tab-pane fade h-100" id="ioOutput" role="tabpanel" aria-labelledby="IOOutput"
                 th:insert="kb/io :: displays">
             </div>
+            <div class="tab-pane fade h-100" id="settings" role="tabpanel" aria-labelledby="settings"
+                th:insert="kb/settings :: main">
+            </div>
         </div>
     </div>
     <script>
         guiInit();
         init();
+        settingsInit();
         kBUtils.send("splash", fillDisplay);
     </script>
 </body>

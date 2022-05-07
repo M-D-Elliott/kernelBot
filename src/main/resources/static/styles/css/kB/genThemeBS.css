@@ -3,6 +3,10 @@
     --primary-l: 49.0%;
     --primary-g: 7%;
 
+    --secondary-raw: 210, 7.0%;
+    --secondary-l: 56.0%;
+    --secondary-g: 7%;
+
     --success-raw: 120, 39.0%;
     --success-l: 54.0%;
     --success-g: 7%;
@@ -45,6 +49,17 @@
     --primary-lightest: hsl(var(--primary-raw), calc(var(--primary-l) + 3 * var(--primary-g)));
     --primary-gradient: linear-gradient(to left, var(--primary), var(--primary-dark));
     --primary-gradient-light: linear-gradient(to right, var(--primary), var(--primary-light));
+
+    --secondary: hsl(var(--secondary-raw), var(--secondary-l));
+    --secondary-trans: hsla(var(--secondary-raw), var(--secondary-l), 40%);
+    --secondary-dark: hsl(var(--secondary-raw), calc(var(--secondary-l) - 1 * var(--secondary-g)));
+    --secondary-darker: hsl(var(--secondary-raw), calc(var(--secondary-l) - 2 * var(--secondary-g)));
+    --secondary-darkest: hsl(var(--secondary-raw), calc(var(--secondary-l) - 3 * var(--secondary-g)));
+    --secondary-light: hsl(var(--secondary-raw), calc(var(--secondary-l) + 1 * var(--secondary-g)));
+    --secondary-lighter: hsl(var(--secondary-raw), calc(var(--secondary-l) + 2 * var(--secondary-g)));
+    --secondary-lightest: hsl(var(--secondary-raw), calc(var(--secondary-l) + 3 * var(--secondary-g)));
+    --secondary-gradient: linear-gradient(to left, var(--secondary), var(--secondary-dark));
+    --secondary-gradient-light: linear-gradient(to right, var(--secondary), var(--secondary-light));
 
     --success: hsl(var(--success-raw), var(--success-l));
     --success-trans: hsla(var(--success-raw), var(--success-l), 40%);
@@ -117,6 +132,7 @@
 * BOOTSTRAP *
 *************/
 
+/** btn **/
 .btn-primary {
     color: var(--tc);
     background-color: var(--primary);
@@ -128,6 +144,17 @@
     border-color: var(--primary);
 }
 
+.btn-secondary {
+    color: var(--tc);
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+}
+
+.btn-outline-secondary {
+    color: var(--secondary);
+    border-color: var(--secondary);
+}
+
 .btn-success {
     color: var(--tc);
     background-color: var(--success);
@@ -137,6 +164,11 @@
 .btn-outline-success {
     color: var(--success);
     border-color: var(--success);
+}
+
+/** nav **/
+.nav-link {
+    color: var(--primary);
 }
 
 /** text **/
@@ -158,4 +190,8 @@
 
 .text-danger {
     color: var(--danger) !important;
+}
+
+.text-tc {
+    color: var(--tc) !important;
 }
