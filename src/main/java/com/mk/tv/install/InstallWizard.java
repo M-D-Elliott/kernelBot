@@ -1,4 +1,4 @@
-package com.mk.tv.entryPoints;
+package com.mk.tv.install;
 
 import com.mk.tv.auth.AuthConfig;
 import com.mk.tv.auth.botusers.BotUser;

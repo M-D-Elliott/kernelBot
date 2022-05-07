@@ -1,4 +1,4 @@
-package com.mk.tv.entryPoints;
+package com.mk.tv.kernel;
 
 import com.mk.tv.auth.AuthConfig;
 import com.mk.tv.auth.AuthKernel;

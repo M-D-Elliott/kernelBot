@@ -1,9 +1,9 @@
 package com.mk.tv;
 
-import com.mk.tv.entryPoints.Install;
-import com.mk.tv.entryPoints.InstallWizard;
-import com.mk.tv.entryPoints.KBMain;
-import com.mk.tv.entryPoints.PreInstall;
+import com.mk.tv.install.Install;
+import com.mk.tv.install.InstallWizard;
+import com.mk.tv.kernel.KBMain;
+import com.mk.tv.install.PreInstall;
 import jPlus.util.io.ConsoleIOUtils;
 
 import java.util.Arrays;

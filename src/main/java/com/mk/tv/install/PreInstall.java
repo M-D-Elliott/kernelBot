@@ -1,4 +1,4 @@
-package com.mk.tv.entryPoints;
+package com.mk.tv.install;
 
 import jPlus.io.ResourceUtils;
 
