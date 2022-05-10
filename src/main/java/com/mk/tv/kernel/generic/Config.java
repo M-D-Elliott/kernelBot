@@ -7,6 +7,7 @@ import com.mk.tv.kernel.controllers.scripts.ScriptConfig;
 import com.mk.tv.kernel.controllers.system.IOConfig;
 import com.mk.tv.kernel.controllers.system.SystemConfig;
 import com.mk.tv.kernel.controllers.tools.ToolsConfig;
+import jPlus.io.file.DirUtils;
 import jPlusLibs.com.fasterxml.jackson.JacksonUtils;
 
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public class Config {
     }
 
     public void store() {
-        JacksonUtils.writeBliss("config.txt", this);
+        JacksonUtils.writeBliss(DirUtils.fromUserDir(Config.CONFIG_PATH), this);
     }
 
     //***************************************************************//
@@ -40,6 +41,7 @@ public class Config {
         final Map<String, IOConfig> ret = new HashMap<>();
         ret.put(Config.DISCORD_IO_CONFIG_NAME, new IOConfig());
         ret.put(Config.CONSOLE_IO_CONFIG_NAME, new IOConfig());
+        ret.put(Config.WEB_IO_CONFIG_NAME, new IOConfig("55555"));
 
         return ret;
     }

@@ -2,9 +2,9 @@
 
 <div th:fragment="gui" id="kbGUI" class="d-flex flex-wrap h-100">
 
-    <div id="recentCommands" class="row col-12 mx-auto"></div>
+    <div id="recentCommands" class="row col-12 mx-auto my-4"></div>
 
-    <div id="commandBank" class="row col-12 mx-auto mt-4">
+    <div id="commandBank" class="row col-12 mx-auto">
         <div class="btn-group col-md-4 col-lg-6 col-12 mb-1" th:each="entry, stat : ${functionNames}">
             <button type="button" class="btn btn-outline-secondary dropdown-toggle w-100" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false" th:text="${entry.key}">

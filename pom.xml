@@ -11,7 +11,7 @@
     </parent>
     <groupId>com.mk.tv</groupId>
     <artifactId>kernelBot</artifactId>
-    <version>1.4.9 Universal Remote Controller (PRE) -- whitelist, login connected, themegen</version>
+    <version>1.5.0 -- Universal Remote Controller</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

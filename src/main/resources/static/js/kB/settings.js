@@ -25,7 +25,7 @@ function settingsGUIInit() {
 
     if (cData == null) {
         cData = newColorsDataObj();
-        Storage.setParse(storageKey, cData);
+        Storage.setParse(colorsKey(), cData);
     }
 
     const cMenu = colorsMenu();
@@ -51,9 +51,8 @@ function newColorsDataObj() {
         warning: '35, 84.0%, 62.0%',
         danger: '2, 64.0%, 58.0%',
         inverse: '200, 4.0%, 17.0%',
-        faded: '0, 0.0%, 97.0%',
-        bg: '243, 100.0%, 13.1%',
-        tc: '0, 0.01%, 100.0%',
+        faded: '0, 0.01%, 97.0%',
+        bg: '243, 100.0%, 13.1%'
     };
 }
 
@@ -80,27 +79,36 @@ function colorsChange(colorsInp) {
 }
 
 function colorsSave() {
-    const cMenu = colorsMenu();
-    const colors = {};
-
-    const options = cMenu.options;
-    const optionsLength = options.length;
-
-    for (let i = 0; i < optionsLength; i++) {
-        const option = options[i];
-        colors[option.text] = option.value;
-    }
-
-    Storage.setParse(colorsKey(), colors);
+    Storage.setParse(colorsKey(), getColorsFromSelect());
 }
 
 function colorsDefault() {
-    Storage.setParse(colorsKey(), newColorsDataObj());
-    settingsInit();
-    settingsGUIInit();
+    setColorsData(newColorsDataObj());
+}
+
+function copyColors() {
+    const cData = getColorsFromSelect();
+    const cDataJson = JSON.stringify(cData, null, " ");
+    HTMLUtils.toClipboardForce(cDataJson);
+}
+
+function pasteColors() {
+    HTMLUtils.pasteForce((text) => {
+        try {
+            setColorsData(JSON.parse(text));
+        } catch (e) {
+            return false;
+        }
+    });
 }
 
 /******************************************************************/
+
+function setColorsData(obj) {
+    Storage.setParse(colorsKey(), obj);
+    settingsInit();
+    settingsGUIInit();
+}
 
 function setRootColor(key, hslString) {
     const hslSplit = hslString.split(', ');
@@ -118,4 +126,19 @@ function setRootColors(cData) {
             setRootColor(key, value);
         }
     }
+}
+
+function getColorsFromSelect() {
+    const cMenu = colorsMenu();
+    const cData = {};
+
+    const options = cMenu.options;
+    const optionsLength = options.length;
+
+    for (let i = 0; i < optionsLength; i++) {
+        const option = options[i];
+        cData[option.text] = option.value;
+    }
+
+    return cData;
 }

@@ -1,8 +1,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<div id="settings" th:fragment="main">
+<div id="settings" class="pt-2" th:fragment="main">
     <fieldset class="text-tc border p-2">
-        <legend class="w-auto px-2 m-0">Colors</legend>
+        <legend class="w-auto px-2 m-0">Colors
+            <button class="btn btn-info" onClick="copyColors();">
+                <i class="fa-solid fa-copy"></i>
+            </button>
+            <button class="btn btn-warning" onClick="pasteColors();">
+                <i class="fa-solid fa-paste"></i>
+            </button>
+        </legend>
         <section>
             <div class="row w-100 p-0 m-0">
                 <wrapper class="col-md-2 col-6 p-1 my-auto">

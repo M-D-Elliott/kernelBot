@@ -27,17 +27,13 @@
     --inverse-l: 17.0%;
     --inverse-g: 7%;
 
-    --faded-raw: 0, 0.0%;
+    --faded-raw: 0, 0.01%;
     --faded-l: 97.0%;
     --faded-g: 7%;
 
     --bg-raw: 243, 100.0%;
     --bg-l: 13.1%;
     --bg-g: 7%;
-
-    --tc-raw: 0, 0.01%;
-    --tc-l: 100.0%;
-    --tc-g: 7%;
 
     --primary: hsl(var(--primary-raw), var(--primary-l));
     --primary-trans: hsla(var(--primary-raw), var(--primary-l), 40%);
@@ -105,6 +101,28 @@
     --danger-gradient: linear-gradient(to left, var(--danger), var(--danger-dark));
     --danger-gradient-light: linear-gradient(to right, var(--danger), var(--danger-light));
 
+    --faded: hsl(var(--faded-raw), var(--faded-l));
+    --faded-trans: hsla(var(--faded-raw), var(--faded-l), 40%);
+    --faded-dark: hsl(var(--faded-raw), calc(var(--faded-l) - 1 * var(--faded-g)));
+    --faded-darker: hsl(var(--faded-raw), calc(var(--faded-l) - 2 * var(--faded-g)));
+    --faded-darkest: hsl(var(--faded-raw), calc(var(--faded-l) - 3 * var(--faded-g)));
+    --faded-light: hsl(var(--faded-raw), calc(var(--faded-l) + 1 * var(--faded-g)));
+    --faded-lighter: hsl(var(--faded-raw), calc(var(--faded-l) + 2 * var(--faded-g)));
+    --faded-lightest: hsl(var(--faded-raw), calc(var(--faded-l) + 3 * var(--faded-g)));
+    --faded-gradient: linear-gradient(to left, var(--faded), var(--faded-dark));
+    --faded-gradient-light: linear-gradient(to right, var(--faded), var(--faded-light));
+
+    --inverse: hsl(var(--inverse-raw), var(--inverse-l));
+    --inverse-trans: hsla(var(--inverse-raw), var(--inverse-l), 40%);
+    --inverse-dark: hsl(var(--inverse-raw), calc(var(--inverse-l) - 1 * var(--inverse-g)));
+    --inverse-darker: hsl(var(--inverse-raw), calc(var(--inverse-l) - 2 * var(--inverse-g)));
+    --inverse-darkest: hsl(var(--inverse-raw), calc(var(--inverse-l) - 3 * var(--inverse-g)));
+    --inverse-light: hsl(var(--inverse-raw), calc(var(--inverse-l) + 1 * var(--inverse-g)));
+    --inverse-lighter: hsl(var(--inverse-raw), calc(var(--inverse-l) + 2 * var(--inverse-g)));
+    --inverse-lightest: hsl(var(--inverse-raw), calc(var(--inverse-l) + 3 * var(--inverse-g)));
+    --inverse-gradient: linear-gradient(to left, var(--inverse), var(--inverse-dark));
+    --inverse-gradient-light: linear-gradient(to right, var(--inverse), var(--inverse-light));
+
     --bg: hsl(var(--bg-raw), var(--bg-l));
     --bg-trans: hsla(var(--bg-raw), var(--bg-l), 40%);
     --bg-dark: hsl(var(--bg-raw), calc(var(--bg-l) - 1 * var(--bg-g)));
@@ -115,17 +133,6 @@
     --bg-lightest: hsl(var(--bg-raw), calc(var(--bg-l) + 3 * var(--bg-g)));
     --bg-gradient: linear-gradient(to left, var(--bg), var(--bg-dark));
     --bg-gradient-light: linear-gradient(to right, var(--bg), var(--bg-light));
-
-    --tc: hsl(var(--tc-raw), var(--tc-l));
-    --tc-trans: hsla(var(--tc-raw), var(--tc-l), 40%);
-    --tc-dark: hsl(var(--tc-raw), calc(var(--tc-l) - 1 * var(--tc-g)));
-    --tc-darker: hsl(var(--tc-raw), calc(var(--tc-l) - 2 * var(--tc-g)));
-    --tc-darkest: hsl(var(--tc-raw), calc(var(--tc-l) - 3 * var(--tc-g)));
-    --tc-light: hsl(var(--tc-raw), calc(var(--tc-l) + 1 * var(--tc-g)));
-    --tc-lighter: hsl(var(--tc-raw), calc(var(--tc-l) + 2 * var(--tc-g)));
-    --tc-lightest: hsl(var(--tc-raw), calc(var(--tc-l) + 3 * var(--tc-g)));
-    --tc-gradient: linear-gradient(to left, var(--tc), var(--tc-dark));
-    --tc-gradient-light: linear-gradient(to right, var(--tc), var(--tc-light));
 }
 
 /************
@@ -134,7 +141,7 @@
 
 /** btn **/
 .btn-primary {
-    color: var(--tc);
+    color: var(--faded);
     background-color: var(--primary);
     border-color: var(--primary);
 }
@@ -144,8 +151,16 @@
     border-color: var(--primary);
 }
 
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus,
+.btn-primary:visited {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-darker) !important;
+}
+
 .btn-secondary {
-    color: var(--tc);
+    color: var(--faded);
     background-color: var(--secondary);
     border-color: var(--secondary);
 }
@@ -156,7 +171,7 @@
 }
 
 .btn-success {
-    color: var(--tc);
+    color: var(--faded);
     background-color: var(--success);
     border-color: var(--success);
 }
@@ -166,9 +181,35 @@
     border-color: var(--success);
 }
 
+.btn-info {
+    color: var(--faded);
+    background-color: var(--info);
+    border-color: var(--info);
+}
+
+.btn-outline-info {
+    color: var(--info);
+    border-color: var(--info);
+}
+
+.btn-warning {
+    color: var(--faded);
+    background-color: var(--warning);
+    border-color: var(--warning);
+}
+
+.btn-outline-warning {
+    color: var(--warning);
+    border-color: var(--warning);
+}
+
 /** nav **/
 .nav-link {
     color: var(--primary);
+}
+
+.nav-link:hover {
+    color: var(--primary-dark);
 }
 
 /** text **/
@@ -193,5 +234,5 @@
 }
 
 .text-tc {
-    color: var(--tc) !important;
+    color: var(--faded) !important;
 }
