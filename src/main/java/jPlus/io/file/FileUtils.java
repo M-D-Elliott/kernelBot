@@ -1,7 +1,6 @@
 package jPlus.io.file;
 
 import jPlus.util.lang.StringUtils;
-import jPlus.util.lang.SystemUtils;
 
 import java.io.*;
 import java.util.ArrayList;
