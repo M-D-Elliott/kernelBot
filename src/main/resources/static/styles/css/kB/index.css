@@ -45,17 +45,18 @@ body {
 
 .nav-link:active,
 .btn:active {
+    color: var(--faded) !important;
     background: var(--success-gradient-light) !important;
 }
 
 div.btn-group.show div.dropdown-menu {
-    background: var(--bg-gradient);
+    background: var(--secondary-gradient);
     max-height: 50vh;
     overflow-y: auto;
     border: 1px solid var(--faded);
 }
 
-div.btn-group.show div.dropdown-menu.show button.dropdown-item {
+button.dropdown-item {
     color: var(--faded);
 }
 

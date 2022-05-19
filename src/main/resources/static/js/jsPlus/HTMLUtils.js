@@ -31,10 +31,7 @@ class HTMLUtils {
             pasteTarget.focus();
             document.execCommand("paste", null, null);
             const paste = pasteTarget.innerText;
-            console.log(pasteTarget);
             actElem.removeChild(pasteTarget);
-
-            console.log(paste);
 
             cb(paste);
 

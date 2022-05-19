@@ -8,7 +8,7 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.6.6</version>
         <relativePath/>
-    </parent>
+    </parent> <!--spring-boot-starter-parent-->
     <groupId>com.mk.tv</groupId>
     <artifactId>kernelBot</artifactId>
     <version>1.5.0 -- Universal Remote Controller</version>
@@ -28,8 +28,7 @@
                     <target>9</target>
                 </configuration>
                 <version>3.9.0</version>
-            </plugin>
-
+            </plugin> <!--maven-compiler-plugin-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -43,22 +42,7 @@
                     </archive>
                 </configuration>
                 <version>3.1.2</version>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <fork>true</fork>
-                    <mainClass>${start-class}</mainClass>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+            </plugin> <!--maven-jar-plugin-->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
@@ -81,7 +65,23 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> <!--maven-assembly-plugin-->
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                    <mainClass>${start-class}</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin> <!--spring-boot-maven-plugin-->
         </plugins>
     </build>
     <dependencies>
@@ -89,70 +89,75 @@
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
             <version>4.2.0_168</version>
-        </dependency>
+        </dependency> <!--dv8tion-->
+
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
             <version>1.2.11</version>
-        </dependency>
+        </dependency> <!--logback-->
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
-        </dependency>
+        </dependency> <!--jackson-databind-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
             <version>${jackson.version}</version>
-        </dependency>
+        </dependency> <!--jackson-annotations-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
             <version>${jackson.version}</version>
-        </dependency>
+        </dependency> <!--jackson-core-->
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.11.0</version>
-        </dependency>
+        </dependency> <!--commons-io-->
+
         <dependency>
             <groupId>edu.cmu.sphinx</groupId>
             <artifactId>sphinx4-core</artifactId>
             <version>5prealpha-SNAPSHOT</version>
-        </dependency>
+        </dependency> <!--sphinx4-core-->
         <dependency>
             <groupId>edu.cmu.sphinx</groupId>
             <artifactId>sphinx4-data</artifactId>
             <version>5prealpha-SNAPSHOT</version>
-        </dependency>
+        </dependency> <!--sphinx4-data-->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
             <version>2.6.6</version>
-        </dependency>
+        </dependency> <!--spring-boot-starter-thymeleaf-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>2.6.6</version>
-        </dependency>
+        </dependency> <!--spring-boot-starter-web-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
             <version>2.6.6</version>
-        </dependency>
+        </dependency> <!--spring-boot-starter-security-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-parent</artifactId>
             <version>2.6.6</version>
             <type>pom</type>
-        </dependency>
+        </dependency> <!--spring-boot-starter-parent-->
     </dependencies>
     <repositories>
         <repository>
             <id>jcenter</id>
             <name>jcenter-bintray</name>
             <url>https://jcenter.bintray.com/</url>
-        </repository>
+        </repository> <!--jcenter-->
         <repository>
             <id>snapshots-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
@@ -162,6 +167,6 @@
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
-        </repository>
+        </repository> <!--snapshots-repo-->
     </repositories>
 </project>

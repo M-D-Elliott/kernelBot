@@ -2,7 +2,6 @@ package jPlus.util.io;
 
 import jPlus.lang.callback.Receivable1;
 import jPlus.util.lang.SystemUtils;
-import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -54,17 +53,17 @@ public class RuntimeUtils {
 
     //***************************************************************//
 
-    public static boolean kill(String path, String title) throws NotImplementedException, IOException {
+    public static boolean kill(String path, String title) throws IOException {
         final SystemUtils.OS os = SystemUtils.getOS();
         switch (os) {
             case WINDOWS:
                 return exec(killWin(path, title));
             case LINUX:
-                throw new NotImplementedException("kill linux task");
+                System.err.println("kill linux task");
             case MAC:
-                throw new NotImplementedException("kill mac task");
+                System.err.println("kill mac task");
             case SOLARIS:
-                throw new NotImplementedException("kill solaris task");
+                System.err.println("kill solaris task");
             default:
                 return false;
         }
@@ -75,9 +74,8 @@ public class RuntimeUtils {
             return kill(path, title);
         } catch (IOException ex) {
             sendError("Error killing " + title + " at path " + path, ex);
-        } catch (NotImplementedException ex) {
-            sendError(ex);
         }
+
         return false;
     }
 

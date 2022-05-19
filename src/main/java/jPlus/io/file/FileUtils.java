@@ -1,6 +1,7 @@
 package jPlus.io.file;
 
 import jPlus.util.lang.StringUtils;
+import jPlus.util.lang.SystemUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -133,5 +134,4 @@ public final class FileUtils {
     public static String addExtSafe(String filePath, String ext) {
         return ext(filePath).equals('.' + ext) ? filePath : filePath + '.' + ext;
     }
-
 }

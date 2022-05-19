@@ -3,7 +3,6 @@ package jPlus.util.awt.image;
 import jPlus.lang.Tuple2;
 import jPlus.util.collections.PointUtils;
 
-import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -38,7 +37,6 @@ public class ImageUtils {
 
     //***************************************************************//
 
-    @Nullable
     public static BufferedImage readResource(String path) {
         try {
             final InputStream in = ImageUtils.class.getResourceAsStream(path);

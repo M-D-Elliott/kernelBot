@@ -1,7 +1,5 @@
 package jPlus.util.lang;
 
-import javax.annotation.Nullable;
-
 /**
  * @author Marcus
  */
@@ -70,7 +68,6 @@ public final class IntUtils {
         }
     }
 
-    @Nullable
     public static Integer parseIntBliss(String s) {
         try {
             return Integer.parseInt(s);
